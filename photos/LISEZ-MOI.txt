@@ -14,3 +14,6 @@ Pour remplacer une photo : déposer la nouvelle photo (largeur 1600 px ou plus s
 et demander à Claude de régénérer les deux .webp et, si besoin, la légende dans index.html.
 
 Le dossier « non-utilisees » n'est pas affiché sur le site.
+
+Depuis la refonte en onglets : toutes les photos sont sur la page « Chez Belle » (chez-belle/index.html),
+l’accueil n’en montre que trois (jardin, salon, chambre). Une photo remplacée doit l’être dans les deux pages.

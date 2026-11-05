@@ -20,290 +20,32 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Jost:wght@400;500;600&family=Caveat:wght@500&display=swap">
-<style>
-/* Layout : une station balnéaire Belle Époque. Bandeaux pleine largeur crème / marine, liseré de rayures de transat entre les sections, photos en fenêtres à arcade comme les villas de Pontaillac. */
-:root {
-  --marine: #1E3A5C;
-  --marine-2: #2B4F78;
-  --creme: #F8F4EA;
-  --sable: #EDE1C6;
-  --corail: #C4513A;
-  --corail-fonce: #A3402C;
-  --ecume: #FFFFFF;
-  --encre: #1A2633;
-  --gris: #56636F;
-  --filet: #DCCFB3;
-  --display: "DM Serif Display", Georgia, "Times New Roman", serif;
-  --body: "Jost", "Futura", "Century Gothic", "Segoe UI", sans-serif;
-  --main: "Caveat", "Segoe Script", "Bradley Hand", cursive;
-  color-scheme: light;
-}
-* { box-sizing: border-box }
-html { color-scheme: light }
-body { margin: 0 }
-img { max-width: 100% }
-[hidden] { display: none !important }
-html { scroll-padding-top: 76px }
-body { background: var(--creme); color: var(--encre); font-family: var(--body); font-size: 17px; line-height: 1.65; }
-.wrap { max-width: 1120px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
-section { padding-block: 72px; }
-h1, h2, h3 { font-family: var(--display); font-weight: 400; line-height: 1.1; text-wrap: balance; margin: 0; color: var(--marine); }
-h1 { font-size: clamp(2.3rem, 5.4vw, 4rem); }
-h2 { font-size: clamp(1.9rem, 3.8vw, 2.8rem); }
-h3 { font-size: 1.35rem; }
-p { margin: 0; max-width: 62ch; }
-a { color: var(--marine-2); }
-:focus-visible { outline: 3px solid var(--corail); outline-offset: 3px; border-radius: 4px; }
-.kicker { font-size: .8rem; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: var(--corail); }
-.lead { font-size: 1.15rem; color: var(--gris); }
-.stack { display: grid; gap: 16px; }
-.num { font-variant-numeric: tabular-nums; }
-
-/* Rayures de transat */
-.stripes { height: 14px; background: repeating-linear-gradient(90deg, var(--marine) 0 22px, var(--creme) 22px 44px); }
-.stripes.corail { background: repeating-linear-gradient(90deg, var(--corail) 0 22px, var(--creme) 22px 44px); }
-
-/* En-tête */
-body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--creme); }
-header.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 6; background: color-mix(in srgb, var(--creme) 94%, transparent); backdrop-filter: blur(6px); border-bottom: 1px solid var(--filet); }
-.top .wrap { display: flex; align-items: center; gap: 24px; padding-block: 12px; }
-.brand { font-family: var(--display); font-size: 1.6rem; color: var(--marine); text-decoration: none; display: flex; align-items: center; gap: 10px; white-space: nowrap; }
-.brand svg { flex: none }
-nav.main { display: flex; gap: 22px; margin-left: auto; font-size: .95rem; font-weight: 500; }
-nav.main a { color: var(--encre); text-decoration: none; }
-nav.main a:hover { color: var(--corail); }
-.lang { font-size: .85rem; font-weight: 600; letter-spacing: .08em; border: 1px solid var(--filet); border-radius: 999px; padding: 4px 12px; color: var(--marine); text-decoration: none; }
-.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: var(--corail); color: var(--ecume); font: inherit; font-weight: 600; text-decoration: none; border: 0; border-radius: 999px; padding: 13px 26px; cursor: pointer; transition: background .2s; }
-.btn:hover { background: var(--corail-fonce); }
-.btn.line { background: transparent; color: var(--marine); border: 1.5px solid var(--marine); }
-.btn.line:hover { background: var(--marine); color: var(--ecume); }
-.top .btn { padding: 9px 18px; font-size: .92rem; }
-
-/* Ouverture */
-.hero { padding-block: 56px 72px; }
-.hero-grid { display: grid; grid-template-columns: 1.05fr .95fr; gap: 56px; align-items: center; }
-.hero-grid > * { min-width: 0; }
-.hero h1 em { font-style: italic; color: var(--corail); }
-.hero .lead { margin-top: 22px; }
-.hero-actions { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 30px; align-items: center; }
-.note { display: flex; align-items: center; gap: 12px; margin-top: 30px; font-size: .95rem; color: var(--gris); }
-.note .score { font-family: var(--display); font-size: 2rem; color: var(--marine); line-height: 1; }
-.note .stars { color: var(--corail); letter-spacing: 2px; }
-.arch { position: relative; border-radius: 999px 999px 18px 18px; overflow: hidden; aspect-ratio: 4 / 5; max-width: 100%; background: var(--sable); border: 6px solid var(--ecume); box-shadow: 0 0 0 1px var(--filet); }
-.arch img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.hero-photo { position: relative; }
-.badge-ticket { position: absolute; left: -18px; bottom: 34px; background: var(--marine); color: var(--creme); padding: 14px 18px; border-radius: 10px; font-size: .9rem; line-height: 1.35; max-width: 210px; }
-.badge-ticket b { display: block; font-family: var(--display); font-weight: 400; font-size: 1.5rem; color: var(--ecume); }
-
-/* Mot de Belle */
-.mot { background: var(--sable); }
-.mot-grid { display: grid; grid-template-columns: 220px 1fr; gap: 40px; align-items: start; }
-.mot-grid > * { min-width: 0; }
-.mot blockquote { margin: 0; font-family: var(--display); font-size: clamp(1.3rem, 2.4vw, 1.7rem); line-height: 1.45; color: var(--marine); max-width: 52ch; }
-.signature { font-family: var(--main); font-size: 2.4rem; color: var(--corail); margin-top: 14px; display: block; }
-.todo { display: inline-block; font-size: .78rem; font-weight: 600; letter-spacing: .06em; background: var(--ecume); color: var(--corail-fonce); border: 1px dashed var(--corail); border-radius: 6px; padding: 2px 8px; }
-
-/* Atouts */
-.atouts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; margin-top: 40px; border-top: 1px solid var(--filet); }
-.atout { padding: 28px 26px 30px 0; border-bottom: 1px solid var(--filet); display: grid; gap: 8px; align-content: start; }
-.atout + .atout { padding-left: 26px; }
-.atout:nth-child(3n+1) { padding-left: 0; }
-.atout:nth-child(3n+2), .atout:nth-child(3n) { border-left: 1px solid var(--filet); }
-.atout svg { width: 34px; height: 34px; color: var(--corail); }
-.atout h3 { font-size: 1.3rem; }
-.atout p { color: var(--gris); font-size: .98rem; }
-
-/* Logement */
-.logement-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: start; }
-.logement-grid > * { min-width: 0; }
-.equip { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 24px; padding: 0; margin: 8px 0 0; list-style: none; font-size: .96rem; }
-.equip li { padding-left: 20px; position: relative; }
-.equip li::before { content: ""; position: absolute; left: 0; top: .62em; width: 9px; height: 9px; border-radius: 50%; border: 2px solid var(--corail); }
-.ticket { background: var(--ecume); border-radius: 14px; padding: 30px 30px 26px; position: relative; border: 1px solid var(--filet);
-  -webkit-mask: radial-gradient(circle 12px at 0 62%, transparent 11px, #000 12px) left / 51% 100% no-repeat, radial-gradient(circle 12px at 100% 62%, transparent 11px, #000 12px) right / 51% 100% no-repeat;
-          mask: radial-gradient(circle 12px at 0 62%, transparent 11px, #000 12px) left / 51% 100% no-repeat, radial-gradient(circle 12px at 100% 62%, transparent 11px, #000 12px) right / 51% 100% no-repeat; }
-.ticket .kicker { color: var(--marine-2); }
-.ticket h3 { margin: 6px 0 4px; font-size: 1.7rem; }
-.ticket .sub { color: var(--gris); font-size: .95rem; }
-.ticket ul { list-style: none; padding: 0; margin: 18px 0 0; display: grid; gap: 9px; }
-.ticket li { display: flex; gap: 10px; align-items: baseline; }
-.ticket li::before { content: "✓"; color: var(--corail); font-weight: 600; flex: none; }
-.ticket hr { border: 0; border-top: 2px dashed var(--filet); margin: 22px 0 16px; }
-.ticket .sur-demande { font-size: .92rem; color: var(--gris); }
-
-.galerie { display: grid; grid-template-columns: repeat(4, 1fr); grid-auto-rows: 210px; gap: 12px; margin-top: 48px; }
-.galerie figure { margin: 0; position: relative; border-radius: 12px; overflow: hidden; background: var(--sable); }
-.galerie img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .5s ease; }
-.galerie figure:hover img { transform: scale(1.04); }
-.galerie figcaption { position: absolute; left: 10px; bottom: 10px; background: color-mix(in srgb, var(--creme) 92%, transparent); color: var(--marine); font-size: .8rem; font-weight: 500; padding: 3px 10px; border-radius: 999px; }
-.galerie .big { grid-column: span 2; grid-row: span 2; }
-.galerie .tall { grid-row: span 2; }
-
-/* Saisons */
-.saison { background: var(--marine); color: var(--creme); }
-.saison h2 { color: var(--ecume); }
-.saison .kicker { color: #F0B9A8; }
-.saison .lead { color: #C9D4E0; }
-.mois { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 40px; }
-.mois article { border: 1px solid #3E6088; border-radius: 16px 16px 16px 16px; padding: 26px; display: grid; gap: 10px; align-content: start; background: color-mix(in srgb, var(--marine-2) 35%, var(--marine)); }
-.mois .m { font-family: var(--display); font-size: 2rem; color: var(--ecume); line-height: 1; }
-.mois p { color: #D6DEE8; font-size: .98rem; }
-.mois .prix { font-size: .92rem; color: #F0B9A8; font-weight: 600; letter-spacing: .02em; }
-.saison-cta { margin-top: 34px; display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
-.saison-cta small { color: #C9D4E0; }
-
-/* Autour */
-.filtres { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 28px; }
-.filtres button { font: inherit; font-size: .92rem; font-weight: 500; border: 1.5px solid var(--filet); background: var(--ecume); color: var(--encre); border-radius: 999px; padding: 7px 16px; cursor: pointer; }
-.filtres button[aria-pressed="true"] { background: var(--marine); border-color: var(--marine); color: var(--ecume); }
-.zones { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; margin-top: 34px; }
-.zones > * { min-width: 0; }
-.zone-head { display: flex; align-items: center; gap: 10px; padding-bottom: 12px; border-bottom: 3px solid var(--marine); margin-bottom: 6px; }
-.zone-head svg { width: 26px; height: 26px; color: var(--corail); flex: none; }
-.zone-head h3 { font-size: 1.45rem; }
-.zone-head span { margin-left: auto; font-size: .82rem; color: var(--gris); white-space: nowrap; }
-.lieu { padding: 16px 0; border-bottom: 1px solid var(--filet); display: grid; gap: 6px; }
-.lieu-top { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; }
-.lieu h4 { margin: 0; font-size: 1.05rem; font-weight: 600; color: var(--marine); }
-.lieu .t { font-size: .85rem; font-weight: 600; color: var(--corail); white-space: nowrap; }
-.lieu p { font-size: .94rem; color: var(--gris); }
-.tags { display: flex; gap: 6px; flex-wrap: wrap; }
-.tags span { font-size: .74rem; font-weight: 500; background: var(--sable); color: var(--marine); border-radius: 999px; padding: 1px 9px; }
-.lieu a { font-size: .88rem; }
-.vide { color: var(--gris); font-size: .94rem; padding: 16px 0; }
-.adresses { margin-top: 44px; background: var(--ecume); border: 1.5px dashed var(--filet); border-radius: 16px; padding: 26px 28px; display: grid; grid-template-columns: auto 1fr; gap: 20px; align-items: center; }
-.adresses > * { min-width: 0; }
-.adresses .signature { margin: 0; font-size: 2rem; }
-.chien-info { margin-top: 22px; font-size: .92rem; color: var(--gris); }
-
-/* Avis */
-.avis-head { display: flex; justify-content: space-between; align-items: end; gap: 24px; flex-wrap: wrap; }
-.notes { display: flex; gap: 28px; flex-wrap: wrap; align-items: end; }
-.notes .score { font-family: var(--display); font-size: 3.2rem; line-height: .9; color: var(--marine); }
-.notes dl { display: grid; grid-template-columns: auto auto; gap: 2px 14px; margin: 0; font-size: .92rem; }
-.notes dt { color: var(--gris); }
-.notes dd { margin: 0; font-weight: 600; text-align: right; }
-.car { display: flex; gap: 18px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 6px 2px 14px; margin-top: 34px; scrollbar-width: thin; }
-.car figure { flex: 0 0 min(360px, 84%); scroll-snap-align: start; margin: 0; background: var(--ecume); border: 1px solid var(--filet); border-radius: 16px; padding: 26px; display: grid; gap: 16px; align-content: space-between; }
-.car blockquote { margin: 0; font-family: var(--display); font-size: 1.18rem; line-height: 1.45; color: var(--marine); }
-.car blockquote::before { content: "“"; display: block; font-size: 3rem; line-height: .6; color: var(--corail); margin-bottom: 8px; }
-.car figcaption { font-size: .9rem; color: var(--gris); }
-.car figcaption strong { color: var(--encre); }
-.car-nav { display: flex; gap: 8px; }
-.car-nav button { font: inherit; width: 44px; height: 44px; border-radius: 50%; border: 1.5px solid var(--marine); background: transparent; color: var(--marine); cursor: pointer; font-size: 1.1rem; }
-.car-nav button:hover { background: var(--marine); color: var(--ecume); }
-.fine { font-size: .88rem; color: var(--gris); }
-
-/* Tarifs */
-.tarifs { background: var(--sable); }
-.cabines { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 36px; }
-.cabine { background: var(--ecume); border-radius: 14px; overflow: hidden; display: grid; grid-template-rows: auto 1fr; border: 1px solid var(--filet); }
-.cabine .toit { height: 12px; background: repeating-linear-gradient(90deg, var(--marine) 0 14px, var(--ecume) 14px 28px); }
-.cabine.peak .toit { background: repeating-linear-gradient(90deg, var(--corail) 0 14px, var(--ecume) 14px 28px); }
-.cabine .in { padding: 20px 22px 22px; display: grid; gap: 6px; align-content: start; }
-.cabine h3 { font-size: 1.3rem; }
-.cabine .dates { font-size: .9rem; color: var(--gris); }
-.cabine .p { font-family: var(--display); font-size: 2.2rem; color: var(--marine); line-height: 1.1; margin-top: 6px; }
-.cabine .p small { font-family: var(--body); font-size: .9rem; color: var(--gris); }
-.cabine .cond { font-size: .9rem; border-top: 1px dashed var(--filet); padding-top: 10px; margin-top: 6px; }
-.cabine.peak { border: 2px solid var(--corail); }
-.peak-tag { justify-self: start; font-size: .74rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; background: var(--corail); color: var(--ecume); border-radius: 999px; padding: 2px 10px; }
-.extras { margin-top: 22px; display: flex; gap: 10px 28px; flex-wrap: wrap; font-size: .94rem; }
-
-/* Réserver */
-.direct { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; margin-top: 32px; }
-.direct div { display: grid; gap: 6px; align-content: start; }
-.direct b { font-family: var(--display); font-weight: 400; font-size: 1.3rem; color: var(--marine); }
-.direct p { color: var(--gris); font-size: .96rem; }
-ol.etapes { list-style: none; counter-reset: e; padding: 0; margin: 40px 0 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
-ol.etapes li { counter-increment: e; display: grid; grid-template-columns: 46px 1fr; gap: 14px; align-items: start; }
-ol.etapes li::before { content: counter(e); width: 46px; height: 46px; border-radius: 50%; background: var(--marine); color: var(--ecume); font-family: var(--display); font-size: 1.4rem; display: grid; place-items: center; }
-ol.etapes h3 { font-size: 1.15rem; margin-bottom: 4px; }
-ol.etapes p { color: var(--gris); font-size: .95rem; }
-
-.demande { background: var(--marine); }
-.demande h2 { color: var(--ecume); }
-.demande .kicker { color: #F0B9A8; }
-.req { display: grid; grid-template-columns: 1.1fr .9fr; gap: 28px; margin-top: 30px; align-items: start; }
-.req > * { min-width: 0; }
-form { background: var(--creme); border-radius: 16px; padding: 26px; display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-form .full { grid-column: 1 / -1; }
-label { display: grid; gap: 5px; font-size: .9rem; font-weight: 500; color: var(--marine); }
-input, select, textarea { font: inherit; font-size: 1rem; padding: 11px 13px; border: 1.5px solid var(--filet); border-radius: 10px; background: var(--ecume); color: var(--encre); width: 100%; min-width: 0; }
-textarea { min-height: 92px; resize: vertical; }
-.check { display: flex; gap: 10px; align-items: center; font-weight: 500; }
-.check input { width: 20px; height: 20px; accent-color: var(--corail); }
-.estim { background: var(--ecume); border-radius: 16px; padding: 26px; display: grid; gap: 8px; }
-.estim .total { font-family: var(--display); font-size: 2.8rem; color: var(--marine); line-height: 1; }
-.estim ul { margin: 6px 0; padding-left: 18px; font-size: .93rem; color: var(--gris); }
-.warn { color: var(--corail-fonce); font-size: .95rem; font-weight: 500; }
-.out pre { white-space: pre-wrap; word-break: break-word; font-family: var(--body); font-size: .92rem; background: var(--creme); padding: 14px; border-radius: 10px; margin: 4px 0 10px; }
-.row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
-.mail-belle { font-weight: 600; user-select: all; }
-
-/* FAQ */
-.faq-list { margin-top: 30px; display: grid; gap: 0; max-width: 820px; border-top: 1px solid var(--filet); }
-details { border-bottom: 1px solid var(--filet); padding: 18px 0; }
-summary { cursor: pointer; font-family: var(--display); font-size: 1.2rem; color: var(--marine); list-style: none; display: flex; justify-content: space-between; gap: 16px; }
-summary::-webkit-details-marker { display: none }
-summary::after { content: "+"; color: var(--corail); font-family: var(--body); font-size: 1.5rem; line-height: 1; }
-details[open] summary::after { content: "–"; }
-details p { margin-top: 10px; color: var(--gris); }
-
-footer { background: var(--encre); color: #C3CCD5; font-size: .9rem; }
-footer .wrap { padding-block: 40px 96px; display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 28px; }
-footer .wrap > * { min-width: 0; }
-footer .brand { color: var(--creme); }
-footer a { color: #E4C9A8; }
-footer h4 { margin: 0 0 8px; font-family: var(--body); font-size: .8rem; letter-spacing: .14em; text-transform: uppercase; color: var(--creme); }
-
-.barre { display: none; position: fixed; left: 0; right: 0; bottom: 0; z-index: 8; background: var(--creme); border-top: 1px solid var(--filet); padding: 10px max(16px, env(safe-area-inset-right, 0px)) calc(10px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px)); align-items: center; gap: 12px; }
-.barre .p { font-size: .88rem; color: var(--gris); line-height: 1.3; }
-.barre .p b { font-family: var(--display); font-weight: 400; font-size: 1.25rem; color: var(--marine); }
-.barre .btn { margin-left: auto; padding: 11px 20px; }
-
-@media (max-width: 900px) {
-  .hero-grid, .logement-grid, .req, .mot-grid { grid-template-columns: 1fr; }
-  .hero-photo { max-width: 440px; justify-self: center; width: 100%; }
-  .atouts, .mois, .cabines, .direct, ol.etapes, .zones { grid-template-columns: 1fr 1fr; }
-  .atout, .atout + .atout { padding-left: 0; border-left: 0 !important; padding-right: 18px; }
-  .zones { gap: 36px 28px; }
-  .galerie { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 170px; }
-  footer .wrap { grid-template-columns: 1fr 1fr; }
-  section { padding-block: 56px; }
-  nav.main { display: none; }
-  .top .wrap { justify-content: space-between; }
-  .lang { margin-left: auto; }
-}
-@media (max-width: 600px) {
-  .atouts, .mois, .cabines, .direct, ol.etapes, .zones, .equip, footer .wrap { grid-template-columns: 1fr; }
-  form { grid-template-columns: 1fr; }
-  .top .btn { display: none; }
-  .barre { display: flex; }
-  .badge-ticket { left: 8px; bottom: 16px; }
-  .adresses { grid-template-columns: 1fr; }
-  .galerie .big { grid-column: span 2; }
-}
-@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
-@media (prefers-reduced-motion: reduce) { .galerie img { transition: none; } }
-</style>
+<link rel="stylesheet" href="assets/style.css">
+<script>
+// Anciens liens (site sur une seule page) : on redirige vers le bon onglet.
+(() => {
+  const ANCIENS = { logement: "chez-belle/", tarifs: "tarifs-reservation/", reserver: "tarifs-reservation/#reserver", autour: "autour/", faq: "infos/" };
+  const cible = ANCIENS[location.hash.slice(1)];
+  if (cible) location.replace(cible);
+})();
+</script>
 </head>
 <body>
 
 <header class="top">
   <div class="wrap">
-    <a class="brand" href="#accueil" aria-label="Chez Belle, accueil">
+    <a class="brand" href="./" aria-label="Chez Belle, accueil">
       <svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><circle cx="15" cy="15" r="14" fill="#1E3A5C"/><path d="M5 19c3-2 5-2 7 0s5 2 7 0 5-2 7 0" stroke="#F8F4EA" stroke-width="2" fill="none" stroke-linecap="round"/><circle cx="15" cy="11" r="4" fill="#C4513A"/></svg>
       Chez Belle
     </a>
-    <nav class="main" aria-label="Sections">
-      <a href="#logement">Le logement</a>
-      <a href="#autour">Autour</a>
-      <a href="#avis">Avis</a>
-      <a href="#tarifs">Tarifs</a>
-      <a href="#faq">Questions</a>
+    <nav class="main" aria-label="Onglets du site">
+      <a href="./" aria-current="page">Accueil</a>
+      <a href="chez-belle/">Chez Belle</a>
+      <a href="tarifs-reservation/">Tarifs et réservation</a>
+      <a href="autour/">Conseils et adresses</a>
+      <a href="infos/">Infos pratiques</a>
     </nav>
-    <a class="btn" href="#reserver">Demander mes dates</a>
+    <a class="btn" href="tarifs-reservation/#reserver">Demander mes dates</a>
   </div>
 </header>
 <div class="stripes" aria-hidden="true"></div>
@@ -316,8 +58,8 @@ footer h4 { margin: 0 0 8px; font-family: var(--body); font-size: .8rem; letter-
         <h1 style="margin-top:14px">Flâner sous les pins, <em>l’océan</em> au bout de la rue</h1>
         <p class="lead">Un rez-de-jardin indépendant de 55&nbsp;m², au calme, avec un grand jardin clos à l’ombre des pins. La petite conche de Saint-Sordelin est à 5&nbsp;minutes à pied, la plage de Pontaillac à 7. Lits faits, linge et ménage compris.</p>
         <div class="hero-actions">
-          <a class="btn" href="#reserver">Demander mes dates</a>
-          <a class="btn line" href="#logement">Visiter le logement</a>
+          <a class="btn" href="tarifs-reservation/#reserver">Demander mes dates</a>
+          <a class="btn line" href="chez-belle/">Visiter le logement</a>
         </div>
         <div class="note">
           <span class="score num" data-note="globale">4,82</span>
@@ -333,226 +75,47 @@ footer h4 { margin: 0 0 8px; font-family: var(--body); font-size: .8rem; letter-
     </div>
   </section>
 
-  <section class="mot" aria-label="Le mot de Belle">
-    <div class="wrap mot-grid">
-      <div class="stack">
-        <div class="kicker">Le mot de votre hôtesse</div>
-      </div>
-      <div>
-        <blockquote>« J’habite à l’étage depuis des années et je loue le rez-de-jardin comme j’aimerais être reçue en vacances : des lits faits à votre arrivée, un jardin où l’on déjeune à l’ombre, et mes bonnes adresses du quartier. Vous êtes chez vous, et je reste là si vous avez besoin. »</blockquote>
-        <span class="signature">Belle</span>
-      </div>
-    </div>
-  </section>
-
-  <section aria-labelledby="t-atouts">
-    <div class="wrap">
-      <div class="kicker">Pourquoi on s’y sent bien</div>
-      <h2 id="t-atouts" style="margin-top:10px">Six raisons de poser vos valises ici</h2>
-      <div class="atouts">
-        <div class="atout">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M2 18c2-1.5 4-1.5 6 0s4 1.5 6 0 4-1.5 6 0"/><path d="M2 14c2-1.5 4-1.5 6 0s4 1.5 6 0 4-1.5 6 0"/><circle cx="17" cy="6" r="3"/></svg>
-          <h3>La mer à pied</h3>
-          <p>Une conche abritée à 5 minutes, la grande plage de Pontaillac à 7. On laisse la voiture tout le séjour.</p>
-        </div>
-        <div class="atout">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M12 22V12"/><path d="M12 3l6 9H6z"/><path d="M12 8l4 6H8z"/></svg>
-          <h3>Un jardin clos et ombragé</h3>
-          <p>200 m² sous les pins, plein sud et ouest, avec transats, auvent et barbecue Weber.</p>
-        </div>
-        <div class="atout">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M3 18h18"/><path d="M5 18V9l7-5 7 5v9"/><path d="M10 18v-5h4v5"/></svg>
-          <h3>Calme et indépendant</h3>
-          <p>Votre propre entrée, dans une rue résidentielle. On entend surtout les oiseaux.</p>
-        </div>
-        <div class="atout">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16v10H4z"/><path d="M4 11h16"/><path d="M9 7V4h6v3"/></svg>
-          <h3>Vraiment tout compris</h3>
-          <p>Lits faits, linge de toilette, serviettes de plage et ménage final. Vous arrivez, vous êtes en vacances.</p>
-        </div>
-        <div class="atout">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="5" cy="10" r="2"/><circle cx="9" cy="5" r="2"/><circle cx="15" cy="5" r="2"/><circle cx="19" cy="10" r="2"/><path d="M12 11c-3 0-5 3-5 6 0 2 2 3 5 2 3 1 5 0 5-2 0-3-2-6-5-6z"/></svg>
-          <h3>Votre chien bienvenu</h3>
-          <p>Le jardin est clos, et le sentier des douaniers part à deux pas pour les grandes balades.</p>
-        </div>
-        <div class="atout">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M5 17h14l-1.5-6h-11z"/><circle cx="8" cy="18" r="1.5"/><circle cx="16" cy="18" r="1.5"/><path d="M7 11l1.5-4h7l1.5 4"/></svg>
-          <h3>Parking dans la propriété</h3>
-          <p>Une place réservée derrière le portail. Précieux en plein mois d’août à Pontaillac.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <div class="stripes corail" aria-hidden="true"></div>
 
-  <section id="logement" aria-labelledby="t-logement">
+  <section aria-labelledby="t-essentiel">
     <div class="wrap">
-      <div class="logement-grid">
-        <div class="stack">
-          <div class="kicker">Le logement</div>
-          <h2 id="t-logement">Une maison de vacances de famille, au rez-de-jardin</h2>
-          <p>On entre par sa propre porte, de plain-pied sur le jardin. La pièce à vivre réunit un coin repas, un salon et un canapé-lit. La cuisine est entièrement équipée pour cuisiner le poisson du marché. La chambre a deux lits simples qui se rapprochent en grand lit, et la salle de douche à l’italienne a été rénovée.</p>
-          <p>Le soir, on dîne dehors sous l’auvent pendant que le soleil passe à l’ouest, derrière les pins.</p>
-          <ul class="equip">
-            <li>Lave-vaisselle, four, micro-ondes</li>
-            <li>Cafetière Nespresso, grille-pain</li>
-            <li>Vaisselle pour 8 personnes</li>
-            <li>Lave-linge</li>
-            <li>Wifi fibre et télévision</li>
-            <li>Fer à repasser, sèche-cheveux</li>
-            <li>Parasol et jeux de plage</li>
-            <li>Barbecue Weber, 2 transats</li>
-            <li>Volets roulants solaires</li>
-            <li>Lit parapluie sur demande</li>
-          </ul>
-        </div>
-        <div class="ticket">
-          <div class="kicker">Inclus dans le prix</div>
-          <h3>Votre billet tout compris</h3>
-          <p class="sub">Le prix affiché est le prix payé. Seule la taxe de séjour s’ajoute.</p>
-          <ul>
-            <li>Lits faits à votre arrivée</li>
-            <li>Linge de toilette et serviettes de plage</li>
-            <li>Ménage de fin de séjour</li>
-            <li>Eau, électricité, chauffage et wifi</li>
-            <li>Café et produits de base pour démarrer</li>
-            <li>Arrivée autonome avec boîte à clés, dès 16 h</li>
-          </ul>
-          <hr>
-          <p class="sur-demande"><strong>Sur demande :</strong> lit parapluie et chaise haute. <strong>Chien :</strong> 15&nbsp;€ jusqu’à 3 nuits, 25&nbsp;€ au-delà.</p>
+      <div class="kicker">L’essentiel</div>
+      <h2 id="t-essentiel" style="margin-top:10px">Chez Belle en un coup d’œil</h2>
+      <ul class="essentiels">
+        <li><b>55 m² de plain-pied</b><span>Votre propre entrée, au rez-de-jardin</span></li>
+        <li><b>4 voyageurs</b><span>1 chambre, 1 canapé-lit</span></li>
+        <li><b>Jardin clos de 200 m²</b><span>Sous les pins, transats et barbecue</span></li>
+        <li><b>La mer à pied</b><span>Conche à 5 min, plage de Pontaillac à 7</span></li>
+        <li><b>Tout compris</b><span>Lits faits, linge et ménage de fin de séjour</span></li>
+        <li><b>Chien bienvenu</b><span>Parking dans la propriété · arrivée dès 16 h</span></li>
+      </ul>
+      <div class="apercu">
+        <div class="galerie">
+          <figure class="big"><img src="photos/terrasse-960.webp" srcset="photos/terrasse-480.webp 480w, photos/terrasse-960.webp 960w" sizes="(max-width: 900px) 100vw, 560px" width="960" height="720" loading="lazy" alt="Le jardin côté terrasse, en fleurs"><figcaption>Le jardin</figcaption></figure>
+          <figure class="tall"><img src="photos/piece-a-vivre-960.webp" srcset="photos/piece-a-vivre-480.webp 480w, photos/piece-a-vivre-960.webp 960w" sizes="(max-width: 900px) 50vw, 280px" width="960" height="1280" loading="lazy" alt="Le salon avec canapé-lit et fauteuil en rotin"><figcaption>Le salon</figcaption></figure>
+          <figure class="tall"><img src="photos/chambre-960.webp" srcset="photos/chambre-480.webp 480w, photos/chambre-960.webp 960w" sizes="(max-width: 900px) 50vw, 280px" width="960" height="1280" loading="lazy" alt="La chambre, lits rapprochés en grand lit"><figcaption>La chambre</figcaption></figure>
         </div>
       </div>
-
-      <div class="galerie">
-        <figure class="big"><img src="photos/terrasse-960.webp" srcset="photos/terrasse-480.webp 480w, photos/terrasse-960.webp 960w" sizes="(max-width: 900px) 100vw, 560px" width="960" height="720" loading="lazy" alt="Le jardin côté terrasse, en fleurs"><figcaption>Le jardin</figcaption></figure>
-        <figure class="tall"><img src="photos/piece-a-vivre-960.webp" srcset="photos/piece-a-vivre-480.webp 480w, photos/piece-a-vivre-960.webp 960w" sizes="(max-width: 900px) 50vw, 280px" width="960" height="1280" loading="lazy" alt="Le salon avec canapé-lit et fauteuil en rotin"><figcaption>Le salon</figcaption></figure>
-        <figure class="tall"><img src="photos/chambre-960.webp" srcset="photos/chambre-480.webp 480w, photos/chambre-960.webp 960w" sizes="(max-width: 900px) 50vw, 280px" width="960" height="1280" loading="lazy" alt="La chambre, lits rapprochés en grand lit"><figcaption>La chambre</figcaption></figure>
-        <figure class="tall"><img src="photos/galerie-1-960.webp" srcset="photos/galerie-1-480.webp 480w, photos/galerie-1-960.webp 960w" sizes="(max-width: 900px) 50vw, 280px" width="960" height="1280" loading="lazy" alt="Le coin repas et sa table en bois"><figcaption>Le coin repas</figcaption></figure>
-        <figure><img src="photos/cuisine-960.webp" srcset="photos/cuisine-480.webp 480w, photos/cuisine-960.webp 720w" sizes="(max-width: 900px) 50vw, 280px" width="720" height="540" loading="lazy" alt="La cuisine équipée"><figcaption>La cuisine</figcaption></figure>
-        <figure><img src="photos/salle-de-douche-960.webp" srcset="photos/salle-de-douche-480.webp 480w, photos/salle-de-douche-960.webp 960w" sizes="(max-width: 900px) 50vw, 280px" width="960" height="720" loading="lazy" alt="La salle de douche à l’italienne"><figcaption>La douche à l’italienne</figcaption></figure>
-        <figure class="tall"><img src="photos/galerie-2-480.webp" width="480" height="640" loading="lazy" alt="L’entrée, avec la porte ouverte sur le jardin"><figcaption>L’entrée</figcaption></figure>
-        <figure><img src="photos/salle-a-manger-480.webp" width="480" height="388" loading="lazy" alt="La table de la salle à manger dressée"><figcaption>La table</figcaption></figure>
-        <figure><img src="photos/galerie-3-480.webp" width="480" height="640" loading="lazy" alt="La buanderie avec lave-linge"><figcaption>La buanderie</figcaption></figure>
+      <div class="plus">
+        <a class="btn line" href="chez-belle/#photos">Voir les 9 photos</a>
+        <a href="chez-belle/">Le logement et ses prestations →</a>
       </div>
     </div>
   </section>
 
-  <section class="saison" aria-labelledby="t-saison">
+  <section class="tarifs" aria-labelledby="t-zoom">
     <div class="wrap">
-      <div class="kicker">Le secret des habitués</div>
-      <h2 id="t-saison" style="margin-top:10px">Mai, juin, septembre : la plus belle saison</h2>
-      <p class="lead" style="margin-top:14px">Les plages sont à vous, les terrasses ont de la place et la lumière est dorée. Et le prix descend à 75&nbsp;€ la nuit.</p>
-      <div class="mois">
-        <article><span class="m">Mai</span><p>Les ponts de l’Ascension et de la Pentecôte, les premiers bains de soleil et le marché sans la foule.</p><span class="prix">dès 75 € la nuit, 3 nuits minimum</span></article>
-        <article><span class="m">Juin</span><p>Les jours les plus longs de l’année, des dîners dehors jusqu’à 22 h, la plage encore calme en semaine.</p><span class="prix">dès 75 € la nuit, 3 nuits minimum</span></article>
-        <article><span class="m">Septembre</span><p>L’océan a chauffé tout l’été, la rentrée a vidé les plages. Le meilleur mois pour se baigner au calme.</p><span class="prix">dès 75 € la nuit, 3 nuits minimum</span></article>
+      <div class="kicker">Tarifs 2027 en réservation directe</div>
+      <h2 id="t-zoom" style="margin-top:10px">Zoom sur les prix</h2>
+      <p style="margin-top:14px">Linge et ménage compris. Seule la taxe de séjour s’ajoute.</p>
+      <div class="cabines zoom">
+        <div class="cabine"><div class="toit"></div><div class="in"><h3>Mai, juin, septembre</h3><span class="dates">la plus belle saison</span><span class="p num">75 € <small>la nuit dès 4 nuits</small></span><span class="fine">85 € la nuit pour 3 nuits</span><span class="cond">3 nuits minimum</span></div></div>
+        <div class="cabine"><div class="toit"></div><div class="in"><h3>Ponts et début d’été</h3><span class="dates">ponts de mai, début juillet, fin d’été</span><span class="p num">90 à 100 € <small>la nuit</small></span><span class="cond">3 ou 4 nuits minimum</span></div></div>
+        <div class="cabine peak"><div class="toit"></div><div class="in"><span class="peak-tag">Cœur de l’été</span><h3>Juillet et août</h3><span class="dates">du 17 juillet au 28 août</span><span class="p num">805 € <small>la semaine</small></span><span class="cond">7 nuits, du samedi au samedi</span></div></div>
       </div>
-      <div class="saison-cta"><a class="btn" href="#reserver">Choisir mes dates hors saison</a><small>Arrivée possible le mercredi, le vendredi ou le samedi.</small></div>
-    </div>
-  </section>
-
-  <section id="autour" aria-labelledby="t-autour">
-    <div class="wrap">
-      <div class="kicker">Autour de Chez Belle</div>
-      <h2 id="t-autour" style="margin-top:10px">Tout se fait à pied, à vélo, ou presque</h2>
-      <p class="lead" style="margin-top:14px">Les conches et le sentier des douaniers au bout de la rue, Royan et Saint-Palais par la piste cyclable, et toute la Côte de Beauté à moins de 30 minutes en voiture.</p>
-      <div class="filtres" role="group" aria-label="Filtrer par envie">
-        <button type="button" data-f="tout" aria-pressed="true">Tout</button>
-        <button type="button" data-f="plage" aria-pressed="false">Plages</button>
-        <button type="button" data-f="balade" aria-pressed="false">Balades</button>
-        <button type="button" data-f="enfants" aria-pressed="false">Avec des enfants</button>
-        <button type="button" data-f="pluie" aria-pressed="false">Jour de pluie</button>
-        <button type="button" data-f="chien" aria-pressed="false">Avec un chien</button>
-        <button type="button" data-f="marche" aria-pressed="false">Marchés</button>
-      </div>
-      <div class="zones">
-        <div>
-          <div class="zone-head">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="13" cy="4" r="2"/><path d="M10 21l2-6 3 3v3"/><path d="M8 11l3-3 3 2 3 1"/><path d="M12 15l-1-5"/></svg>
-            <h3>À pied</h3><span>moins de 30 min</span>
-          </div>
-          <div class="lieu" data-t="plage enfants">
-            <div class="lieu-top"><h4>Conche de Saint-Sordelin</h4><span class="t">5 min</span></div>
-            <p>La plus proche : une petite crique de sable abritée entre deux pointes rocheuses, juste au nord de Pontaillac.</p>
-            <div class="tags"><span>Plage</span><span>Calme</span></div>
-          </div>
-          <div class="lieu" data-t="plage enfants">
-            <div class="lieu-top"><h4>Plage de Pontaillac</h4><span class="t">7 min</span></div>
-            <p>La grande plage familiale en arc de cercle, surveillée en été, avec club enfants, glaciers, cafés et location de tentes et transats.</p>
-            <div class="tags"><span>Plage</span><span>Enfants</span><span>Surf</span></div>
-          </div>
-          <div class="lieu" data-t="balade chien">
-            <div class="lieu-top"><h4>Sentier des douaniers jusqu’à Nauzan</h4><span class="t">30 min</span></div>
-            <p>Le chemin côtier longe les falaises et les villas Belle Époque, par la conche du Conseil jusqu’à la baie de Nauzan.</p>
-            <div class="tags"><span>Balade</span><span>Chien</span><span>Coucher de soleil</span></div>
-          </div>
-          <div class="lieu" data-t="marche">
-            <div class="lieu-top"><h4>Marché de Vaux-sur-Mer</h4><span class="t">10 min</span></div>
-            <p>Tous les matins en juillet et août. Le mardi, le jeudi et le samedi matin d’avril à juin et en septembre.</p>
-            <div class="tags"><span>Marché</span><span>Produits locaux</span></div>
-          </div>
-        </div>
-        <div>
-          <div class="zone-head">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="5.5" cy="16.5" r="3.5"/><circle cx="18.5" cy="16.5" r="3.5"/><path d="M5.5 16.5L9 9h6l3.5 7.5"/><path d="M12 16.5L9 9"/><path d="M14 6h2.5L15 9"/></svg>
-            <h3>À vélo</h3><span>par la piste cyclable</span>
-          </div>
-          <div class="lieu" data-t="plage enfants">
-            <div class="lieu-top"><h4>Conche de Nauzan</h4><span class="t">10 min</span></div>
-            <p>Un croissant de sable fin entre deux falaises vertes, l’une des plus jolies conches de la côte.</p>
-            <div class="tags"><span>Plage</span><span>Baignade</span></div>
-          </div>
-          <div class="lieu" data-t="marche pluie">
-            <div class="lieu-top"><h4>Royan, front de mer et marché central</h4><span class="t">env. 15 min</span></div>
-            <p>La grande conche, le port, l’architecture des années 50 et la halle du marché couvert, idéale un matin gris.</p>
-            <div class="tags"><span>Marché</span><span>Ville</span><span>Jour de pluie</span></div>
-          </div>
-          <div class="lieu" data-t="balade">
-            <div class="lieu-top"><h4>Saint-Palais-sur-Mer et le Pont du Diable</h4><span class="t">env. 25 min</span></div>
-            <p>Rochers sculptés par la mer, carrelets de pêcheurs et la plage du Platin. Le sentier continue jusqu’à la Grande Côte.</p>
-            <div class="tags"><span>Balade</span><span>Panorama</span></div>
-          </div>
-          <div class="vide" hidden>Rien dans cette catégorie à vélo.</div>
-        </div>
-        <div>
-          <div class="zone-head">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M5 17h14v-4l-2-5H7l-2 5z"/><circle cx="8" cy="17" r="2"/><circle cx="16" cy="17" r="2"/><path d="M5 13h14"/></svg>
-            <h3>En voiture</h3><span>moins de 30 min</span>
-          </div>
-          <div class="lieu" data-t="enfants">
-            <div class="lieu-top"><h4>Zoo de La Palmyre</h4><span class="t">env. 20 min</span></div>
-            <p>L’un des grands zoos de France, au milieu de la forêt de pins. Une journée entière avec les enfants.</p>
-            <div class="tags"><span>Enfants</span></div>
-          </div>
-          <div class="lieu" data-t="balade">
-            <div class="lieu-top"><h4>Phare de la Coubre et la Côte sauvage</h4><span class="t">env. 25 min</span></div>
-            <p>On monte au sommet du phare, puis on file vers les immenses plages de sable bordées de forêt.</p>
-            <div class="tags"><span>Balade</span><span>Panorama</span></div>
-          </div>
-          <div class="lieu" data-t="enfants">
-            <div class="lieu-top"><h4>Phare de Cordouan en bateau</h4><span class="t">depuis Royan</span></div>
-            <p>Le « roi des phares », classé à l’Unesco, en pleine mer. Visites d’avril à octobre, horaires selon les marées, réservation obligatoire.</p>
-            <div class="tags"><span>Excursion</span><span>Enfants</span></div>
-            <a href="https://www.phare-de-cordouan.fr/" rel="noopener" target="_blank">Horaires et réservation</a>
-          </div>
-          <div class="lieu" data-t="pluie enfants">
-            <div class="lieu-top"><h4>Grottes de Meschers</h4><span class="t">env. 20 min</span></div>
-            <p>Des habitations troglodytiques creusées dans la falaise, face à l’estuaire de la Gironde.</p>
-            <div class="tags"><span>Jour de pluie</span><span>Enfants</span></div>
-          </div>
-          <div class="lieu" data-t="balade">
-            <div class="lieu-top"><h4>Talmont-sur-Gironde</h4><span class="t">env. 30 min</span></div>
-            <p>Un village fortifié aux ruelles couvertes de roses trémières et son église romane au bord de l’eau.</p>
-            <div class="tags"><span>Balade</span><span>Patrimoine</span></div>
-          </div>
-          <div class="vide" hidden>Rien dans cette catégorie en voiture.</div>
-        </div>
-      </div>
-      <p class="chien-info" id="chien-info" hidden>À savoir : les chiens, même tenus en laisse, ne sont pas admis sur les plages de Royan et de Vaux-sur-Mer du 1<sup>er</sup> avril au 30 septembre. Le sentier des douaniers reste parfait pour les balades.</p>
-      <div class="adresses">
-        <span class="signature">Les belles adresses de Belle</span>
-        <p>Bientôt sur cette page : sa boulangerie, son poissonnier, sa table préférée et le meilleur glacier de Pontaillac.</p>
+      <div class="plus">
+        <a class="btn" href="tarifs-reservation/">Toute la grille et l’estimation</a>
+        <a href="tarifs-reservation/#reserver">Demander mes dates →</a>
       </div>
     </div>
   </section>
@@ -579,98 +142,12 @@ footer h4 { margin: 0 0 8px; font-family: var(--body); font-size: .8rem; letter-
     </div>
   </section>
 
-  <section id="tarifs" class="tarifs" aria-labelledby="t-tarifs">
+  <section class="cta-final" aria-labelledby="t-suite">
     <div class="wrap">
-      <div class="kicker">Tarifs 2027 en réservation directe</div>
-      <h2 id="t-tarifs" style="margin-top:10px">Le prix par nuit, saison par saison</h2>
-      <p style="margin-top:14px">Les prix en direct sont plus bas que sur les plateformes, qui ajoutent leurs frais de service.</p>
-      <div class="cabines">
-        <div class="cabine"><div class="toit"></div><div class="in"><h3>Mai et juin</h3><span class="dates">du 1<sup>er</sup> mai au 3 juillet</span><span class="p num">75 € <small>la nuit dès 4 nuits</small></span><span class="fine">85 € la nuit pour 3 nuits</span><span class="cond">3 nuits minimum · arrivée mercredi, vendredi ou samedi</span></div></div>
-        <div class="cabine"><div class="toit"></div><div class="in"><h3>Ponts de mai</h3><span class="dates">Ascension du 6 au 9 mai · Pentecôte du 14 au 17 mai</span><span class="p num">95 € <small>la nuit</small></span><span class="cond">3 nuits minimum · arrivée jeudi ou vendredi</span></div></div>
-        <div class="cabine"><div class="toit"></div><div class="in"><h3>Début juillet</h3><span class="dates">du 3 au 17 juillet</span><span class="p num">100 € <small>la nuit</small></span><span class="cond">4 nuits minimum · arrivée mercredi ou samedi</span></div></div>
-        <div class="cabine peak"><div class="toit"></div><div class="in"><span class="peak-tag">Cœur de l’été</span><h3>Juillet et août</h3><span class="dates">du 17 juillet au 28 août</span><span class="p num">805 € <small>la semaine</small></span><span class="fine">soit 115 € la nuit</span><span class="cond">7 nuits, du samedi au samedi</span></div></div>
-        <div class="cabine"><div class="toit"></div><div class="in"><h3>Fin d’été</h3><span class="dates">du 28 août au 11 septembre</span><span class="p num">90 € <small>la nuit</small></span><span class="cond">4 nuits minimum · arrivée mercredi ou samedi</span></div></div>
-        <div class="cabine"><div class="toit"></div><div class="in"><h3>Septembre</h3><span class="dates">du 11 au 25 septembre</span><span class="p num">75 € <small>la nuit dès 4 nuits</small></span><span class="fine">85 € la nuit pour 3 nuits</span><span class="cond">3 nuits minimum · arrivée mercredi, vendredi ou samedi</span></div></div>
-      </div>
-      <div class="extras">
-        <span><strong>Chien :</strong> 15 € jusqu’à 3 nuits, 25 € au-delà</span>
-        <span><strong>Taxe de séjour :</strong> en sus, adultes seulement</span>
-        <span><strong>Arrivée</strong> dès 16 h · <strong>départ</strong> avant 10 h</span>
-      </div>
-    </div>
-  </section>
-
-  <section aria-labelledby="t-direct">
-    <div class="wrap">
-      <div class="kicker">Réserver en direct</div>
-      <h2 id="t-direct" style="margin-top:10px">Simple, sans frais et avec Belle au bout du fil</h2>
-      <div class="direct">
-        <div><b>Le meilleur prix</b><p>Pas de frais de service ajoutés au moment de payer : le prix de la grille est celui du contrat.</p></div>
-        <div><b>Un vrai contact</b><p>Vous échangez directement avec Belle, qui connaît chaque recoin du quartier.</p></div>
-        <div><b>Un contrat clair</b><p>30 % d’arrhes à la réservation, le solde 30 jours avant l’arrivée, par virement.</p></div>
-      </div>
-      <ol class="etapes">
-        <li><div><h3>Votre demande</h3><p>Indiquez vos dates ci-dessous. Belle vous répond sous 24 heures avec le contrat.</p></div></li>
-        <li><div><h3>La confirmation</h3><p>Le séjour est réservé dès réception du contrat signé et des arrhes.</p></div></li>
-        <li><div><h3>Avant l’arrivée</h3><p>Après le solde, vous recevez le livret d’accueil et le code de la boîte à clés.</p></div></li>
-      </ol>
-    </div>
-  </section>
-
-  <section id="reserver" class="demande" aria-labelledby="t-reserver">
-    <div class="wrap">
-      <div class="kicker">Vos dates</div>
-      <h2 id="t-reserver" style="margin-top:10px">Demander mes dates</h2>
-      <div class="req">
-        <form id="f" novalidate>
-          <label for="arr">Arrivée<input id="arr" type="date" value="2027-06-12" min="2027-05-01" max="2027-09-24"></label>
-          <label for="dep">Départ<input id="dep" type="date" value="2027-06-16" min="2027-05-02" max="2027-09-25"></label>
-          <label for="pax">Voyageurs<select id="pax"><option>1</option><option selected>2</option><option>3</option><option>4</option></select></label>
-          <label for="kids">Dont enfants<select id="kids"><option selected>0</option><option>1</option><option>2</option><option>3</option></select></label>
-          <span class="full check"><input id="pet" type="checkbox"><label for="pet" style="display:inline;color:var(--encre)">Je viens avec mon chien</label></span>
-          <label class="full" for="nom">Nom et prénom<input id="nom" type="text" autocomplete="name" placeholder="Claire Martin"></label>
-          <label class="full" for="contact">E-mail ou téléphone<input id="contact" type="text" autocomplete="email" placeholder="claire.martin@exemple.fr"></label>
-          <label class="full" for="msg">Message (facultatif)<textarea id="msg" placeholder="Une question, un lit parapluie, une arrivée tardive…"></textarea></label>
-          <div class="full"><button class="btn" type="submit">Préparer ma demande</button></div>
-        </form>
-        <div class="stack">
-          <div class="estim" aria-live="polite">
-            <div class="kicker" style="color:var(--marine-2)">Estimation</div>
-            <div class="total num" id="total">—</div>
-            <div id="detail" class="fine"></div>
-            <ul id="lines"></ul>
-            <p class="warn" id="warn" hidden></p>
-            <p class="fine">Taxe de séjour en sus. Prix confirmé par Belle avec le contrat.</p>
-          </div>
-          <div class="estim out" id="out" hidden>
-            <div class="kicker" style="color:var(--marine-2)">Votre demande, prête à envoyer</div>
-            <pre id="draft"></pre>
-            <div class="row">
-              <button class="btn line" type="button" id="copy">Copier la demande</button>
-              <a class="btn" id="mail" href="#">Ouvrir ma messagerie</a>
-            </div>
-            <span id="copied" class="fine" hidden>Demande copiée.</span>
-            <p class="fine">Ou écrivez directement à <span class="mail-belle" id="belle-mail"></span></p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="faq" aria-labelledby="t-faq">
-    <div class="wrap">
-      <div class="kicker">Bon à savoir</div>
-      <h2 id="t-faq" style="margin-top:10px">Vos questions</h2>
-      <div class="faq-list">
-        <details><summary>Comment se passent l’arrivée et le départ ?</summary><p>L’arrivée se fait en autonomie à partir de 16 h, avec une boîte à clés. Le code vous est envoyé au plus tard trois jours avant, une fois le séjour réglé. Le départ se fait avant 10 h, en déposant les clés dans la boîte.</p></details>
-        <details><summary>Le linge et le ménage sont-ils vraiment compris ?</summary><p>Oui. Les lits sont faits à votre arrivée, le linge de toilette et les serviettes de plage sont fournis, et le ménage de fin de séjour est inclus. Pour les séjours de plus de 7 nuits, le linge est changé chaque semaine.</p></details>
-        <details><summary>Je viens avec mon chien, comment ça se passe ?</summary><p>Il est le bienvenu : signalez-le dans votre demande. Comptez 15 € pour un séjour de 3 nuits ou moins, 25 € au-delà. Il ne monte ni sur les lits ni sur le canapé et ne reste pas seul dans le logement. Les chiens ne sont pas admis sur les plages de Royan et de Vaux-sur-Mer du 1<sup>er</sup> avril au 30 septembre, mais le sentier des douaniers est tout proche.</p></details>
-        <details><summary>Nous venons avec un bébé : avez-vous de l’équipement ?</summary><p>Un lit parapluie et une chaise haute sont disponibles sur demande. Précisez-le dans votre message.</p></details>
-        <details><summary>Où se gare-t-on ?</summary><p>Une place de stationnement vous est réservée dans la propriété, derrière le portail. Pour la plage, inutile de prendre la voiture.</p></details>
-        <details><summary>Combien coûte la taxe de séjour ?</summary><p>Elle est due par chaque adulte et par nuit, selon le tarif de la Communauté d’Agglomération Royan Atlantique en vigueur à la date du séjour. Les mineurs en sont exonérés. Belle vous indique le montant exact avec le contrat.</p></details>
-        <details><summary>Y a-t-il un dépôt de garantie ?</summary><p>Oui, il est versé avec le solde et vous est restitué par virement au plus tard quatorze jours après votre départ, déduction faite d’éventuels dégâts justifiés.</p></details>
-        <details><summary>Et si je dois annuler ?</summary><p>Avant le paiement du solde, vous pouvez renoncer en abandonnant les arrhes. Après, le séjour reste dû, mais Belle vous rembourse les nuits qu’elle parvient à relouer. Une assurance annulation est recommandée.</p></details>
-      </div>
+      <div class="kicker">Pour préparer votre séjour</div>
+      <h2 id="t-suite" style="margin-top:10px">Les conseils de Belle, du marché aux conches</h2>
+      <p class="lead">Plages à pied, balades à vélo, sorties en famille ou jour de pluie : ses idées classées par distance, et toutes les réponses pratiques.</p>
+      <div class="hero-actions"><a class="btn" href="autour/">Conseils et adresses</a><a class="btn line" href="infos/">Infos pratiques</a></div>
     </div>
   </section>
 </main>
@@ -679,7 +156,7 @@ footer h4 { margin: 0 0 8px; font-family: var(--body); font-size: .8rem; letter-
 <footer>
   <div class="wrap">
     <div class="stack" style="gap:10px">
-      <a class="brand" href="#accueil">Chez Belle</a>
+      <a class="brand" href="./">Chez Belle</a>
       <p>Location de vacances de particulier · quartier de Pontaillac, 17640 Vaux-sur-Mer</p>
     </div>
     <div>
@@ -691,116 +168,19 @@ footer h4 { margin: 0 0 8px; font-family: var(--body); font-size: .8rem; letter-
     <div>
       <h4>Liens</h4>
       <p><a href="https://www.airbnb.fr/rooms/25931091" rel="noopener" target="_blank">Tous les avis sur Airbnb</a></p>
-      <p><a href="#reserver">Demander mes dates</a></p>
+      <p><a href="tarifs-reservation/#reserver">Demander mes dates</a></p>
+      <p><a href="infos/">Vos questions</a></p>
     </div>
   </div>
 </footer>
 
 <div class="barre" aria-label="Réservation rapide">
   <span class="p">dès <b>75 €</b> la nuit<br>tout compris</span>
-  <a class="btn" href="#reserver">Demander mes dates</a>
+  <a class="btn" href="tarifs-reservation/#reserver">Demander mes dates</a>
 </div>
 
 <script>
-const CONFIG = {
-  user: "ileseigneur", domain: "yahoo.fr",
-  chienCourt: 15, chienLong: 25, chienSeuil: 3
-};
-const EMAIL = CONFIG.user + "@" + CONFIG.domain;
-
-const PERIODS = [
-  ["2027-05-01", "2027-05-05", "basse"], ["2027-05-06", "2027-05-08", "pont"],
-  ["2027-05-09", "2027-05-13", "basse"], ["2027-05-14", "2027-05-16", "pont"],
-  ["2027-05-17", "2027-07-02", "basse"], ["2027-07-03", "2027-07-16", "juillet"],
-  ["2027-07-17", "2027-08-27", "coeur"], ["2027-08-28", "2027-09-10", "fin"],
-  ["2027-09-11", "2027-09-24", "basse"]
-];
-const RATES = {
-  basse:   { label: "Mai, juin, septembre", min: 3, price: n => (n >= 4 ? 75 : 85) },
-  pont:    { label: "Pont de mai",           min: 3, price: () => 95 },
-  juillet: { label: "Début juillet",         min: 4, price: () => 100 },
-  coeur:   { label: "Cœur de l’été",         min: 7, price: () => 115, samedi: true },
-  fin:     { label: "Fin d’été",             min: 4, price: () => 90 }
-};
-const DAY = 86400000;
-const toUTC = s => { const [y, m, d] = s.split("-").map(Number); return Date.UTC(y, m - 1, d); };
-const iso = t => new Date(t).toISOString().slice(0, 10);
-const frDate = s => new Date(toUTC(s)).toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long", timeZone: "UTC" });
-const eur = n => n.toLocaleString("fr-FR") + " €";
-const periodOf = s => { const t = toUTC(s); const p = PERIODS.find(([a, b]) => t >= toUTC(a) && t <= toUTC(b)); return p ? p[2] : null; };
 const $ = id => document.getElementById(id);
-
-function estimate(arr, dep, pet) {
-  const res = { nights: 0, total: 0, lines: [], warn: "", out: false };
-  if (!arr || !dep) { res.warn = "Indiquez vos dates d’arrivée et de départ."; return res; }
-  const a = toUTC(arr), d = toUTC(dep), n = Math.round((d - a) / DAY);
-  if (n <= 0) { res.warn = "La date de départ doit suivre la date d’arrivée."; return res; }
-  res.nights = n;
-  const groups = {};
-  for (let t = a; t < d; t += DAY) {
-    const k = periodOf(iso(t));
-    if (!k) { res.out = true; res.warn = "Une partie de ces dates sort des périodes affichées. Écrivez à Belle : elle vous répondra pour ces dates."; return res; }
-    const p = RATES[k].price(n), key = k + p;
-    groups[key] = groups[key] || { label: RATES[k].label, price: p, count: 0 };
-    groups[key].count++; res.total += p;
-  }
-  res.lines = Object.values(groups).map(l => `${l.label} : ${l.count} × ${l.price} €`);
-  if (pet) { const f = n <= CONFIG.chienSeuil ? CONFIG.chienCourt : CONFIG.chienLong; res.total += f; res.lines.push(`Chien : ${f} €`); }
-  const r0 = RATES[periodOf(arr)];
-  if (n < r0.min) res.warn = `En période « ${r0.label} », le séjour minimum est de ${r0.min} nuits.`;
-  else if (r0.samedi && new Date(a).getUTCDay() !== 6) res.warn = "En cœur d’été, les séjours vont du samedi au samedi.";
-  return res;
-}
-function render() {
-  const r = estimate($("arr").value, $("dep").value, $("pet").checked);
-  $("total").textContent = r.total && !r.out ? eur(r.total) : "—";
-  $("detail").textContent = r.nights > 0 && !r.out ? `${r.nights} nuit${r.nights > 1 ? "s" : ""}, linge et ménage compris` : "";
-  $("lines").innerHTML = "";
-  if (!r.out) r.lines.forEach(t => { const li = document.createElement("li"); li.textContent = t; $("lines").appendChild(li); });
-  $("warn").hidden = !r.warn; $("warn").textContent = r.warn;
-  return r;
-}
-function draft(r) {
-  const pax = +$("pax").value, kids = Math.min(+$("kids").value, pax - 1);
-  const who = `${pax} personne${pax > 1 ? "s" : ""}${kids ? ` dont ${kids} enfant${kids > 1 ? "s" : ""}` : ""}`;
-  return [
-    "Bonjour Belle,", "",
-    `Je souhaiterais séjourner Chez Belle du ${frDate($("arr").value)} au ${frDate($("dep").value)} (${r.nights} nuit${r.nights > 1 ? "s" : ""}), pour ${who}.`,
-    r.total && !r.out ? `Estimation indiquée sur votre page : ${eur(r.total)}, taxe de séjour en sus.` : null,
-    $("pet").checked ? "Nous viendrons avec notre chien." : null,
-    $("msg").value.trim() ? "\n" + $("msg").value.trim() : null,
-    "", "Merci de me dire si ces dates sont disponibles.",
-    `${$("nom").value.trim() || "[votre nom]"} · ${$("contact").value.trim() || "[votre e-mail ou téléphone]"}`
-  ].filter(l => l !== null).join("\n");
-}
-["arr", "dep", "pet"].forEach(id => $(id).addEventListener("input", render));
-$("f").addEventListener("submit", e => {
-  e.preventDefault();
-  const r = render(); if (!r.nights) return;
-  const t = draft(r);
-  $("draft").textContent = t;
-  $("mail").href = `mailto:${EMAIL}?subject=${encodeURIComponent("Demande de séjour Chez Belle")}&body=${encodeURIComponent(t)}`;
-  $("out").hidden = false; $("copied").hidden = true;
-});
-$("copy").addEventListener("click", () => {
-  const sel = () => { const s = getSelection(), rg = document.createRange(); rg.selectNodeContents($("draft")); s.removeAllRanges(); s.addRange(rg); };
-  try { navigator.clipboard.writeText($("draft").textContent).then(() => { $("copied").hidden = false; }, sel); } catch (err) { sel(); }
-});
-$("belle-mail").textContent = EMAIL;
-render();
-
-// Filtres « Autour »
-document.querySelectorAll(".filtres button").forEach(b => b.addEventListener("click", () => {
-  const f = b.dataset.f;
-  document.querySelectorAll(".filtres button").forEach(x => x.setAttribute("aria-pressed", x === b));
-  document.querySelectorAll(".zones > div").forEach(z => {
-    let vis = 0;
-    z.querySelectorAll(".lieu").forEach(l => { const ok = f === "tout" || l.dataset.t.split(" ").includes(f); l.hidden = !ok; vis += ok; });
-    const v = z.querySelector(".vide"); if (v) v.hidden = vis > 0;
-  });
-  $("chien-info").hidden = f !== "chien";
-}));
-
 // Avis : extraits recopiés mot pour mot, mis à jour par le flow « maj-avis-chez-belle »
 // DEBUT AVIS
 const AVIS = [
@@ -829,5 +209,6 @@ const slide = d => $("car").scrollBy({ left: d * $("car").clientWidth * 0.8, beh
 $("prev").addEventListener("click", () => slide(-1));
 $("next").addEventListener("click", () => slide(1));
 </script>
+<script src="assets/galerie.js"></script>
 </body>
 </html>
