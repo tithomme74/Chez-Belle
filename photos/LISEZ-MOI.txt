@@ -1,0 +1,21 @@
+Déposez ici vos photos (.jpg ou .jpeg), renommées ainsi, en minuscules et sans accents.
+
+1) Les 7 photos principales (un nom précis pour chaque emplacement) :
+  jardin.jpg            -> grande photo d'ouverture (format vertical de préférence)
+  piece-a-vivre.jpg
+  chambre.jpg
+  cuisine.jpg
+  salle-de-douche.jpg
+  barbecue.jpg
+  chemin-plage.jpg
+
+2) Toutes les autres photos, pour le carrousel « D'autres photos » :
+  galerie-1.jpg, galerie-2.jpg, galerie-3.jpg ... (jusqu'à 80)
+  Elles s'affichent dans l'ordre des numéros. Ne sautez pas plus de 2 numéros
+  d'affilée : le carrousel s'arrête au 3e numéro manquant.
+
+Conseils :
+- photos prises à la lumière du jour ;
+- moins de 500 Ko par photo si possible (le site s'affiche plus vite) ;
+- une photo principale absente laisse simplement l'emplacement rayé : rien ne casse ;
+- sans aucune photo « galerie-… », le carrousel n'apparaît pas.
