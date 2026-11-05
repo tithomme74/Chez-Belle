@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://chez-belle-pontaillac.netlify.app/sitemap.xml

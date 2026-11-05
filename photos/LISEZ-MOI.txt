@@ -1,23 +1,16 @@
-Photos du site, en .jpg ou .jpeg, en minuscules et sans accents.
+Photos du site (refonte novembre 2026)
 
-1) Les 7 emplacements fixes :
-  jardin.jpg           grande photo d'ouverture (et image des partages WhatsApp, Facebook…)
-  piece-a-vivre.jpg
-  chambre.jpg
-  cuisine.jpg
-  salle-de-douche.jpg
-  terrasse.jpg         le jardin, côté terrasse
-  salle-a-manger.jpg
+Le site affiche des versions WebP compressées, en deux tailles :
+  <nom>-480.webp  (téléphones)
+  <nom>-960.webp  (ordinateurs)
 
-2) Le carrousel « D'autres photos » :
-  galerie-1.jpg, galerie-2.jpg, galerie-3.jpg… dans l'ordre d'affichage.
-  Pour ajouter une photo, prenez le numéro suivant. Le carrousel s'arrête
-  au 3e numéro manquant d'affilée.
+Photos utilisées : jardin, terrasse, piece-a-vivre, chambre, galerie-1 (coin repas),
+cuisine, salle-de-douche, galerie-2 (entrée), salle-a-manger, galerie-3 (buanderie).
 
-3) Les avis (section « Ce qu'en disent les voyageurs ») :
-  avis-1.png, avis-2.png, avis-3.png   captures d'écran d'avis Airbnb (.png ou .jpg)
-  La section reste masquée tant qu'aucune capture n'est déposée.
+jardin.jpg reste l'image affichée lors des partages (WhatsApp, Facebook…).
+Les .jpg d'origine sont conservés comme sources.
 
-4) Le dossier « non-utilisees » n'est pas affiché sur le site.
+Pour remplacer une photo : déposer la nouvelle photo (largeur 1600 px ou plus si possible)
+et demander à Claude de régénérer les deux .webp et, si besoin, la légende dans index.html.
 
-Pour remplacer une photo : déposez la nouvelle avec exactement le même nom.
+Le dossier « non-utilisees » n'est pas affiché sur le site.
