@@ -18,7 +18,7 @@ depuis la branche `main` : https://chez-belle-pontaillac.netlify.app
 Fichiers communs :
 
 - `assets/style.css` : la charte rétro balnéaire (marine, crème, corail, sable ; DM Serif Display, Jost, Caveat).
-- `assets/reservation.js` : estimation du prix (périodes et tarifs 2027) et brouillon de demande. Pour changer les tarifs, modifier `PERIODS` et `RATES` ici **et** les cartes de prix dans `tarifs-reservation/index.html` et `index.html` (zoom tarifs).
+- `assets/reservation.js` : estimation du prix (périodes, tarifs, durées minimales et jours d’arrivée 2027 dans `RATES`) et brouillon de demande. Pour changer les tarifs, modifier `PERIODS` et `RATES` ici **et** les cartes de prix dans `tarifs-reservation/index.html` et `index.html` (zoom tarifs).
 - `assets/autour.js` : filtres « par envie ».
 - `assets/galerie.js` : agrandissement des photos.
 
@@ -28,6 +28,7 @@ L’en-tête et le pied de page sont recopiés dans chaque page : une modificati
 
 Le flow « maj-avis-chez-belle » met à jour les blocs `// DEBUT AVIS … // FIN AVIS` et
 `// DEBUT NOTES … // FIN NOTES` : ils restent dans **`index.html`** (l’accueil), comme avant.
+La page Logement affiche en plus deux extraits fixes (Clémence, Alexia) écrits en dur dans `chez-belle/index.html` : le flow ne les touche pas.
 
 ## Anciens liens
 

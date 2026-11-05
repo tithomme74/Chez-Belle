@@ -13,12 +13,15 @@ const PERIODS = [
   ["2027-09-11", "2027-09-24", "basse"]
 ];
 const RATES = {
-  basse:   { label: "Mai, juin, septembre", min: 3, price: n => (n >= 4 ? 75 : 85) },
-  pont:    { label: "Pont de mai",           min: 3, price: () => 95 },
-  juillet: { label: "Début juillet",         min: 4, price: () => 100 },
-  coeur:   { label: "Cœur de l’été",         min: 7, price: () => 115, samedi: true },
-  fin:     { label: "Fin d’été",             min: 4, price: () => 90 }
+  basse:   { label: "Mai, juin, septembre", min: 3, jours: [3, 5, 6], price: n => (n >= 4 ? 75 : 85) },
+  pont:    { label: "Pont de mai",           min: 3, jours: [4, 5],    price: () => 95 },
+  juillet: { label: "Début juillet",         min: 4, jours: [3, 6],    price: () => 100 },
+  coeur:   { label: "Cœur de l’été",         min: 7, jours: [6],       price: () => 115 },
+  fin:     { label: "Fin d’été",             min: 4, jours: [3, 6],    price: () => 90 }
 };
+// jours d'arrivée autorisés : 0 = dimanche … 6 = samedi
+const JOURS = ["dimanche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi"];
+const liste = a => a.length < 2 ? a[0] : a.slice(0, -1).join(", ") + " ou " + a[a.length - 1];
 const DAY = 86400000;
 const toUTC = s => { const [y, m, d] = s.split("-").map(Number); return Date.UTC(y, m - 1, d); };
 const iso = t => new Date(t).toISOString().slice(0, 10);
@@ -44,17 +47,23 @@ function estimate(arr, dep, pet) {
   res.lines = Object.values(groups).map(l => `${l.label} : ${l.count} × ${l.price} €`);
   if (pet) { const f = n <= CONFIG.chienSeuil ? CONFIG.chienCourt : CONFIG.chienLong; res.total += f; res.lines.push(`Chien : ${f} €`); }
   const r0 = RATES[periodOf(arr)];
+  const finCoeur = periodOf(iso(d - DAY)) === "coeur";
   if (n < r0.min) res.warn = `En période « ${r0.label} », le séjour minimum est de ${r0.min} nuits.`;
-  else if (r0.samedi && new Date(a).getUTCDay() !== 6) res.warn = "En cœur d’été, les séjours vont du samedi au samedi.";
+  else if (!r0.jours.includes(new Date(a).getUTCDay())) res.warn = r0 === RATES.coeur
+    ? "En cœur d’été, les séjours vont du samedi au samedi."
+    : `En période « ${r0.label} », l’arrivée se fait ${liste(r0.jours.map(j => "le " + JOURS[j]))}.`;
+  else if (finCoeur && new Date(d).getUTCDay() !== 6) res.warn = "En cœur d’été, le départ se fait le samedi.";
   return res;
 }
-function render() {
+function render(envoi) {
   const r = estimate($("arr").value, $("dep").value, $("pet").checked);
+  const vide = !$("arr").value || !$("dep").value;
   $("total").textContent = r.total && !r.out ? eur(r.total) : "—";
-  $("detail").textContent = r.nights > 0 && !r.out ? `${r.nights} nuit${r.nights > 1 ? "s" : ""}, linge et ménage compris` : "";
+  $("detail").textContent = r.nights > 0 && !r.out ? `${r.nights} nuit${r.nights > 1 ? "s" : ""}, linge et ménage compris` : (vide ? "Choisissez vos dates pour voir le prix." : "");
   $("lines").innerHTML = "";
   if (!r.out) r.lines.forEach(t => { const li = document.createElement("li"); li.textContent = t; $("lines").appendChild(li); });
-  $("warn").hidden = !r.warn; $("warn").textContent = r.warn;
+  const w = vide && !envoi ? "" : r.warn;
+  $("warn").hidden = !w; $("warn").textContent = w;
   return r;
 }
 function draft(r) {
@@ -70,10 +79,10 @@ function draft(r) {
     `${$("nom").value.trim() || "[votre nom]"} · ${$("contact").value.trim() || "[votre e-mail ou téléphone]"}`
   ].filter(l => l !== null).join("\n");
 }
-["arr", "dep", "pet"].forEach(id => $(id).addEventListener("input", render));
+["arr", "dep", "pet"].forEach(id => $(id).addEventListener("input", () => render()));
 $("f").addEventListener("submit", e => {
   e.preventDefault();
-  const r = render(); if (!r.nights) return;
+  const r = render(true); if (!r.nights) return;
   const t = draft(r);
   $("draft").textContent = t;
   $("mail").href = `mailto:${EMAIL}?subject=${encodeURIComponent("Demande de séjour Chez Belle")}&body=${encodeURIComponent(t)}`;

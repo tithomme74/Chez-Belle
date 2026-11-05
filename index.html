@@ -55,7 +55,7 @@
       <div>
         <div class="kicker">Vaux-sur-Mer · quartier de Pontaillac</div>
         <h1 style="margin-top:14px">Flâner sous les pins, <em>l’océan</em> au bout de la rue</h1>
-        <p class="lead">Un rez-de-jardin indépendant de 55&nbsp;m², au calme, avec un grand jardin clos à l’ombre des pins. La petite conche de Saint-Sordelin est à 5&nbsp;minutes à pied, la plage de Pontaillac à 7. Lits faits, linge et ménage compris.</p>
+        <p class="lead">Un rez-de-jardin indépendant de 55&nbsp;m², au calme, sous la maison de Belle, avec un grand jardin clos à l’ombre des pins. La petite conche de Saint-Sordelin est à 5&nbsp;minutes à pied, la plage de Pontaillac à 7. Lits faits, linge et ménage compris.</p>
         <div class="hero-actions">
           <a class="btn" href="tarifs-reservation/#reserver">Demander mes dates</a>
           <a class="btn line" href="chez-belle/">Visiter le logement</a>
@@ -69,7 +69,7 @@
         <div class="arch">
           <img src="photos/jardin-960.webp" srcset="photos/jardin-480.webp 480w, photos/jardin-960.webp 960w" sizes="(max-width: 900px) 90vw, 480px" width="960" height="812" alt="Le jardin de Chez Belle sous les pins, deux transats à l’ombre" fetchpriority="high">
         </div>
-        <div class="badge-ticket"><b>4 voyageurs</b>1 chambre, 1 canapé-lit, chien bienvenu</div>
+        <div class="badge-ticket"><b><span data-note="globale">4,82</span> ★</b><span data-note="badge">sur 33 avis Airbnb</span></div>
       </div>
     </div>
   </section>
@@ -83,7 +83,7 @@
       <ul class="essentiels">
         <li><b>55 m² de plain-pied</b><span>Votre propre entrée, au rez-de-jardin</span></li>
         <li><b>4 voyageurs</b><span>1 chambre, 1 canapé-lit</span></li>
-        <li><b>Jardin clos de 200 m²</b><span>Sous les pins, transats et barbecue</span></li>
+        <li><b>Jardin clos de 200 m²</b><span>Sous les pins, partagé avec Belle qui vit à l’étage</span></li>
         <li><b>La mer à pied</b><span>Conche à 5 min, plage de Pontaillac à 7</span></li>
         <li><b>Tout compris</b><span>Lits faits, linge et ménage de fin de séjour</span></li>
         <li><b>Chien bienvenu</b><span>Parking dans la propriété · arrivée dès 16 h</span></li>
@@ -131,7 +131,7 @@
       <p style="margin-top:14px">Linge et ménage compris. Seule la taxe de séjour s’ajoute.</p>
       <div class="cabines zoom">
         <div class="cabine"><div class="toit"></div><div class="in"><h3>Mai, juin, septembre</h3><span class="dates">la plus belle saison</span><span class="p num">75 € <small>la nuit dès 4 nuits</small></span><span class="fine">85 € la nuit pour 3 nuits</span><span class="cond">3 nuits minimum</span></div></div>
-        <div class="cabine"><div class="toit"></div><div class="in"><h3>Ponts et début d’été</h3><span class="dates">ponts de mai, début juillet, fin d’été</span><span class="p num">90 à 100 € <small>la nuit</small></span><span class="cond">3 ou 4 nuits minimum</span></div></div>
+        <div class="cabine"><div class="toit"></div><div class="in"><h3>Ponts, juillet, fin d’été</h3><span class="dates">ponts de mai, début juillet, fin août à mi-septembre</span><span class="p num">90 à 100 € <small>la nuit</small></span><span class="cond">3 ou 4 nuits minimum</span></div></div>
         <div class="cabine peak"><div class="toit"></div><div class="in"><span class="peak-tag">Cœur de l’été</span><h3>Juillet et août</h3><span class="dates">du 17 juillet au 28 août</span><span class="p num">805 € <small>la semaine</small></span><span class="cond">7 nuits, du samedi au samedi</span></div></div>
       </div>
       <div class="plus">
@@ -174,7 +174,7 @@
 </footer>
 
 <div class="barre" aria-label="Réservation rapide">
-  <span class="p">dès <b>75 €</b> la nuit<br>tout compris</span>
+  <span class="p">dès <b>75 €</b> la nuit<br>linge et ménage compris</span>
   <a class="btn" href="tarifs-reservation/#reserver">Demander mes dates</a>
 </div>
 
@@ -195,6 +195,7 @@ const AVIS = [
 const NOTES = { "globale": "4,82", "nombre": 33, "categories": [ { "nom": "Emplacement", "note": "4,9" }, { "nom": "Communication", "note": "4,9" } ] };
 // FIN NOTES
 document.querySelectorAll('[data-note="globale"]').forEach(e => { e.textContent = NOTES.globale; });
+document.querySelectorAll('[data-note="badge"]').forEach(e => { e.textContent = `sur ${NOTES.nombre} avis Airbnb`; });
 document.querySelectorAll('[data-note="resume"]').forEach(e => { e.textContent = `sur ${NOTES.nombre} avis Airbnb · ` + NOTES.categories.map(c => `${c.nom.toLowerCase()} ${c.note}`).join(" · "); });
 (() => { const dl = $("notes-dl"); dl.innerHTML = ""; [...NOTES.categories, { nom: "Avis publiés", note: NOTES.nombre }].forEach(c => { const dt = document.createElement("dt"), dd = document.createElement("dd"); dt.textContent = c.nom; dd.textContent = c.note; dl.append(dt, dd); }); })();
 AVIS.slice(0, 6).forEach(a => {
