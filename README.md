@@ -9,7 +9,7 @@ depuis la branche `main` : https://chez-belle-pontaillac.netlify.app
 | Onglet | Fichier | Contenu |
 |---|---|---|
 | Accueil | `index.html` | Accroche (photo en tête sur mobile), l’essentiel en 6 points, aperçu photos, avis Airbnb, zoom tarifs, liens vers les conseils |
-| Le logement | `chez-belle/index.html` | Les 9 photos (agrandissables) en premier, puis le logement en détail et les équipements |
+| Le logement | `chez-belle/index.html` | 5 photos visibles (10 en grand), 4 chiffres clés, cartes Dedans / Dehors / Avec Belle, option caravane, équipements en 4 familles, bandeau « compris », 1 avis fixe (Clémence) |
 | Tarifs | `tarifs-reservation/index.html` | Grille 2027 + « billet tout compris », saison mai-juin-septembre, mot de Belle, réserver en direct, formulaire (`#reserver`), questions fréquentes (`#questions`) |
 | Autour | `autour/index.html` | Autour de Chez Belle par distance avec filtres, info chiens, « Les belles adresses de Belle » |
 
@@ -28,7 +28,7 @@ L’en-tête et le pied de page sont recopiés dans chaque page : une modificati
 
 Le flow « maj-avis-chez-belle » met à jour les blocs `// DEBUT AVIS … // FIN AVIS` et
 `// DEBUT NOTES … // FIN NOTES` : ils restent dans **`index.html`** (l’accueil), comme avant.
-La page Logement affiche en plus deux extraits fixes (Clémence, Alexia) écrits en dur dans `chez-belle/index.html` : le flow ne les touche pas.
+La page Logement affiche en plus un extrait fixe (Clémence) écrit en dur dans `chez-belle/index.html` : le flow ne le touche pas.
 
 ## Anciens liens
 

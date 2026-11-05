@@ -40,70 +40,113 @@
 <div class="stripes" aria-hidden="true"></div>
 
 <main>
+  <!-- 1. Ce que c'est, en une phrase, puis les photos -->
   <section id="logement" class="page-head" aria-labelledby="t-logement">
     <div class="wrap">
-      <div class="kicker">Chez Belle · le logement</div>
-      <h1 id="t-logement">Une maison de vacances de famille, au rez-de-jardin</h1>
-      <p class="fine" style="margin-top:12px" id="photos">Touchez ou cliquez sur une photo pour l’agrandir.</p>
-      <div class="galerie">
-        <figure class="big"><img src="../photos/terrasse-960.webp" srcset="../photos/terrasse-480.webp 480w, ../photos/terrasse-960.webp 960w" sizes="(max-width: 900px) 100vw, 560px" width="960" height="720" loading="lazy" alt="Le jardin côté terrasse, en fleurs"><figcaption>Le jardin</figcaption></figure>
+      <div class="kicker">Le logement</div>
+      <h1 id="t-logement">55 m² de plain-pied, ouverts sur un jardin sous les pins</h1>
+      <p class="lead">Pour 4 personnes au maximum, au calme, à 7 minutes à pied de la plage de Pontaillac.</p>
+      <div class="galerie g5" id="photos">
+        <figure class="big"><img src="../photos/jardin-960.webp" srcset="../photos/jardin-480.webp 480w, ../photos/jardin-960.webp 960w" sizes="(max-width: 900px) 100vw, 560px" width="960" height="720" alt="Le jardin sous les pins, avec deux transats"><figcaption>Le jardin</figcaption></figure>
         <figure class="tall"><img src="../photos/piece-a-vivre-960.webp" srcset="../photos/piece-a-vivre-480.webp 480w, ../photos/piece-a-vivre-960.webp 960w" sizes="(max-width: 900px) 50vw, 280px" width="960" height="1280" loading="lazy" alt="Le salon avec canapé-lit et fauteuil en rotin"><figcaption>Le salon</figcaption></figure>
         <figure class="tall"><img src="../photos/chambre-960.webp" srcset="../photos/chambre-480.webp 480w, ../photos/chambre-960.webp 960w" sizes="(max-width: 900px) 50vw, 280px" width="960" height="1280" loading="lazy" alt="La chambre, lits rapprochés en grand lit"><figcaption>La chambre</figcaption></figure>
-        <figure class="tall"><img src="../photos/galerie-1-960.webp" srcset="../photos/galerie-1-480.webp 480w, ../photos/galerie-1-960.webp 960w" sizes="(max-width: 900px) 50vw, 280px" width="960" height="1280" loading="lazy" alt="Le coin repas et sa table en bois"><figcaption>Le coin repas</figcaption></figure>
         <figure><img src="../photos/cuisine-960.webp" srcset="../photos/cuisine-480.webp 480w, ../photos/cuisine-960.webp 720w" sizes="(max-width: 900px) 50vw, 280px" width="720" height="540" loading="lazy" alt="La cuisine équipée"><figcaption>La cuisine</figcaption></figure>
-        <figure><img src="../photos/salle-de-douche-960.webp" srcset="../photos/salle-de-douche-480.webp 480w, ../photos/salle-de-douche-960.webp 960w" sizes="(max-width: 900px) 50vw, 280px" width="960" height="720" loading="lazy" alt="La salle de douche à l’italienne"><figcaption>La douche à l’italienne</figcaption></figure>
-        <figure class="tall"><img src="../photos/galerie-2-480.webp" width="480" height="640" loading="lazy" alt="L’entrée, avec la porte ouverte sur le jardin"><figcaption>L’entrée</figcaption></figure>
-        <figure><img src="../photos/salle-a-manger-480.webp" width="480" height="388" loading="lazy" alt="La table de la salle à manger dressée"><figcaption>La table</figcaption></figure>
-        <figure><img src="../photos/galerie-3-480.webp" width="480" height="640" loading="lazy" alt="La buanderie avec lave-linge"><figcaption>La buanderie</figcaption></figure>
+        <figure><img src="../photos/salle-de-douche-960.webp" srcset="../photos/salle-de-douche-480.webp 480w, ../photos/salle-de-douche-960.webp 960w" sizes="(max-width: 900px) 50vw, 280px" width="960" height="720" loading="lazy" alt="La salle de douche à l’italienne"><figcaption>La douche</figcaption></figure>
+        <!-- Visibles seulement en grand, avec les flèches -->
+        <figure hidden><img src="../photos/galerie-1-960.webp" width="960" height="1280" loading="lazy" alt="Le coin repas et sa table en bois"><figcaption>Le coin repas</figcaption></figure>
+        <figure hidden><img src="../photos/terrasse-960.webp" width="960" height="720" loading="lazy" alt="Le côté terrasse du jardin, en fleurs"><figcaption>Le côté terrasse</figcaption></figure>
+        <figure hidden><img src="../photos/galerie-2-480.webp" width="480" height="640" loading="lazy" alt="L’entrée, avec la porte ouverte sur le jardin"><figcaption>L’entrée</figcaption></figure>
+        <figure hidden><img src="../photos/salle-a-manger-480.webp" width="480" height="388" loading="lazy" alt="La table de la salle à manger dressée"><figcaption>La table</figcaption></figure>
+        <figure hidden><img src="../photos/galerie-3-480.webp" width="480" height="640" loading="lazy" alt="La buanderie avec lave-linge"><figcaption>La buanderie</figcaption></figure>
+      </div>
+      <p class="plus"><button type="button" class="btn line" data-galerie-ouvrir>Voir les 10 photos</button></p>
+    </div>
+  </section>
+
+  <!-- 2. Les chiffres qui comptent -->
+  <section class="chiffres-sec" aria-label="En un coup d’œil">
+    <div class="wrap">
+      <ul class="chiffres">
+        <li><b>55 m²</b><span>de plain-pied, entrée indépendante</span></li>
+        <li><b>4 personnes</b><span>1 chambre et 1 canapé-lit</span></li>
+        <li><b>200 m²</b><span>de jardin clos, sous les pins</span></li>
+        <li><b>7 min</b><span>à pied jusqu’à la plage</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 3. Comment c'est organisé -->
+  <section aria-labelledby="t-orga" class="orga-sec">
+    <div class="wrap">
+      <h2 id="t-orga">Comment c’est organisé</h2>
+      <div class="orga">
+        <article>
+          <h3>Dedans</h3>
+          <ul class="coches">
+            <li>La chambre : 2 lits simples, à jumeler en grand lit ou à séparer</li>
+            <li>Le salon : un canapé-lit, à côté du coin repas</li>
+            <li>Une cuisine équipée et une douche à l’italienne rénovée</li>
+          </ul>
+        </article>
+        <article>
+          <h3>Dehors</h3>
+          <ul class="coches">
+            <li>Un jardin clos de 200 m², à l’ombre des pins</li>
+            <li>Une table sous l’auvent pour dîner dehors</li>
+            <li>Barbecue Weber et 2 transats</li>
+          </ul>
+        </article>
+        <article>
+          <h3>Avec Belle</h3>
+          <ul class="coches">
+            <li>Votre propre porte, de plain-pied sur le jardin</li>
+            <li>Belle vit à l’étage, avec son entrée à elle</li>
+            <li>Portail et jardin partagés, place de parking réservée</li>
+          </ul>
+        </article>
+      </div>
+      <p class="option-sup" style="margin-top:20px"><b>En option :</b> la caravane « cosy » dans le jardin, avec un lit double · 20 € par jour, en réservation directe.</p>
+    </div>
+  </section>
+
+  <!-- 4. Équipements regroupés -->
+  <section aria-labelledby="t-equip" class="equip-sec">
+    <div class="wrap">
+      <h2 id="t-equip">Les équipements</h2>
+      <div class="familles">
+        <div><h3>Cuisine</h3><p>Lave-vaisselle · four · micro-ondes · plaque vitrocéramique · réfrigérateur et congélateur · Nespresso · grille-pain</p></div>
+        <div><h3>Confort</h3><p>Wifi fibre · télévision · lave-linge · fer à repasser · sèche-cheveux · volets roulants</p></div>
+        <div><h3>Plage</h3><p>Parasol · jeux de plage · serviettes de plage fournies</p></div>
+        <div><h3>Bébé et chien</h3><p>Lit parapluie et chaise haute prêtés sur demande · chien bienvenu</p></div>
       </div>
     </div>
   </section>
 
-  <section aria-labelledby="t-detail" style="padding-top:0">
+  <!-- 5. Compris + règles, en une bande -->
+  <section class="compris-sec" aria-label="Compris dans le prix et règles de la maison">
+    <div class="wrap compris">
+      <div>
+        <div class="kicker">Compris dans le prix</div>
+        <p class="gros">Lits faits, linge de toilette et ménage de fin de séjour.</p>
+      </div>
+      <div>
+        <div class="kicker">La maison</div>
+        <p class="gros">Non-fumeur, ni fête ni réception. Arrivée dès 16 h, départ avant 10 h.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. Un avis, puis l'action -->
+  <section aria-label="Un avis et la suite" class="fin-sec">
     <div class="wrap">
-      <div class="logement-grid">
-        <div class="stack">
-          <div class="kicker">Le logement en détail</div>
-          <h2 id="t-detail">Dedans, dehors</h2>
-          <p>On entre par sa propre porte, de plain-pied sur le jardin. La pièce à vivre réunit un coin repas, un salon et un canapé-lit. La cuisine est entièrement équipée pour cuisiner le poisson du marché. La chambre a deux lits simples qui se rapprochent en grand lit, et la salle de douche à l’italienne a été rénovée.</p>
-          <p>Le soir, on dîne dehors sous l’auvent pendant que le soleil passe à l’ouest, derrière les pins.</p>
-          <p>Belle habite à l’étage, avec son propre accès. Le portail et le jardin se partagent avec elle, et une place de stationnement vous est réservée dans la propriété.</p>
-          <div class="kicker" style="margin-top:8px">Bon à savoir</div>
-          <ul class="equip">
-            <li>4 personnes au maximum, bébés compris</li>
-            <li>2 lits simples rapprochables, 1 canapé-lit</li>
-            <li>Logement non-fumeur</li>
-            <li>Ni fête ni réception</li>
-          </ul>
-        </div>
-        <div class="stack">
-          <div class="kicker">Équipements</div>
-          <ul class="equip">
-            <li>Réfrigérateur et congélateur</li>
-            <li>Plaque vitrocéramique, four, micro-ondes</li>
-            <li>Lave-vaisselle</li>
-            <li>Cafetière Nespresso, grille-pain</li>
-            <li>Vaisselle pour 8 personnes</li>
-            <li>Lave-linge</li>
-            <li>Wifi fibre et télévision</li>
-            <li>Fer à repasser, sèche-cheveux</li>
-            <li>Parasol et jeux de plage</li>
-            <li>Barbecue Weber, 2 transats</li>
-            <li>Volets roulants solaires</li>
-            <li>Lit parapluie et chaise haute, prêtés gratuitement sur demande</li>
-            <li>Place de parking dans la propriété</li>
-          </ul>
-        </div>
-      </div>
-      <!-- Extraits d’avis Airbnb recopiés mot pour mot (le flow « maj-avis-chez-belle » ne met à jour que l’accueil) -->
-      <div class="car" style="margin-top:44px" aria-label="Deux extraits d’avis">
-        <figure><blockquote>Nous avons passé une agréable semaine, le logement est bien équipé, spacieux et possède un grand extérieur ombragé. Le quartier est calme, à proximité de la plage Pontaillac et des commerces.</blockquote><figcaption><strong>Clémence</strong> · août 2025 · Airbnb</figcaption></figure>
-        <figure><blockquote>La location est conforme à la description . Très proche du bord de mer à pied mais super calme et reposant .Le jardin et la surface du logement sont un vrai plus .</blockquote><figcaption><strong>Alexia</strong> · août 2023 · Airbnb</figcaption></figure>
-      </div>
-      <p class="fine"><a href="../#avis">Tous les avis à l’accueil</a></p>
+      <!-- Extrait d’avis Airbnb recopié mot pour mot (le flow « maj-avis-chez-belle » ne met à jour que l’accueil) -->
+      <figure class="avis-un">
+        <blockquote>Nous avons passé une agréable semaine, le logement est bien équipé, spacieux et possède un grand extérieur ombragé. Le quartier est calme, à proximité de la plage Pontaillac et des commerces.</blockquote>
+        <figcaption><strong>Clémence</strong> · août 2025 · Airbnb · <a href="../#avis">les autres avis</a></figcaption>
+      </figure>
       <div class="plus">
-        <a class="btn" href="../tarifs-reservation/">Voir les tarifs et réserver</a>
-        <a class="btn line" href="../autour/">Les conseils de Belle autour</a>
+        <a class="btn" href="../tarifs-reservation/">Voir les prix et demander mes dates</a>
+        <a href="../autour/">Les plages et adresses autour →</a>
       </div>
     </div>
   </section>

@@ -27,5 +27,7 @@
     if (b && b.dataset.d) show(i + Number(b.dataset.d));
     else if ((b && "x" in b.dataset) || e.target === dlg) dlg.close();
   });
+  // Bouton « Voir les N photos » : ouvre la première photo en grand
+  document.querySelectorAll("[data-galerie-ouvrir]").forEach(b => b.addEventListener("click", () => { show(0); dlg.showModal(); }));
   dlg.addEventListener("keydown", e => { if (e.key === "ArrowLeft") show(i - 1); if (e.key === "ArrowRight") show(i + 1); });
 })();
