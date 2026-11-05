@@ -160,6 +160,10 @@ footer .wrap { display: grid; gap: 6px; }
 .avis-note { font-size: 1.05rem; color: var(--muted); }
 .avis-note strong { color: var(--ink); font-size: 1.3rem; }
 .reviews { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; align-items: start; margin-top: 8px; }
+.review { margin: 0; background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 20px; display: grid; gap: 12px; }
+.review blockquote { margin: 0; font-size: .98rem; line-height: 1.55; }
+.review figcaption { font-size: .88rem; color: var(--muted); }
+.review figcaption strong { color: var(--ink); font-weight: 600; }
 .reviews img { width: 100%; height: auto; border: 1px solid var(--line); border-radius: 8px; background: var(--card); }
 @media (max-width: 860px) {
   .hero-grid, .two, .req { grid-template-columns: 1fr; }
@@ -285,7 +289,7 @@ footer .wrap { display: grid; gap: 6px; }
       <h2 id="t-avis">Ce qu’en disent les voyageurs</h2>
       <p class="avis-note"><strong class="num">4,82&nbsp;/&nbsp;5</strong> sur 33 avis publiés sur Airbnb</p>
       <div class="reviews" id="reviews"></div>
-      <p class="fine">Captures d’avis publiés sur Airbnb. <a href="https://www.airbnb.fr/rooms/25931091" rel="noopener" target="_blank">Lire tous les avis</a></p>
+      <p class="fine">Avis publiés sur Airbnb, reproduits sans modification. <a href="https://www.airbnb.fr/rooms/25931091" rel="noopener" target="_blank">Lire tous les avis</a></p>
     </div>
   </section>
 
@@ -513,8 +517,23 @@ document.querySelectorAll(".ph[data-photo]").forEach(el => {
     $("car-count").textContent = `${count} photo${count > 1 ? "s" : ""}`;
   }
 })();
-// Avis : captures photos/avis-1, avis-2, avis-3 (.png ou .jpg)
-(async () => {
+// Avis en texte : mis à jour par le flow « maj-avis-chez-belle ». Recopier les avis mot pour mot.
+// DEBUT AVIS
+const AVIS = [];
+// FIN AVIS
+if (AVIS.length) {
+  AVIS.slice(0, 3).forEach(a => {
+    const fig = document.createElement("figure"); fig.className = "review";
+    const q = document.createElement("blockquote"); q.textContent = `« ${a.texte} »`;
+    const c = document.createElement("figcaption");
+    const who = document.createElement("strong"); who.textContent = a.prenom;
+    c.append(who, ` · ${a.date}`);
+    fig.append(q, c); $("reviews").appendChild(fig);
+  });
+  $("avis").hidden = false;
+}
+// Sinon, captures photos/avis-1, avis-2, avis-3 (.png ou .jpg)
+if (!AVIS.length) (async () => {
   for (let n = 1; n <= 3; n++) {
     const src = await findPhoto(`avis-${n}`);
     if (!src) continue;
