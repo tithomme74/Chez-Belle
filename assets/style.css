@@ -357,13 +357,10 @@ ul.coches.plus-s li::before { content: "+"; }
 .mot-court .signature { color: #F0B9A8; margin-top: 6px; }
 @media (max-width: 900px) { .inclus { grid-template-columns: 1fr; gap: 32px; } }
 @media (max-width: 600px) {
-  table.grille thead th:nth-child(4), table.grille td:nth-child(4) { display: none; }
   table.grille td, table.grille tbody th { padding: 14px 8px; }
   table.grille thead th { padding: 0 8px 10px; }
   table.grille .tag { display: none; }
 }
-.mob { display: none; margin-top: 12px; }
-@media (max-width: 600px) { .mob { display: block; } }
 
 /* Page Le logement simplifiée (novembre 2026) */
 .page-head .lead { margin-top: 14px; }

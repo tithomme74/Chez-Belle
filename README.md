@@ -10,7 +10,7 @@ depuis la branche `main` : https://chez-belle-pontaillac.netlify.app
 |---|---|---|
 | Accueil | `index.html` | Accroche (photo en tête sur mobile), l’essentiel en 6 points, aperçu photos, avis Airbnb, zoom tarifs, liens vers les conseils |
 | Le logement | `chez-belle/index.html` | 5 photos visibles (10 en grand), 4 chiffres clés, cartes Dedans / Dehors / Avec Belle, option caravane, équipements en 4 familles, bandeau « compris », 1 avis fixe (Clémence) |
-| Tarifs | `tarifs-reservation/index.html` | Grille 2027 + « billet tout compris », saison mai-juin-septembre, mot de Belle, réserver en direct, formulaire (`#reserver`), questions fréquentes (`#questions`) |
+| Tarifs | `tarifs-reservation/index.html` | Grille 2027 (prix par période, durée minimale, Noël), mot de Belle, réserver en direct, formulaire (`#reserver`), questions fréquentes (`#questions`) |
 | Autour | `autour/index.html` | Autour de Chez Belle par distance avec filtres, info chiens, « Les belles adresses de Belle » |
 
 `infos/index.html` ne sert plus qu’à rediriger l’ancienne adresse vers `tarifs-reservation/#questions`.
@@ -18,7 +18,7 @@ depuis la branche `main` : https://chez-belle-pontaillac.netlify.app
 Fichiers communs :
 
 - `assets/style.css` : la charte rétro balnéaire (marine, crème, corail, sable ; DM Serif Display, Jost, Caveat).
-- `assets/reservation.js` : estimation du prix (périodes, tarifs, durées minimales et jours d’arrivée 2027 dans `RATES`) et brouillon de demande. Pour changer les tarifs, modifier `PERIODS` et `RATES` ici **et** les cartes de prix dans `tarifs-reservation/index.html` et `index.html` (zoom tarifs).
+- `assets/reservation.js` : estimation du prix (périodes, tarifs, durées minimales 2027 dans `RATES`, sans jours d’arrivée imposés) et brouillon de demande. Pour changer les tarifs, modifier `PERIODS` et `RATES` ici **et** les cartes de prix dans `tarifs-reservation/index.html` et `index.html` (zoom tarifs).
 - `assets/autour.js` : filtres « par envie ».
 - `assets/galerie.js` : agrandissement des photos.
 

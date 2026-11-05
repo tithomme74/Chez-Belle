@@ -5,23 +5,24 @@ const CONFIG = {
 };
 const EMAIL = CONFIG.user + "@" + CONFIG.domain;
 
+// Nuits concernées : dates de début et de fin incluses (la nuit du 2027-05-01 va du 1er au 2 mai)
 const PERIODS = [
-  ["2027-05-01", "2027-05-05", "basse"], ["2027-05-06", "2027-05-08", "pont"],
-  ["2027-05-09", "2027-05-13", "basse"], ["2027-05-14", "2027-05-16", "pont"],
-  ["2027-05-17", "2027-07-02", "basse"], ["2027-07-03", "2027-07-16", "juillet"],
-  ["2027-07-17", "2027-08-27", "coeur"], ["2027-08-28", "2027-09-10", "fin"],
-  ["2027-09-11", "2027-09-24", "basse"]
+  ["2027-05-01", "2027-05-01", "pont"],    ["2027-05-02", "2027-05-05", "basse"],
+  ["2027-05-06", "2027-05-08", "pont"],    ["2027-05-09", "2027-05-13", "basse"],
+  ["2027-05-14", "2027-05-16", "pont"],    ["2027-05-17", "2027-06-20", "basse"],
+  ["2027-06-21", "2027-07-06", "juillet"], ["2027-07-07", "2027-08-27", "coeur"],
+  ["2027-08-28", "2027-09-04", "fin"],     ["2027-09-05", "2027-09-24", "basse"],
+  ["2027-12-18", "2027-12-31", "noel"]
 ];
 const RATES = {
-  basse:   { label: "Mai, juin, septembre", min: 3, jours: [3, 5, 6], price: n => (n >= 4 ? 75 : 85) },
-  pont:    { label: "Pont de mai",           min: 3, jours: [4, 5],    price: () => 95 },
-  juillet: { label: "Début juillet",         min: 4, jours: [3, 6],    price: () => 100 },
-  coeur:   { label: "Cœur de l’été",         min: 7, jours: [6],       price: () => 115 },
-  fin:     { label: "Fin d’été",             min: 4, jours: [3, 6],    price: () => 90 }
+  basse:   { label: "Mai, juin, septembre", min: 3, price: 80 },
+  pont:    { label: "Pont de mai",           min: 3, price: 95 },
+  juillet: { label: "Début juillet",         min: 4, price: 105 },
+  coeur:   { label: "Cœur de l’été",         min: 7, price: 115 },
+  fin:     { label: "Fin d’été",             min: 4, price: 90 },
+  noel:    { label: "Noël",                  min: 7, price: 85 }
 };
-// jours d'arrivée autorisés : 0 = dimanche … 6 = samedi
-const JOURS = ["dimanche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi"];
-const liste = a => a.length < 2 ? a[0] : a.slice(0, -1).join(", ") + " ou " + a[a.length - 1];
+const NOEL_ARRIVEES = ["2027-12-18", "2027-12-25"];
 const DAY = 86400000;
 const toUTC = s => { const [y, m, d] = s.split("-").map(Number); return Date.UTC(y, m - 1, d); };
 const iso = t => new Date(t).toISOString().slice(0, 10);
@@ -40,19 +41,15 @@ function estimate(arr, dep, pet) {
   for (let t = a; t < d; t += DAY) {
     const k = periodOf(iso(t));
     if (!k) { res.out = true; res.warn = "Une partie de ces dates sort des périodes affichées. Écrivez à Belle : elle vous répondra pour ces dates."; return res; }
-    const p = RATES[k].price(n), key = k + p;
+    const p = RATES[k].price, key = k + p;
     groups[key] = groups[key] || { label: RATES[k].label, price: p, count: 0 };
     groups[key].count++; res.total += p;
   }
   res.lines = Object.values(groups).map(l => `${l.label} : ${l.count} × ${l.price} €`);
   if (pet) { const f = n <= CONFIG.chienSeuil ? CONFIG.chienCourt : CONFIG.chienLong; res.total += f; res.lines.push(`Chien : ${f} €`); }
   const r0 = RATES[periodOf(arr)];
-  const finCoeur = periodOf(iso(d - DAY)) === "coeur";
-  if (n < r0.min) res.warn = `En période « ${r0.label} », le séjour minimum est de ${r0.min} nuits.`;
-  else if (!r0.jours.includes(new Date(a).getUTCDay())) res.warn = r0 === RATES.coeur
-    ? "En cœur d’été, les séjours vont du samedi au samedi."
-    : `En période « ${r0.label} », l’arrivée se fait ${liste(r0.jours.map(j => "le " + JOURS[j]))}.`;
-  else if (finCoeur && new Date(d).getUTCDay() !== 6) res.warn = "En cœur d’été, le départ se fait le samedi.";
+  if (r0 === RATES.noel && (n !== 7 || !NOEL_ARRIVEES.includes(arr))) res.warn = "À Noël, le séjour dure une semaine : du 18 au 25 décembre ou du 25 décembre au 1er janvier.";
+  else if (n < r0.min) res.warn = `En période « ${r0.label} », le séjour minimum est de ${r0.min} nuits.`;
   return res;
 }
 function render(envoi) {
