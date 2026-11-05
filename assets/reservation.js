@@ -1,6 +1,6 @@
 // Demande de réservation : estimation du prix et brouillon de message (adresse de Belle masquée aux robots)
 const CONFIG = {
-  user: "ileseigneur", domain: "yahoo.fr",
+  user: "chez.belle.pontaillac", domain: "gmail.com",
   chienCourt: 15, chienLong: 25, chienSeuil: 3
 };
 const EMAIL = CONFIG.user + "@" + CONFIG.domain;
