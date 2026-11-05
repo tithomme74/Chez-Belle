@@ -310,3 +310,18 @@ dialog.lb img { display: block; max-width: min(1100px, 96vw); max-height: 82vh; 
 @media (max-width: 600px) {
   .essentiels { grid-template-columns: 1fr; }
 }
+
+/* Réorganisation de novembre 2026 */
+.tarif-ticket { margin-top: 28px; max-width: 560px; }
+#questions .faq-list { margin-top: 24px; }
+@media (max-width: 900px) {
+  .hero-photo { order: -1; }
+  .hero .arch { aspect-ratio: 4 / 3; border-radius: 220px 220px 16px 16px; }
+  .hero { padding-block: 28px 56px; }
+  .hero .badge-ticket { bottom: 14px; }
+}
+.tarif-ticket .extras { margin-top: 18px; }
+@media (min-width: 901px) {
+  .tarif-ticket { max-width: none; display: grid; grid-template-columns: minmax(0, 560px) minmax(0, 1fr); gap: 40px; align-items: center; }
+  .tarif-ticket .extras { margin-top: 0; flex-direction: column; gap: 14px; font-size: 1rem; }
+}

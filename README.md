@@ -4,15 +4,16 @@ Location de vacances à Vaux-sur-Mer, quartier de Pontaillac.
 Site statique (HTML, CSS, JS sans outil de build), publié automatiquement par Netlify
 depuis la branche `main` : https://chez-belle-pontaillac.netlify.app
 
-## Architecture en 5 onglets
+## Architecture en 4 onglets
 
 | Onglet | Fichier | Contenu |
 |---|---|---|
-| Accueil | `index.html` | Accroche, l’essentiel en 6 points, aperçu photos, zoom tarifs, avis Airbnb, liens vers les conseils |
-| Chez Belle | `chez-belle/index.html` | Le logement, équipements, « billet tout compris », les 9 photos (agrandissables), mot de Belle, six atouts |
-| Tarifs et réservation | `tarifs-reservation/index.html` | Grille 2027, saison mai-juin-septembre, réserver en direct, formulaire d’estimation et de demande (`#reserver`) |
-| Conseils et adresses | `autour/index.html` | Autour de Chez Belle par distance avec filtres, info chiens, « Les belles adresses de Belle » |
-| Infos pratiques | `infos/index.html` | Questions fréquentes |
+| Accueil | `index.html` | Accroche (photo en tête sur mobile), l’essentiel en 6 points, aperçu photos, avis Airbnb, zoom tarifs, liens vers les conseils |
+| Le logement | `chez-belle/index.html` | Les 9 photos (agrandissables) en premier, puis le logement en détail et les équipements |
+| Tarifs | `tarifs-reservation/index.html` | Grille 2027 + « billet tout compris », saison mai-juin-septembre, mot de Belle, réserver en direct, formulaire (`#reserver`), questions fréquentes (`#questions`) |
+| Autour | `autour/index.html` | Autour de Chez Belle par distance avec filtres, info chiens, « Les belles adresses de Belle » |
+
+`infos/index.html` ne sert plus qu’à rediriger l’ancienne adresse vers `tarifs-reservation/#questions`.
 
 Fichiers communs :
 
@@ -21,7 +22,7 @@ Fichiers communs :
 - `assets/autour.js` : filtres « par envie ».
 - `assets/galerie.js` : agrandissement des photos.
 
-L’en-tête et le pied de page sont recopiés dans chaque page : une modification du menu se fait dans les 5 fichiers.
+L’en-tête et le pied de page sont recopiés dans chaque page : une modification du menu se fait dans les 4 fichiers.
 
 ## Avis et notes Airbnb
 
@@ -30,7 +31,7 @@ Le flow « maj-avis-chez-belle » met à jour les blocs `// DEBUT AVIS … // FI
 
 ## Anciens liens
 
-Les liens de l’ancien site en une page (`/#reserver`, `/#tarifs`, `/#logement`, `/#autour`, `/#faq`)
+Les liens de l’ancien site en une page (`/#reserver`, `/#tarifs`, `/#logement`, `/#autour`, `/#faq`) et l’ancien onglet `/infos/`
 redirigent vers le bon onglet.
 
 ## Photos
