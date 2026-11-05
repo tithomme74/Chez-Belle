@@ -14,6 +14,10 @@ Photos du site, en .jpg ou .jpeg, en minuscules et sans accents.
   Pour ajouter une photo, prenez le numéro suivant. Le carrousel s'arrête
   au 3e numéro manquant d'affilée.
 
-3) Le dossier « non-utilisees » n'est pas affiché sur le site.
+3) Les avis (section « Ce qu'en disent les voyageurs ») :
+  avis-1.png, avis-2.png, avis-3.png   captures d'écran d'avis Airbnb (.png ou .jpg)
+  La section reste masquée tant qu'aucune capture n'est déposée.
+
+4) Le dossier « non-utilisees » n'est pas affiché sur le site.
 
 Pour remplacer une photo : déposez la nouvelle avec exactement le même nom.

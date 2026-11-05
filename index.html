@@ -155,9 +155,16 @@ footer .wrap { display: grid; gap: 6px; }
 .car-btn { padding: 6px 14px; font-size: 1.1rem; line-height: 1; }
 .car-track { display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 8px; scrollbar-width: thin; }
 .car-track img { flex: 0 0 auto; height: clamp(200px, 36vw, 380px); width: auto; max-width: 86vw; object-fit: cover; border-radius: 6px; scroll-snap-align: start; background: var(--ph1); }
+.avis-rule { border-top: 1px solid var(--line); margin-bottom: 56px; }
+#avis { padding-top: 0; }
+.avis-note { font-size: 1.05rem; color: var(--muted); }
+.avis-note strong { color: var(--ink); font-size: 1.3rem; }
+.reviews { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; align-items: start; margin-top: 8px; }
+.reviews img { width: 100%; height: auto; border: 1px solid var(--line); border-radius: 8px; background: var(--card); }
 @media (max-width: 860px) {
   .hero-grid, .two, .req { grid-template-columns: 1fr; }
   .facts { grid-template-columns: repeat(2, 1fr); }
+  .reviews { grid-template-columns: 1fr; max-width: 520px; }
   .facts div { border-left: 0; border-top: 1px solid var(--line); }
   .facts div:nth-child(-n+2) { border-top: 0; }
   ol.steps { grid-template-columns: 1fr; }
@@ -268,6 +275,17 @@ footer .wrap { display: grid; gap: 6px; }
         </div>
         <div class="car-track" id="car-track" tabindex="0" role="region" aria-label="Galerie de photos, faire défiler horizontalement"></div>
       </div>
+    </div>
+  </section>
+
+  <section id="avis" aria-labelledby="t-avis" hidden>
+    <div class="wrap">
+      <div class="avis-rule"></div>
+      <div class="eyebrow">Avis des voyageurs</div>
+      <h2 id="t-avis">Ce qu’en disent les voyageurs</h2>
+      <p class="avis-note"><strong class="num">4,82&nbsp;/&nbsp;5</strong> sur 33 avis publiés sur Airbnb</p>
+      <div class="reviews" id="reviews"></div>
+      <p class="fine">Captures d’avis publiés sur Airbnb. <a href="https://www.airbnb.fr/rooms/25931091" rel="noopener" target="_blank">Lire tous les avis</a></p>
     </div>
   </section>
 
@@ -460,7 +478,7 @@ $("host").textContent = CONFIG.hebergeur;
 render();
 
 // Photos : déposées dans le dossier « photos », en .jpg ou .jpeg
-const EXTS = ["jpg", "jpeg", "JPG", "JPEG"];
+const EXTS = ["jpg", "jpeg", "png", "JPG", "JPEG", "PNG"];
 function findPhoto(name) {
   return new Promise(resolve => {
     let i = 0;
@@ -493,6 +511,17 @@ document.querySelectorAll(".ph[data-photo]").forEach(el => {
     $("car-track").appendChild(img);
     $("carousel").hidden = false;
     $("car-count").textContent = `${count} photo${count > 1 ? "s" : ""}`;
+  }
+})();
+// Avis : captures photos/avis-1, avis-2, avis-3 (.png ou .jpg)
+(async () => {
+  for (let n = 1; n <= 3; n++) {
+    const src = await findPhoto(`avis-${n}`);
+    if (!src) continue;
+    const img = document.createElement("img");
+    img.src = src; img.alt = `Avis Airbnb d’un voyageur (${n})`; img.loading = "lazy";
+    $("reviews").appendChild(img);
+    $("avis").hidden = false;
   }
 })();
 const slide = dir => { const t = $("car-track"); t.scrollBy({ left: dir * t.clientWidth * 0.8, behavior: "smooth" }); };
