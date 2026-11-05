@@ -141,19 +141,20 @@ nav.main a[aria-current="page"] { color: var(--marine); border-bottom-color: var
 .zone-head svg { width: 26px; height: 26px; color: var(--corail); flex: none; }
 .zone-head h3 { font-size: 1.45rem; }
 .zone-head span { margin-left: auto; font-size: .82rem; color: var(--gris); white-space: nowrap; }
-.lieu { padding: 16px 0; border-bottom: 1px solid var(--filet); display: grid; gap: 6px; }
-.lieu-top { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; }
+.lieu { padding: 14px 0; border-bottom: 1px solid var(--filet); display: grid; grid-template-columns: 64px 1fr; gap: 12px; align-items: baseline; }
+.lieu[hidden], .vide[hidden], .conseil[hidden] { display: none; }
+.lieu > * { min-width: 0; }
 .lieu h4 { margin: 0; font-size: 1.05rem; font-weight: 600; color: var(--marine); }
-.lieu .t { font-size: .85rem; font-weight: 600; color: var(--corail); white-space: nowrap; }
-.lieu p { font-size: .94rem; color: var(--gris); }
-.tags { display: flex; gap: 6px; flex-wrap: wrap; }
-.tags span { font-size: .74rem; font-weight: 500; background: var(--sable); color: var(--marine); border-radius: 999px; padding: 1px 9px; }
-.lieu a { font-size: .88rem; }
+.lieu .t { font-size: .95rem; font-weight: 600; color: var(--corail); white-space: nowrap; }
+.lieu p { font-size: .94rem; color: var(--gris); margin: 2px 0 0; }
+.lieu a { display: inline-block; margin-top: 4px; font-size: .88rem; }
+.conseil { margin: 18px 0 0; max-width: 720px; background: var(--sable); border-left: 4px solid var(--corail); border-radius: 10px; padding: 12px 16px; font-size: .98rem; color: var(--encre); }
+.conseil.chien { background: var(--marine); color: var(--ecume); }
+.aussi { margin-top: 22px; font-size: .94rem; color: var(--gris); }
 .vide { color: var(--gris); font-size: .94rem; padding: 16px 0; }
 .adresses { margin-top: 44px; background: var(--ecume); border: 1.5px dashed var(--filet); border-radius: 16px; padding: 26px 28px; display: grid; grid-template-columns: auto 1fr; gap: 20px; align-items: center; }
 .adresses > * { min-width: 0; }
 .adresses .signature { margin: 0; font-size: 2rem; }
-.chien-info { margin-top: 22px; font-size: .92rem; color: var(--gris); }
 
 /* Avis */
 .avis-head { display: flex; justify-content: space-between; align-items: end; gap: 24px; flex-wrap: wrap; }
