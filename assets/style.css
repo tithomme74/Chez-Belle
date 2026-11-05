@@ -325,3 +325,41 @@ dialog.lb img { display: block; max-width: min(1100px, 96vw); max-height: 82vh; 
   .tarif-ticket { max-width: none; display: grid; grid-template-columns: minmax(0, 560px) minmax(0, 1fr); gap: 40px; align-items: center; }
   .tarif-ticket .extras { margin-top: 0; flex-direction: column; gap: 14px; font-size: 1rem; }
 }
+
+/* Page Tarifs allégée (5 novembre 2026) */
+.page-head .hero-actions { margin-top: 26px; }
+.grille-sec { padding-top: 16px; }
+.grille-box { margin-top: 26px; background: var(--ecume); border: 1px solid var(--filet); border-radius: 16px; padding: 18px 10px 6px; overflow-x: auto; }
+table.grille { width: 100%; border-collapse: collapse; font-size: 1rem; }
+table.grille thead th { text-align: left; font-size: .76rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--gris); padding: 0 16px 12px; }
+table.grille td, table.grille tbody th { text-align: left; vertical-align: top; padding: 16px; border-top: 1px solid var(--filet); font-weight: 400; }
+table.grille tbody th { font-weight: 600; color: var(--marine); }
+table.grille small { display: block; font-size: .86rem; font-weight: 400; color: var(--gris); }
+table.grille .prix { font-family: var(--display); font-size: 1.6rem; color: var(--marine); white-space: nowrap; }
+table.grille tr.peak > * { background: var(--marine); color: var(--creme); border-top-color: var(--marine); }
+table.grille tr.peak th, table.grille tr.peak .prix { color: var(--ecume); }
+table.grille tr.peak small { color: #C9D4E0; }
+.tag { display: inline-block; margin-left: 6px; padding: 1px 9px; border-radius: 999px; background: var(--sable); color: var(--marine); font-size: .72rem; font-weight: 600; letter-spacing: .04em; vertical-align: 2px; }
+.secret { margin-top: 22px; }
+.secret b { color: var(--marine); }
+.inclus-sec { background: var(--sable); }
+.inclus { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+.inclus > * { min-width: 0; }
+.inclus h2 { font-size: clamp(1.6rem, 3vw, 2.1rem); }
+ul.coches { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+ul.coches li { display: flex; gap: 10px; align-items: baseline; }
+ul.coches li::before { content: "✓"; color: var(--corail); font-weight: 600; flex: none; }
+ul.coches.plus-s li::before { content: "+"; }
+.demande .req { margin-top: 24px; }
+.mot-court { margin: 10px 0 0; }
+.mot-court blockquote { margin: 0; font-family: var(--display); font-style: italic; font-size: 1.25rem; line-height: 1.45; color: var(--creme); }
+.mot-court .signature { color: #F0B9A8; margin-top: 6px; }
+@media (max-width: 900px) { .inclus { grid-template-columns: 1fr; gap: 32px; } }
+@media (max-width: 600px) {
+  table.grille thead th:nth-child(4), table.grille td:nth-child(4) { display: none; }
+  table.grille td, table.grille tbody th { padding: 14px 8px; }
+  table.grille thead th { padding: 0 8px 10px; }
+  table.grille .tag { display: none; }
+}
+.mob { display: none; margin-top: 12px; }
+@media (max-width: 600px) { .mob { display: block; } }

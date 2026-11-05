@@ -40,101 +40,74 @@
 <div class="stripes" aria-hidden="true"></div>
 
 <main>
-  <section class="page-head" aria-labelledby="t-page" style="padding-bottom:0">
+  <section class="page-head" aria-labelledby="t-page">
     <div class="wrap">
-      <div class="kicker">Tarifs et réservation</div>
-      <h1 id="t-page">Tarifs et demandes de réservation</h1>
-      <p class="lead">Les prix 2027 en direct, l’estimation de votre séjour et votre demande à Belle, qui répond sous 24 heures.</p>
+      <div class="kicker">Tarifs 2027 · réservation en direct</div>
+      <h1 id="t-page">Dès 75 € la nuit, linge et ménage compris</h1>
+      <p class="lead">Le prix de la grille est celui du contrat, sans frais de plateforme. Choisissez vos dates : Belle vous répond sous 24 heures.</p>
+      <div class="hero-actions"><a class="btn" href="#reserver">Estimer mon séjour</a><a class="btn line" href="#tarifs">Voir les prix</a></div>
     </div>
   </section>
 
-  <section id="tarifs" class="tarifs" aria-labelledby="t-tarifs">
+  <section id="tarifs" class="grille-sec" aria-labelledby="t-tarifs">
     <div class="wrap">
-      <div class="kicker">Tarifs 2027 en réservation directe</div>
-      <h2 id="t-tarifs" style="margin-top:10px">Le prix par nuit, saison par saison</h2>
-      <p style="margin-top:14px">Les prix en direct sont plus bas que sur les plateformes, qui ajoutent leurs frais de service.</p>
-      <div class="cabines">
-        <div class="cabine"><div class="toit"></div><div class="in"><h3>Mai et juin</h3><span class="dates">du 1<sup>er</sup> mai au 3 juillet</span><span class="p num">75 € <small>la nuit dès 4 nuits</small></span><span class="fine">85 € la nuit pour 3 nuits</span><span class="cond">3 nuits minimum · arrivée mercredi, vendredi ou samedi</span></div></div>
-        <div class="cabine"><div class="toit"></div><div class="in"><h3>Ponts de mai</h3><span class="dates">Ascension du 6 au 9 mai · Pentecôte du 14 au 17 mai</span><span class="p num">95 € <small>la nuit</small></span><span class="cond">3 nuits minimum · arrivée jeudi ou vendredi</span></div></div>
-        <div class="cabine"><div class="toit"></div><div class="in"><h3>Début juillet</h3><span class="dates">du 3 au 17 juillet</span><span class="p num">100 € <small>la nuit</small></span><span class="cond">4 nuits minimum · arrivée mercredi ou samedi</span></div></div>
-        <div class="cabine peak"><div class="toit"></div><div class="in"><span class="peak-tag">Cœur de l’été</span><h3>Juillet et août</h3><span class="dates">du 17 juillet au 28 août</span><span class="p num">805 € <small>la semaine</small></span><span class="fine">soit 115 € la nuit</span><span class="cond">7 nuits, du samedi au samedi</span></div></div>
-        <div class="cabine"><div class="toit"></div><div class="in"><h3>Fin d’été</h3><span class="dates">du 28 août au 11 septembre</span><span class="p num">90 € <small>la nuit</small></span><span class="cond">4 nuits minimum · arrivée mercredi ou samedi</span></div></div>
-        <div class="cabine"><div class="toit"></div><div class="in"><h3>Septembre</h3><span class="dates">du 11 au 25 septembre</span><span class="p num">75 € <small>la nuit dès 4 nuits</small></span><span class="fine">85 € la nuit pour 3 nuits</span><span class="cond">3 nuits minimum · arrivée mercredi, vendredi ou samedi</span></div></div>
+      <h2 id="t-tarifs">Les prix, saison par saison</h2>
+      <div class="grille-box">
+        <table class="grille num">
+          <thead><tr><th scope="col">Période</th><th scope="col">Prix</th><th scope="col">Séjour</th><th scope="col">Arrivée</th></tr></thead>
+          <tbody>
+            <tr class="calme"><th scope="row">Mai et juin <span class="tag">plus calme</span><small>1<sup>er</sup> mai – 3 juillet</small></th><td><span class="prix">75 €</span><small>la nuit · 85 € pour 3 nuits</small></td><td>dès 3 nuits</td><td>mer · ven · sam</td></tr>
+            <tr><th scope="row">Ponts de mai<small>Ascension 6 – 9 mai · Pentecôte 14 – 17 mai</small></th><td><span class="prix">95 €</span><small>la nuit</small></td><td>3 nuits</td><td>jeu · ven</td></tr>
+            <tr><th scope="row">Début juillet<small>3 – 17 juillet</small></th><td><span class="prix">100 €</span><small>la nuit</small></td><td>dès 4 nuits</td><td>mer · sam</td></tr>
+            <tr class="peak"><th scope="row">Cœur de l’été<small>17 juillet – 28 août</small></th><td><span class="prix">805 €</span><small>la semaine, soit 115 € la nuit</small></td><td>7 nuits</td><td>samedi</td></tr>
+            <tr><th scope="row">Fin d’été<small>28 août – 11 septembre</small></th><td><span class="prix">90 €</span><small>la nuit</small></td><td>dès 4 nuits</td><td>mer · sam</td></tr>
+            <tr class="calme"><th scope="row">Septembre <span class="tag">plus calme</span><small>11 – 25 septembre</small></th><td><span class="prix">75 €</span><small>la nuit · 85 € pour 3 nuits</small></td><td>dès 3 nuits</td><td>mer · ven · sam</td></tr>
+          </tbody>
+        </table>
       </div>
-      <div class="tarif-ticket">
-        <div class="ticket">
-          <div class="kicker">Inclus dans le prix</div>
-          <h3>Votre billet tout compris</h3>
-          <p class="sub">Le prix affiché est le prix payé. Seule la taxe de séjour s’ajoute.</p>
-          <ul>
-            <li>Lits faits à votre arrivée</li>
-            <li>Linge de toilette et serviettes de plage</li>
-            <li>Ménage de fin de séjour</li>
-            <li>Eau, électricité, chauffage et wifi</li>
-            <li>Café et produits de base pour démarrer</li>
-            <li>Arrivée autonome avec boîte à clés, dès 16 h</li>
-          </ul>
-          <hr>
-          <p class="sur-demande"><strong>Sur demande :</strong> lit parapluie et chaise haute. <strong>Chien :</strong> 15&nbsp;€ jusqu’à 3 nuits, 25&nbsp;€ au-delà.</p>
-        </div>
-        <div class="extras">
-        <span><strong>Taxe de séjour :</strong> en sus, adultes seulement</span>
-        <span><strong>Arrivée</strong> dès 16 h · <strong>départ</strong> avant 10 h</span>
-        </div>
-      </div>
+      <p class="fine mob">Jours d’arrivée selon la saison : l’estimation ci-dessous vous les rappelle.</p>
+      <p class="secret"><b>Le secret des habitués :</b> en mai, juin et septembre, les plages sont calmes, l’océan est bon et le prix descend à 75 € la nuit.</p>
     </div>
   </section>
 
-
-  <section class="saison" aria-labelledby="t-saison">
-    <div class="wrap">
-      <div class="kicker">Le secret des habitués</div>
-      <h2 id="t-saison" style="margin-top:10px">Mai, juin, septembre : la plus belle saison</h2>
-      <p class="lead" style="margin-top:14px">Les plages sont à vous, les terrasses ont de la place et la lumière est dorée. Et le prix descend à 75&nbsp;€ la nuit.</p>
-      <div class="mois">
-        <article><span class="m">Mai</span><p>Les ponts de l’Ascension et de la Pentecôte, les premiers bains de soleil et le marché sans la foule.</p><span class="prix">dès 75 € la nuit, 3 nuits minimum</span></article>
-        <article><span class="m">Juin</span><p>Les jours les plus longs de l’année, des dîners dehors jusqu’à 22 h, la plage encore calme en semaine.</p><span class="prix">dès 75 € la nuit, 3 nuits minimum</span></article>
-        <article><span class="m">Septembre</span><p>L’océan a chauffé tout l’été, la rentrée a vidé les plages. Le meilleur mois pour se baigner au calme.</p><span class="prix">dès 75 € la nuit, 3 nuits minimum</span></article>
-      </div>
-      <div class="saison-cta"><a class="btn" href="#reserver">Choisir mes dates hors saison</a><small>Arrivée possible le mercredi, le vendredi ou le samedi.</small></div>
-    </div>
-  </section>
-
-
-  <section class="mot" aria-label="Le mot de Belle">
-    <div class="wrap mot-grid">
+  <section class="inclus-sec" aria-label="Ce qui est compris dans le prix">
+    <div class="wrap inclus">
       <div class="stack">
-        <div class="kicker">Le mot de votre hôtesse</div>
+        <h2>Compris dans le prix</h2>
+        <ul class="coches">
+          <li>Lits faits, linge de toilette et serviettes de plage</li>
+          <li>Ménage de fin de séjour</li>
+          <li>Eau, électricité, chauffage et wifi fibre</li>
+          <li>Café et produits de base pour démarrer</li>
+          <li>Place de parking dans la propriété</li>
+        </ul>
       </div>
-      <div>
-        <blockquote>« J’habite à l’étage depuis des années et je loue le rez-de-jardin comme j’aimerais être reçue en vacances : des lits faits à votre arrivée, un jardin où l’on déjeune à l’ombre, et mes bonnes adresses du quartier. Vous êtes chez vous, et je reste là si vous avez besoin. »</blockquote>
-        <span class="signature">Belle</span>
+      <div class="stack">
+        <h2>En plus, selon votre séjour</h2>
+        <ul class="coches plus-s">
+          <li>Taxe de séjour : par adulte et par nuit, mineurs exonérés</li>
+          <li>Chien : 15 € jusqu’à 3 nuits, 25 € au-delà</li>
+          <li>Lit parapluie et chaise haute : gratuits, sur demande</li>
+        </ul>
+        <p class="fine">Arrivée dès 16 h · départ avant 10 h · 4 personnes au maximum, bébés compris.</p>
       </div>
     </div>
   </section>
 
-  <section aria-labelledby="t-direct">
+  <section aria-labelledby="t-etapes">
     <div class="wrap">
-      <div class="kicker">Réserver en direct</div>
-      <h2 id="t-direct" style="margin-top:10px">Simple, sans frais et avec Belle au bout du fil</h2>
-      <div class="direct">
-        <div><b>Le meilleur prix</b><p>Pas de frais de service ajoutés au moment de payer : le prix de la grille est celui du contrat.</p></div>
-        <div><b>Un vrai contact</b><p>Vous échangez directement avec Belle, qui connaît chaque recoin du quartier.</p></div>
-        <div><b>Un contrat clair</b><p>30 % d’arrhes à la réservation, le solde 30 jours avant l’arrivée, par virement.</p></div>
-      </div>
+      <h2 id="t-etapes">Réserver en trois étapes</h2>
       <ol class="etapes">
-        <li><div><h3>Votre demande</h3><p>Indiquez vos dates ci-dessous. Belle vous répond sous 24 heures avec le contrat.</p></div></li>
-        <li><div><h3>La confirmation</h3><p>Le séjour est réservé dès réception du contrat signé et des arrhes.</p></div></li>
-        <li><div><h3>Avant l’arrivée</h3><p>Après le solde, vous recevez le livret d’accueil et le code de la boîte à clés.</p></div></li>
+        <li><div><h3>Vous demandez vos dates</h3><p>Belle répond sous 24 heures et vous envoie le contrat.</p></div></li>
+        <li><div><h3>Vous confirmez</h3><p>Contrat signé et 30 % d’arrhes par virement.</p></div></li>
+        <li><div><h3>Un mois avant</h3><p>Vous réglez le solde, puis recevez le livret d’accueil et le code de la boîte à clés.</p></div></li>
       </ol>
     </div>
   </section>
 
-
   <section id="reserver" class="demande" aria-labelledby="t-reserver">
     <div class="wrap">
-      <div class="kicker">Vos dates</div>
-      <h2 id="t-reserver" style="margin-top:10px">Demander mes dates</h2>
+      <h2 id="t-reserver">Demander mes dates</h2>
       <div class="req">
         <form id="f" novalidate>
           <label for="arr">Arrivée<input id="arr" type="date" min="2027-05-01" max="2027-09-24"></label>
@@ -144,7 +117,7 @@
           <span class="full check"><input id="pet" type="checkbox"><label for="pet" style="display:inline;color:var(--encre)">Je viens avec mon chien</label></span>
           <label class="full" for="nom">Nom et prénom<input id="nom" type="text" autocomplete="name" placeholder="Claire Martin"></label>
           <label class="full" for="contact">E-mail ou téléphone<input id="contact" type="text" autocomplete="email" placeholder="claire.martin@exemple.fr"></label>
-          <label class="full" for="msg">Message (facultatif)<textarea id="msg" placeholder="Une question, un lit parapluie, une arrivée tardive…"></textarea></label>
+          <label class="full" for="msg">Message (facultatif)<textarea id="msg" placeholder="Un lit parapluie, une arrivée tardive…"></textarea></label>
           <div class="full"><button class="btn" type="submit">Préparer ma demande</button></div>
         </form>
         <div class="stack">
@@ -166,6 +139,10 @@
             <span id="copied" class="fine" hidden>Demande copiée.</span>
             <p class="fine">Ou écrivez directement à <span class="mail-belle" id="belle-mail"></span></p>
           </div>
+          <figure class="mot-court">
+            <blockquote>« Je loue le rez-de-jardin comme j’aimerais être reçue en vacances. Vous êtes chez vous, et je reste là si vous avez besoin. »</blockquote>
+            <figcaption class="signature">Belle</figcaption>
+          </figure>
         </div>
       </div>
     </div>
@@ -173,22 +150,16 @@
 
   <section id="questions" aria-labelledby="t-faq">
     <div class="wrap">
-      <div class="kicker">Bon à savoir</div>
-      <h2 id="t-faq" style="margin-top:10px">Vos questions</h2>
+      <h2 id="t-faq">Vos questions</h2>
       <div class="faq-list">
-        <details><summary>Comment se passent l’arrivée et le départ ?</summary><p>L’arrivée se fait en autonomie à partir de 16 h, avec une boîte à clés. Le code vous est envoyé au plus tard trois jours avant, une fois le séjour réglé. Le départ se fait avant 10 h, en déposant les clés dans la boîte.</p></details>
-        <details><summary>Le linge et le ménage sont-ils vraiment compris ?</summary><p>Oui. Les lits sont faits à votre arrivée, le linge de toilette et les serviettes de plage sont fournis, et le ménage de fin de séjour est inclus. Pour les séjours de plus de 7 nuits, le linge est changé chaque semaine.</p></details>
-        <details><summary>Je viens avec mon chien, comment ça se passe ?</summary><p>Il est le bienvenu : signalez-le dans votre demande. Comptez 15 € pour un séjour de 3 nuits ou moins, 25 € au-delà. Il ne monte ni sur les lits ni sur le canapé et ne reste pas seul dans le logement. Du 1<sup>er</sup> avril au 30 septembre, les chiens ne sont admis ni sur les plages de Royan, dont Pontaillac, ni sur la conche de Saint-Sordelin, mais le sentier des douaniers est tout proche.</p></details>
-        <details><summary>Nous venons avec un bébé : avez-vous de l’équipement ?</summary><p>Un lit parapluie et une chaise haute sont disponibles sur demande. Précisez-le dans votre message.</p></details>
-        <details><summary>Combien de personnes peut-on être ?</summary><p>Quatre au maximum, enfants et bébés compris : une chambre avec deux lits simples rapprochables en grand lit, et un canapé-lit dans la pièce à vivre. Aucune personne supplémentaire ne peut dormir sur place.</p></details>
-        <details><summary>Belle habite-t-elle sur place ?</summary><p>Oui, à l’étage, avec son propre accès. Vous avez votre entrée et votre logement à vous ; le portail et le jardin se partagent avec elle. Elle reste disponible si vous avez besoin d’un conseil ou d’un coup de main.</p></details>
-        <details><summary>Où se gare-t-on ?</summary><p>Une place de stationnement vous est réservée dans la propriété, derrière le portail. Pour la plage, inutile de prendre la voiture.</p></details>
-        <details><summary>Combien coûte la taxe de séjour ?</summary><p>Elle est due par chaque adulte et par nuit, selon le tarif de la Communauté d’Agglomération Royan Atlantique en vigueur à la date du séjour. Les mineurs en sont exonérés. Belle vous indique le montant exact avec le contrat.</p></details>
-        <details><summary>Comment se règle le séjour ?</summary><p>Par virement uniquement : 30 % d’arrhes à la réservation, puis le solde, la taxe de séjour et le dépôt de garantie en un seul virement, 30 jours avant l’arrivée. Belle vous envoie un récépissé, puis une facture.</p></details>
-        <details><summary>Y a-t-il un dépôt de garantie ?</summary><p>Oui, il est versé avec le solde et vous est restitué par virement au plus tard quatorze jours après votre départ, déduction faite d’éventuels dégâts justifiés.</p></details>
-        <details><summary>Et si je dois annuler ?</summary><p>Avant le paiement du solde, vous pouvez renoncer en abandonnant les arrhes. Après, le séjour reste dû, mais Belle vous rembourse les nuits qu’elle parvient à relouer. Une assurance annulation est recommandée.</p></details>
-        <details><summary>Peut-on venir en dehors de mai à septembre ?</summary><p>Le site présente la saison de mai à septembre. En dehors, Belle accepte parfois un séjour en direct, surtout pour une durée plus longue : écrivez-lui avec vos dates.</p></details>
+        <details><summary>Comment se passent l’arrivée et le départ ?</summary><p>En autonomie, avec une boîte à clés : arrivée dès 16 h, départ avant 10 h. Le code vous est envoyé au plus tard trois jours avant, une fois le séjour réglé.</p></details>
+        <details><summary>Combien coûte la taxe de séjour ?</summary><p>Elle est due par adulte et par nuit, au tarif de la Communauté d’Agglomération Royan Atlantique en vigueur à la date du séjour. Les mineurs en sont exonérés. Belle vous indique le montant exact avec le contrat.</p></details>
+        <details><summary>Y a-t-il un dépôt de garantie ?</summary><p>Oui, 300 €, versés avec le solde et rendus par virement au plus tard quatorze jours après votre départ, déduction faite d’éventuels dégâts justifiés.</p></details>
+        <details><summary>Et si je dois annuler ?</summary><p>Avant le paiement du solde, vous renoncez en abandonnant les arrhes. Après, le séjour reste dû, mais Belle vous rembourse les nuits qu’elle parvient à relouer. Une assurance annulation est recommandée.</p></details>
+        <details><summary>Je viens avec mon chien, comment ça se passe ?</summary><p>Il est le bienvenu : signalez-le dans votre demande. Il ne monte ni sur les lits ni sur le canapé et ne reste pas seul dans le logement. Du 1<sup>er</sup> avril au 30 septembre, les chiens ne sont admis ni sur les plages de Royan, dont Pontaillac, ni sur la conche de Saint-Sordelin, mais le sentier des douaniers est tout proche.</p></details>
+        <details><summary>Peut-on venir en dehors de mai à septembre ?</summary><p>Parfois, surtout pour un séjour plus long : écrivez à Belle avec vos dates.</p></details>
       </div>
+      <p class="fine" style="margin-top:20px">Couchages, parking, Belle à l’étage : tout est détaillé sur la page <a href="../chez-belle/">Le logement</a>.</p>
     </div>
   </section>
 </main>
