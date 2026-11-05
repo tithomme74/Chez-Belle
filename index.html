@@ -133,6 +133,8 @@ ol.steps li::before { content: "Étape " counter(s); display: block; font-family
 .req > * { min-width: 0; }
 form { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 22px; }
 form .full { grid-column: 1 / -1; }
+label.check span { display: flex; gap: 10px; align-items: center; font-weight: 500; }
+label.check input { width: auto; }
 label { display: grid; gap: 4px; font-size: .9rem; font-weight: 500; }
 input, select, textarea { font: inherit; font-size: 1rem; padding: 10px 12px; border: 1px solid var(--line); border-radius: 6px; background: var(--bg); color: var(--ink); width: 100%; min-width: 0; }
 textarea { min-height: 90px; resize: vertical; }
@@ -202,7 +204,7 @@ footer .wrap { display: grid; gap: 6px; }
         <h1>Un rez-de-jardin au calme, à 7&nbsp;minutes à pied de la plage de Pontaillac</h1>
         <p class="lead">Un logement indépendant de 55&nbsp;m² pour 2 à 4 voyageurs, avec un jardin clos et ombragé. Le linge, les lits faits et le ménage sont compris dans le prix.</p>
         <ul class="chips">
-          <li>Jardin ombragé</li><li>Parking privé</li><li>Wifi fibre</li><li>Plage et commerces à pied</li>
+          <li>Jardin ombragé</li><li>Parking privé</li><li>Wifi fibre</li><li>Plage et commerces à pied</li><li>Animaux acceptés</li>
         </ul>
         <a class="cta" href="#reserver">Demander mes dates</a>
         <p class="rating"><strong>4,82&nbsp;/&nbsp;5</strong> sur 33 avis Airbnb · emplacement 4,9 · communication 4,9</p>
@@ -217,7 +219,7 @@ footer .wrap { display: grid; gap: 6px; }
       <div class="facts">
         <div><b class="num">55&nbsp;m²</b><small>logement indépendant</small></div>
         <div><b>4</b><small>voyageurs au maximum</small></div>
-        <div><b>1</b><small>chambre (2 lits simples) et un canapé-lit</small></div>
+        <div><b>1</b><small>chambre (2 lits simples, rapprochables en grand lit) et un canapé-lit</small></div>
         <div><b class="num">200&nbsp;m²</b><small>de jardin clos</small></div>
         <div><b>1</b><small>place de parking dans la propriété</small></div>
       </div>
@@ -238,7 +240,7 @@ footer .wrap { display: grid; gap: 6px; }
           <div class="eyebrow">Le logement</div>
           <h2 id="t-logement">Votre maison de vacances, au rez-de-jardin</h2>
           <p>Le logement occupe le rez-de-jardin d’une maison individuelle, avec sa propre entrée. Belle habite à l’étage, avec un accès séparé : vous êtes chez vous, et quelqu’un est là si besoin.</p>
-          <p>La pièce à vivre réunit le salon, le coin repas et un canapé-lit. La cuisine est entièrement équipée. La chambre a deux lits simples, et la salle de douche est à l’italienne. Le jardin est orienté sud et ouest, avec des transats, un barbecue et un auvent pour les déjeuners à l’ombre.</p>
+          <p>La pièce à vivre réunit le salon, le coin repas et un canapé-lit. La cuisine est entièrement équipée. La chambre a deux lits simples, qui se rapprochent en un grand lit, et la salle de douche est à l’italienne. Le jardin est orienté sud et ouest, avec des transats, un barbecue et un auvent pour les déjeuners à l’ombre.</p>
           <ul class="ticks" style="margin-top:18px">
             <li>Cuisine : réfrigérateur, congélateur, four, micro-ondes, lave-vaisselle, cafetière Nespresso, vaisselle pour 8</li>
             <li>Buanderie avec lave-linge</li>
@@ -257,6 +259,7 @@ footer .wrap { display: grid; gap: 6px; }
             <li>Eau, électricité, chauffage et wifi</li>
             <li>Café et produits de base pour démarrer</li>
             <li>Arrivée autonome avec une boîte à clés</li>
+            <li>Votre chien est le bienvenu : signalez-le dans votre demande</li>
           </ul>
         </div>
       </div>
@@ -337,6 +340,7 @@ footer .wrap { display: grid; gap: 6px; }
           <label>Départ<input id="dep" type="date" value="2027-06-16" min="2027-05-02" max="2027-09-25"></label>
           <label>Voyageurs<select id="pax"><option>1</option><option selected>2</option><option>3</option><option>4</option></select></label>
           <label>Dont enfants<select id="kids"><option selected>0</option><option>1</option><option>2</option><option>3</option></select></label>
+          <label class="full check"><span><input id="pet" type="checkbox"> Je viens avec un animal de compagnie</span></label>
           <label class="full">Nom et prénom<input id="nom" type="text" autocomplete="name" placeholder="Votre nom"></label>
           <label class="full">E-mail ou téléphone<input id="contact" type="text" autocomplete="email" placeholder="Pour que Belle vous réponde"></label>
           <label class="full">Message (facultatif)<textarea id="msg" placeholder="Une question, un besoin particulier…"></textarea></label>
@@ -450,11 +454,12 @@ function draft(r) {
     "Bonjour Belle,", "",
     `Je souhaiterais séjourner Chez Belle du ${frDate($("arr").value)} au ${frDate($("dep").value)} (${r.nights} nuit${r.nights > 1 ? "s" : ""}), pour ${who}.`,
     r.total ? `Estimation indiquée sur votre page : ${eur(r.total)}, taxe de séjour en sus.` : "",
+    $("pet").checked ? "Nous viendrons avec un animal de compagnie." : "",
     $("msg").value.trim() ? "\n" + $("msg").value.trim() : "",
     "", "Merci de me dire si ces dates sont disponibles.",
     `${$("nom").value.trim() || "[votre nom]"} · ${$("contact").value.trim() || "[votre e-mail ou téléphone]"}`
   ];
-  return lines.filter((l, i) => l !== "" || i === 1 || i === 5).join("\n");
+  return lines.filter((l, i) => l !== "" || i === 1 || i === 6).join("\n");
 }
 
 ["arr", "dep"].forEach(id => $(id).addEventListener("input", render));
@@ -519,7 +524,23 @@ document.querySelectorAll(".ph[data-photo]").forEach(el => {
 })();
 // Avis en texte : mis à jour par le flow « maj-avis-chez-belle ». Recopier les avis mot pour mot.
 // DEBUT AVIS
-const AVIS = [];
+const AVIS = [
+  {
+    "prenom": "Clémence",
+    "date": "août 2025",
+    "texte": "Nous avons passé une agréable semaine, le logement est bien équipé, spacieux et possède un grand extérieur ombragé. Le quartier est calme, à proximité de la plage Pontaillac et des commerces.\nNous avons beaucoup apprécié de pouvoir venir avec notre chien Rudie et de l'a promener le long du sentier des douaniers."
+  },
+  {
+    "prenom": "Fabrice",
+    "date": "août 2025",
+    "texte": "Nous avons passé un agréable séjours chez belle. Le logement style maison familiale de vacances ou l on se sent bien : une belle pièce de vie avec des meubles cossus, une cuisine fonctionnelle , une salle de bain rénovée avec WC et douche a l italienne , une chambre avec un grand lit XXL confortable, un grand jardin clos paisible et ombragé avec le mobilier adéquate , une hôte discrète et réactive, une place de parking très pratique,le tout à 5 minutes du centre ville et de la plage de Pontaillac. Chien bienvenu. Tout cela a un prix plus que correct. Je te recommande vivement pour 2 , y compris avec un chien. Encore Merci Belle pour ce séjours"
+  },
+  {
+    "prenom": "Elodie",
+    "date": "août 2024",
+    "texte": "Une semaine de vacances très agréable avec nos 2 enfants qui ont pu profiter du jardin et de la plage accessible à pieds.\nIsabelle est aux petits soins toujours disponible et de bons conseils."
+  }
+];
 // FIN AVIS
 if (AVIS.length) {
   AVIS.slice(0, 3).forEach(a => {
