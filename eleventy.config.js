@@ -26,7 +26,7 @@ export default function (eleventyConfig) {
   ["src/assets", "src/photos", "src/infos", "src/favicon.svg", "src/robots.txt", "src/sitemap.xml"]
     .forEach(p => eleventyConfig.addPassthroughCopy(p));
   // Espace d'administration : pages statiques + schémas partagés avec le serveur
-  eleventyConfig.addPassthroughCopy({ "src/admin": "admin", "src/_lib/schemas.js": "admin/schemas.js" });
+  eleventyConfig.addPassthroughCopy({ "src/admin": "admin", "src/_lib/schemas.js": "admin/schemas.js", "src/_lib/calc.js": "admin/calc.js", "src/_lib/contenu.js": "admin/contenu.js" });
   eleventyConfig.ignores.add("src/admin/**");
   eleventyConfig.ignores.add("src/photos/**");
   eleventyConfig.ignores.add("src/_lib/**");

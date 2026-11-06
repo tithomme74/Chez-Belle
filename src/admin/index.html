@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
-<title>Administration | Chez Belle</title>
+<title>Modifier le site | Chez Belle</title>
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,38 +18,37 @@
 <main id="ecran-connexion" class="connexion" hidden>
   <form id="form-connexion" class="carte">
     <h1>Chez Belle</h1>
-    <p class="aide">Espace de modification du site</p>
+    <p>Modifier le site</p>
     <label>Mot de passe<input id="mdp" type="password" autocomplete="current-password" required maxlength="200"></label>
-    <button class="btn" type="submit">Se connecter</button>
+    <button class="btn" type="submit">Entrer</button>
     <p id="erreur-connexion" class="erreur" role="alert" hidden></p>
   </form>
 </main>
 
-<!-- Espace d'édition -->
+<!-- Espace de modification -->
 <div id="ecran-admin" class="admin" hidden>
   <header class="barre-haut">
-    <button type="button" id="ouvrir-menu" class="menu-mobile" aria-label="Afficher les rubriques">☰</button>
-    <strong class="marque">Chez Belle · administration</strong>
-    <a href="/" target="_blank" rel="noopener">Voir le site ↗</a>
+    <button type="button" id="ouvrir-menu" class="menu-mobile" aria-expanded="false" aria-controls="rubriques">☰ Menu</button>
+    <strong class="marque">Chez Belle</strong>
+    <a href="/" target="_blank" rel="noopener">Le site en ligne ↗</a>
     <button type="button" id="deconnexion" class="lien">Se déconnecter</button>
   </header>
   <div id="barre-brouillon" class="barre-brouillon" aria-live="polite">
     <span id="texte-brouillon">…</span>
-    <a id="lien-apercu" href="#" target="_blank" rel="noopener" hidden>Voir l’aperçu ↗</a>
-    <button type="button" id="abandonner" class="btn line petit" hidden>Abandonner le brouillon</button>
-    <button type="button" id="publier" class="btn petit" hidden>Publier sur le site</button>
+    <a id="lien-apercu" class="btn line" href="#" target="_blank" rel="noopener" hidden>Voir avant de publier ↗</a>
+    <button type="button" id="publier" class="btn" hidden>Publier sur le site</button>
+    <button type="button" id="abandonner" class="lien" hidden>Tout annuler</button>
   </div>
   <nav id="rubriques" class="rubriques" aria-label="Rubriques"></nav>
-  <main id="zone" class="zone" tabindex="-1">
-    <p class="aide">Choisissez une rubrique à gauche.</p>
-  </main>
-  <footer id="pied-enregistrer" class="pied-enregistrer" hidden>
+  <main id="zone" class="zone" tabindex="-1"></main>
+  <footer id="pied-enregistrer" class="pied-enregistrer">
     <span id="etat" aria-live="polite"></span>
-    <button type="button" id="annuler" class="btn line">Annuler les modifications</button>
-    <button type="button" id="enregistrer" class="btn">Enregistrer le brouillon</button>
+    <button type="button" id="annuler" class="lien">Annuler mes modifications</button>
+    <button type="button" id="enregistrer" class="btn">Enregistrer</button>
   </footer>
 </div>
 
+<dialog id="dialogue" class="dialogue"></dialog>
 <div id="chargement" class="chargement">Chargement…</div>
 </body>
 </html>

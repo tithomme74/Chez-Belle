@@ -52,7 +52,7 @@ export const SCHEMAS = {
       liens_titre: texte("Titre de la colonne liens", { max: 60 }),
       liens: liste("Liens", lienSimple("Lien"), { max: 8, titre: "label" })
     }),
-    barre: texte("Barre du bas (mobile)", { max: 160, riche: true, aide: "{prix_min} est remplacé par le prix le plus bas" })
+    barre: texte("Barre du bas (mobile)", { max: 160, riche: true, lignes: 2, aide: "{prix_min} est remplacé par le prix le plus bas" })
   }),
 
   accueil: objet("Accueil", {

@@ -37,19 +37,27 @@ L’en-tête, le menu et le pied de page sont écrits une seule fois dans `src/_
 
 ## Contenus (src/_data/)
 
-Tous les textes, prix, listes et photos sont dans des fichiers JSON, un par page, que l'espace `/admin` modifiera :
+Tous les textes, prix, listes et photos sont dans des fichiers JSON que l'espace `/admin` modifie :
 `site.json` (menu, pied de page, barre du bas, e-mail), `accueil.json`, `logement.json`, `reservation.json` (textes de la page Tarifs),
-`autour.json`, `tarifs.json` (types de période, prix, durées minimales, calendrier, chien, dépôt, bornes du formulaire) et `avis.json`.
+`autour.json`, `tarifs.json` (une ligne par période : nom, plages de dates arrivée → départ, prix par nuit, minimum, options),
+`maison.json` (fiche « Ce qui est compris » : capacité, surface, horaires, distances, dépôt, chien, services avec leur statut) et `avis.json`.
 
-- **Tarifs saisis une seule fois** : la grille, le zoom de l'accueil, la barre du bas et l'estimation sont calculés depuis `tarifs.json` (`src/_data/calc.js`).
-- **Jetons** utilisables dans les textes : `{prix_min}`, `{depot}`, `{annee}`, `{chien_court}`, `{chien_long}`, `{chien_seuil}`, `{nb_photos}`, `{prix:noel}`, `{semaine:coeur}`, `{min:juillet}`.
+- **Saisi une seule fois** (`src/_lib/calc.js`) : calendrier nuit par nuit (la plage la plus courte l'emporte), année, bornes du formulaire,
+  grille, cartes de l'accueil, listes « Compris » / « En plus » de la page Tarifs, estimation.
+- **Jetons** (pastilles bleues dans l'admin) : `{prix_min}`, `{compris}`, `{arrivee}`, `{depart}`, `{capacite}`, `{surface}`, `{jardin}`,
+  `{dist_conche}`, `{dist_plage}`, `{depot}`, `{chien_court}`, `{chien_long}`, `{chien_seuil}`, `{annee}`, `{nb_photos}`, `{prix:<ligne>}`, `{semaine:<ligne>}`.
+  En début de phrase, la valeur prend une majuscule.
+- **Photos** : la mosaïque est automatique (1re grande, puis haute ou normale selon l'orientation, au-delà de 5 visibles seulement en grand).
 - **Mise en forme** autorisée dans les textes : `<b>`, `<em>`, `<sup>`, `<br>`, `<a href>` (liens internes écrits depuis la racine, ex. `/autour/`). Tout le reste est neutralisé (`src/_lib/contenu.js`).
 
 ## Espace d'administration (/admin/)
 
-`src/admin/` : page de connexion puis une rubrique par contenu (Accueil, Le logement, Prix et calendrier, Page Tarifs : textes, Autour,
-Commun, Avis en lecture seule). Les formulaires sont générés à partir de `src/_lib/schemas.js` : ajouter un champ au schéma le fait
-apparaître dans l'admin. Listes : ajouter, supprimer, monter, descendre. Photos : réduites dans le navigateur (480 et 960 px, WebP,
+`src/admin/` : pensé pour une tablette (texte 18 px, boutons de 48 px). Menu par thème (Mes prix, Ce qui est compris, Mes photos,
+Mes textes page par page, Autour de chez moi, Coordonnées, Avis, Mode d'emploi) et « mode avancé » pour Thomas (référencement, menu,
+libellés du formulaire). Les formulaires sont générés à partir de `src/_lib/schemas.js` (`VUES` dans `admin.js` dit où chaque partie
+apparaît) ; composants dédiés pour les prix (une ligne par période), les services (un statut par service), les photos (grille) et les
+lieux. Éditeur de texte comme un traitement de texte (gras, italique, lien, pastilles de valeurs automatiques), dialogues dans la page,
+un seul bouton « Enregistrer » pour tout ce qui a changé. Listes : ajouter, supprimer, monter, descendre. Photos : réduites dans le navigateur (480 et 960 px, WebP,
 ou JPEG si le navigateur ne sait pas faire de WebP), puis envoyées à `/api/photos`. Retirer une photo de la liste la retire du site
 (le fichier reste dans `src/photos/`). Contrôles faits dans le navigateur puis refaits par le serveur.
 
