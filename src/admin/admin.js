@@ -11,7 +11,8 @@ const RUBRIQUES = [
   ["reservation", "Page Tarifs : textes", "/tarifs-reservation/", "compris, étapes, formulaire, questions"],
   ["autour", "Autour", "/autour/", "filtres, lieux, conseils"],
   ["site", "Commun à toutes les pages", "/", "menu, pied de page, e-mail"],
-  ["avis", "Avis Airbnb", "/#avis", "automatique, lecture seule"]
+  ["avis", "Avis Airbnb", "/#avis", "automatique, lecture seule"],
+  ["aide", "Mode d’emploi", "/", "comment modifier et publier"]
 ];
 const JETONS = "{prix_min} prix le plus bas · {depot} dépôt · {annee} année · {chien_court} {chien_long} {chien_seuil} chien · {nb_photos} nombre de photos · {prix:noel} prix d’une période · {semaine:coeur} prix à la semaine";
 
@@ -102,6 +103,13 @@ async function ouvrir(nom) {
   $("rubriques").classList.remove("ouvert");
   for (const b of $("rubriques").children) b.setAttribute("aria-current", String(b.dataset.nom === nom));
   history.replaceState(null, "", "#" + nom);
+  if (nom === "aide") {
+    Object.assign(etat, { nom, donnees: null, version: null, original: "null" });
+    $("pied-enregistrer").hidden = true;
+    $("zone").replaceChildren(...modeEmploi());
+    window.scrollTo(0, 0);
+    return;
+  }
   $("zone").replaceChildren(el("p", { class: "aide" }, "Chargement…"));
   try {
     const c = await api("GET", "/api/contenus/" + nom);
@@ -145,13 +153,13 @@ function dessiner(erreurs = []) {
 
 function vueAvis(d) {
   return el("div", {},
-    el("div", { class: "bandeau-info" }, "Ces avis et notes sont mis à jour automatiquement par le flow « maj-avis-chez-belle ». Ils ne sont pas modifiables ici.",
+    el("div", { class: "bandeau-info" }, "Ces avis et notes sont mis à jour automatiquement par le skill « maj-avis-chez-belle ». Ils ne sont pas modifiables ici.",
       d.mis_a_jour ? el("p", {}, el("strong", {}, "Dernière mise à jour : "), new Date(d.mis_a_jour + "T12:00:00").toLocaleDateString("fr-FR", { dateStyle: "long" })) : null),
     el("details", { class: "groupe" }, el("summary", {}, "Mettre à jour les avis"), el("div", {},
       el("ol", {},
-        el("li", {}, "Ouvrez Claude et lancez la tâche « maj-avis-chez-belle »."),
-        el("li", {}, "Elle relève la note et les derniers avis sur Airbnb, les contrôle, puis les publie directement (sans passer par le brouillon)."),
-        el("li", {}, "Le site est à jour une à deux minutes après la fin de la tâche ; rechargez cette page pour voir la nouvelle date.")),
+        el("li", {}, "Dans l’application Claude, lancez le skill « maj-avis-chez-belle » (Thomas)."),
+        el("li", {}, "Il relève la note et les derniers avis sur Airbnb, vous fait valider les 6 extraits, les contrôle, puis les publie directement (sans passer par le brouillon)."),
+        el("li", {}, "Le site est à jour une à deux minutes après la fin du skill ; rechargez cette page pour voir la nouvelle date.")),
       el("p", { class: "aide" }, "Le brouillon en cours n’est pas touché par cette mise à jour."))),
     el("div", { class: "lecture" },
       el("p", {}, el("strong", {}, `Note globale ${d.notes.globale} sur ${d.notes.nombre} avis`), " · ", d.notes.categories.map(c => `${c.nom} ${c.note}`).join(" · ")),
@@ -496,7 +504,7 @@ $("publier").addEventListener("click", async () => {
     await api("POST", "/api/publier", {});
     await majBrouillon();
     $("texte-brouillon").textContent = "Publié ! Le site en ligne sera à jour dans une à deux minutes.";
-    if (etat.nom && etat.nom !== "avis") dessiner();
+    if (SCHEMAS[etat.nom]) dessiner();
   } catch (err) {
     await majBrouillon();
     const details = err.details && err.details.erreurs ? "\n\n" + err.details.erreurs.slice(0, 8).map(e => "• " + e.message).join("\n") : "";
@@ -539,6 +547,55 @@ function blocHistorique(nom) {
     } catch (err) { liste.replaceChildren(el("p", { class: "erreur" }, err.message)); }
   });
   return bloc;
+}
+
+// ---------- Mode d'emploi (guide du superviseur) ----------
+function modeEmploi() {
+  const section = (titre, ...contenu) => el("section", { class: "guide" }, el("h2", {}, titre), ...contenu);
+  const liste = (...points) => el("ul", {}, points.map(p => el("li", {}, p)));
+  const etapes = (...points) => el("ol", {}, points.map(p => el("li", {}, p)));
+  return [
+    el("div", { class: "entete-rubrique" }, el("h1", {}, "Mode d’emploi")),
+    el("p", { class: "bandeau-info" }, "Rien de ce que vous faites ici n’arrive sur le site sans le bouton « Publier sur le site ». Vous pouvez donc essayer sans crainte."),
+    section("Le principe en 4 gestes",
+      etapes(
+        "Choisissez une rubrique à gauche (sur téléphone : le bouton ☰), modifiez les champs.",
+        "Cliquez sur « Enregistrer le brouillon » en bas de l’écran. Le site en ligne ne change pas encore.",
+        "Cliquez sur « Voir l’aperçu ↗ » dans la barre rose : c’est le site avec vos modifications, marqué « Aperçu du brouillon ».",
+        "Si tout est bon, « Publier sur le site » : le site est à jour en une à deux minutes. Sinon, corrigez et enregistrez à nouveau, ou « Abandonner le brouillon » pour tout annuler.")),
+    section("Saisir les textes",
+      liste(
+        "Le compteur à droite d’un champ indique la longueur maximale.",
+        "Boutons G (gras), I (italique) et Lien : sélectionnez le texte puis cliquez. Un lien vers une page du site s’écrit /autour/ ou /tarifs-reservation/#reserver.",
+        "Des repères entre accolades sont remplacés automatiquement : {prix_min} par le prix le plus bas, {depot} par le dépôt de garantie, {annee} par l’année de la grille, {nb_photos} par le nombre de photos. Gardez-les : ainsi, un prix modifié une fois l’est partout.",
+        "Une liste (questions, lieux, équipements…) se gère avec + Ajouter, ✕ pour supprimer, ↑ ↓ pour changer l’ordre.",
+        "Si un champ est mal rempli, il passe en rouge avec une explication, et rien n’est enregistré.")),
+    section("Les photos",
+      liste(
+        "« + Ajouter une photo » ou « Remplacer la photo » : choisissez une photo du téléphone ou de l’ordinateur, elle est réduite automatiquement.",
+        "Écrivez toujours la description (elle est lue par les malvoyants et par Google) et, si demandé, la légende.",
+        "Dans la galerie du logement, les 5 premières photos visibles forment la mosaïque ; les photos cochées « visible seulement en grand » apparaissent quand on fait défiler.",
+        "Retirer une photo de la liste suffit à la retirer du site.")),
+    section("Les prix (rubrique « Prix et calendrier »)",
+      liste(
+        "Périodes de prix : chaque période a un prix par nuit et une durée minimale. Ce prix est repris partout (grille, accueil, barre du bas, estimation, textes).",
+        "Calendrier : indique quelle période s’applique à chaque nuit. Les plages ne doivent pas se chevaucher ; une nuit hors calendrier invite le voyageur à écrire à Belle.",
+        "Grille : les lignes affichées sur la page Tarifs (titre, dates écrites en clair, mise en avant)."),
+      el("p", {}, el("strong", {}, "Nouvelle saison : "), "changez l’année, les plages du calendrier, les dates écrites dans la grille, les dates d’arrivée de Noël et les dates du formulaire (arrivée et départ au plus tôt et au plus tard), puis vérifiez l’estimation dans l’aperçu.")),
+    section("Revenir en arrière",
+      etapes(
+        "Ouvrez la rubrique, puis « Historique : versions publiées » tout en bas.",
+        "« Reprendre » sur la version voulue : elle revient dans le formulaire.",
+        "Enregistrez le brouillon, vérifiez l’aperçu, publiez.")),
+    section("Les avis Airbnb",
+      el("p", {}, "Ils sont mis à jour par Thomas avec le skill « maj-avis-chez-belle », deux ou trois fois par an, et ne se modifient pas ici. Seul l’avis affiché en bas de la page « Le logement » se change dans la rubrique « Le logement ».")),
+    section("En cas de souci",
+      liste(
+        "« Session expirée » : reconnectez-vous (la connexion dure 8 heures). Vos modifications non enregistrées de la page ouverte peuvent être perdues : enregistrez souvent.",
+        "« Modifié entre-temps » : la rubrique a été changée dans un autre onglet. Rechargez la page.",
+        "« Trop d’essais » : après 5 mots de passe erronés, attendez 15 minutes.",
+        "Tout autre message : notez-le et prévenez Thomas. Le site en ligne, lui, n’est jamais touché tant que rien n’est publié."))
+  ];
 }
 
 // ---------- Démarrage ----------

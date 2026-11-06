@@ -6,11 +6,12 @@ export const echapper = s => String(s).replace(/[&<>"]/g, c => ECHAP[c]);
 // Lien interne écrit depuis la racine (« /autour/ ») → relatif à la page courante ; les autres liens sont inchangés.
 export function lien(url, racine = "") {
   if (typeof url !== "string") return "";
+  if (/[\\\s]/.test(url)) return "#"; // « /\\site.com » serait lu comme un lien vers un autre site
   if (url.startsWith("/") && !url.startsWith("//")) return (racine + url.slice(1)) || "./";
   return url;
 }
 
-const sur = url => /^(https?:\/\/|mailto:|tel:|#|\/(?!\/)|\.\.?\/)/i.test(url);
+const sur = url => !/[\\\s]/.test(url) && /^(https?:\/\/|mailto:|tel:|#|\/(?!\/)|\.\.?\/)/i.test(url);
 
 // Texte mis en forme : seules les balises b, strong, em, i, sup, br et a (href http(s), interne, ancre, mailto, tel) passent.
 // Tout le reste est échappé. Les entités (&nbsp; …) sont conservées.

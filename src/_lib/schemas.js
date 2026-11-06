@@ -189,7 +189,7 @@ export const LECTURE_SEULE = ["avis"];
 export const FICHIERS = [...Object.keys(SCHEMAS), ...LECTURE_SEULE];
 
 // ---------- Validation ----------
-const LIEN_SUR = /^(https?:\/\/[^\s"<>]+|mailto:[^\s"<>]+|tel:[+0-9 ]+|#[\w-]*|\/(?!\/)[^\s"<>]*)$/i;
+const LIEN_SUR = /^(https?:\/\/[^\s"<>\\]+|mailto:[^\s"<>\\]+|tel:[+0-9 ]+|#[\w-]*|\/(?![\/\\])[^\s"<>\\]*)$/i;
 const CTRL = /[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/;
 const dateValide = s => /^\d{4}-\d{2}-\d{2}$/.test(s) && !isNaN(Date.parse(s + "T00:00:00Z")) && new Date(s + "T00:00:00Z").toISOString().startsWith(s);
 

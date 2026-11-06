@@ -49,14 +49,14 @@ test("les contenus actuels respectent leurs schémas (sans perte)", async () => 
   }
 });
 
-test("avis : le script du flow valide, nettoie et refuse ce qui casserait le site", async () => {
+test("avis : le script du flow valide, garde les extraits mot pour mot et refuse ce qui casserait le site", async () => {
   const { preparerAvis } = await import("../scripts/maj-avis.js");
   const bon = { notes: { globale: "4,85", nombre: 40, categories: [{ nom: "Emplacement", note: "5,0" }] },
     avis: [{ prenom: "Léa", date: "juillet 2026", extrait: "  Très bien,\n  calme  et propre. " }] };
   const r = preparerAvis(bon, "2026-11-06");
   assert.deepEqual(r.erreurs, []);
   assert.equal(r.valeur.mis_a_jour, "2026-11-06");
-  assert.equal(r.valeur.avis[0].extrait, "Très bien, calme et propre.");
+  assert.equal(r.valeur.avis[0].extrait, "Très bien,   calme  et propre.", "mot pour mot : seuls les retours à la ligne deviennent des espaces");
   const mauvais = [
     { ...bon, notes: { ...bon.notes, globale: "4.85" } },                                   // point au lieu de virgule
     { ...bon, avis: [{ ...bon.avis[0], extrait: "<script>alert(1)</script>" }] },          // balise
@@ -69,4 +69,21 @@ test("avis : le script du flow valide, nettoie et refuse ce qui casserait le sit
   const actuel = JSON.parse(fs.readFileSync("src/_data/avis.json", "utf8"));
   const { SCHEMA_AVIS, valider } = await import("../src/_lib/schemas.js");
   assert.deepEqual(valider(SCHEMA_AVIS, actuel).erreurs, [], "avis.json actuel valide");
+});
+
+test("liens : barre oblique inversée et espaces refusés (redirection vers un autre site)", async () => {
+  const { SCHEMAS, valider } = await import("../src/_lib/schemas.js");
+  const site = JSON.parse(fs.readFileSync("src/_data/site.json", "utf8"));
+  for (const mauvais of ["/\\evil.com", "/\\\\evil.com", "//evil.com", "https://ex.fr/a b", "javascript:alert(1)", " /autour/"]) {
+    assert.ok(valider(SCHEMAS.site, { ...site, airbnb: mauvais }).erreurs.length > 0, mauvais);
+    assert.ok(!riche(`<a href="${mauvais}">x</a>`).includes("<a href"), "riche : " + mauvais);
+  }
+  assert.equal(lien("/\\evil.com", ""), "#");
+  for (const bon of ["/autour/", "#reserver", "https://www.airbnb.fr/rooms/25931091", "mailto:a@b.fr", "tel:+33 6 00 00 00 00"])
+    assert.deepEqual(valider(SCHEMAS.site, { ...site, airbnb: bon }).erreurs, [], bon);
+});
+
+test("gabarits : textes saisis jamais interprétés comme du code de gabarit", async () => {
+  // Le contenu est une donnée : « {{ 7*7 }} » doit s'afficher tel quel (vérifié aussi à la main au lot 7)
+  assert.equal(riche("{{ 7*7 }} {% raw %}"), "{{ 7*7 }} {% raw %}");
 });

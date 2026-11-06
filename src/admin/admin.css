@@ -118,3 +118,8 @@ details.groupe > div { padding: 0 16px 6px; }
 .historique li { display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--ligne); }
 .historique li span { margin-right: auto; }
 @media (max-width: 760px) { .barre-brouillon { padding: 10px 16px; } }
+
+/* Mode d'emploi */
+.guide { background: var(--blanc); border: 1px solid var(--ligne); border-radius: 14px; padding: 16px 20px; margin: 0 0 16px; }
+.guide h2 { font-size: 1.3rem; }
+.guide li { margin: 0 0 6px; }

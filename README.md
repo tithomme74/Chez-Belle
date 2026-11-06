@@ -63,6 +63,8 @@ ou JPEG si le navigateur ne sait pas faire de WebP), puis envoyées à `/api/pho
   remet une version dans le formulaire, à enregistrer puis publier.
 - Les avis (`avis.json`) se lisent toujours sur la version publiée ; le flow les met à jour directement sur `main`.
 
+Mode d'emploi du superviseur : rubrique « Mode d'emploi » de l'admin (`modeEmploi()` dans `src/admin/admin.js`).
+
 ## API de l'admin (api/)
 
 - `api/app.js` : routes `/api/connexion`, `/api/deconnexion`, `/api/session`, `/api/contenus`, `/api/contenus/<nom>` (lecture, enregistrement).
@@ -76,7 +78,7 @@ ou JPEG si le navigateur ne sait pas faire de WebP), puis envoyées à `/api/pho
 
 Les avis et les notes sont dans `src/_data/avis.json`, rempli par le flow « maj-avis-chez-belle » avec
 `node scripts/maj-avis.js <fichier>` (validation : note au format « 4,82 », 1 à 12 extraits, pas de balise, date « août 2025 »),
-puis commit de ce seul fichier sur `main`. Instructions complètes de la tâche : `FLOW-AVIS.md`.
+puis commit de ce seul fichier sur `main`. Instructions complètes : skill claude.ai « maj-avis-chez-belle » (V3), copie de référence dans `outils/skill-maj-avis-chez-belle/SKILL.md`.
 `node scripts/maj-avis.js --verifier` contrôle le fichier actuel. Ce fichier n'est pas modifiable dans l'admin (lecture seule,
 avec la date de dernière mise à jour).
 La page Logement affiche en plus un extrait fixe (Clémence), dans `logement.json` : le flow ne le touche pas.

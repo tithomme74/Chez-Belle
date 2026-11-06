@@ -1,5 +1,5 @@
 {
-  "_info": "Rempli automatiquement par le flow « maj-avis-chez-belle » (scripts/maj-avis.js). Non modifiable dans l’admin.",
+  "_info": "Rempli automatiquement par le skill « maj-avis-chez-belle » (scripts/maj-avis.js). Non modifiable dans l’admin.",
   "mis_a_jour": "2026-11-06",
   "notes": {
     "globale": "4,82",
@@ -34,7 +34,7 @@
     {
       "prenom": "Elodie",
       "date": "août 2024",
-      "extrait": "Une semaine de vacances très agréable avec nos 2 enfants qui ont pu profiter du jardin et de la plage accessible à pieds."
+      "extrait": "Une semaine de vacances très agréable  avec nos 2 enfants qui ont pu profiter du jardin et de la plage accessible à pieds."
     },
     {
       "prenom": "Alexia",
