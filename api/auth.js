@@ -1,48 +1,64 @@
-// Connexion du superviseur : un seul mot de passe, jamais stocké en clair (empreinte scrypt),
-// session dans un cookie signé (HMAC), HttpOnly, Secure, SameSite=Strict, valable 8 heures.
-import crypto from "node:crypto";
+// Connexion du superviseur : un seul mot de passe, jamais stocké en clair (empreinte PBKDF2-SHA256),
+// session dans un cookie signé (HMAC-SHA256), HttpOnly, Secure, SameSite=Strict, valable 8 heures.
+// Uniquement des fonctions standard du web (WebCrypto) : même code en local (Node) et en ligne (Cloudflare).
+import { versOctets, versTexte, base64, depuisBase64, base64url, depuisBase64url, egal } from "./octets.js";
 
-const SCRYPT = { N: 16384, r: 8, p: 1, maxmem: 64 * 1024 * 1024 };
+// Nombre de tours : l'offre gratuite de Cloudflare limite le temps de calcul par appel (environ 10 ms).
+// En contrepartie : mot de passe d'au moins 12 caractères, essais limités (voir plus bas), empreinte gardée en secret.
+export const TOURS = 10000;
 export const DUREE_SESSION = 8 * 3600;
 export const COOKIE = "cb_session";
+const sub = globalThis.crypto.subtle;
 
-// Empreinte à placer dans la variable ADMIN_MOT_DE_PASSE_HASH : scrypt$<sel base64>$<empreinte base64>
-export function empreinte(motDePasse) {
-  const sel = crypto.randomBytes(16);
-  const h = crypto.scryptSync(String(motDePasse).normalize("NFC"), sel, 32, SCRYPT);
-  return `scrypt$${sel.toString("base64")}$${h.toString("base64")}`;
+async function deriver(motDePasse, sel, tours, longueur) {
+  const cle = await sub.importKey("raw", versOctets(motDePasse.normalize("NFC")), "PBKDF2", false, ["deriveBits"]);
+  return new Uint8Array(await sub.deriveBits({ name: "PBKDF2", hash: "SHA-256", salt: sel, iterations: tours }, cle, longueur * 8));
 }
 
-export function verifierMotDePasse(motDePasse, hash) {
-  const m = /^scrypt\$([A-Za-z0-9+/=]+)\$([A-Za-z0-9+/=]+)$/.exec(hash || "");
-  if (!m || typeof motDePasse !== "string" || !motDePasse || motDePasse.length > 200) {
-    crypto.scryptSync("x", "sel-factice", 32, SCRYPT); // même durée qu'une vraie vérification
+// Empreinte à placer dans la variable ADMIN_MOT_DE_PASSE_HASH : pbkdf2$<tours>$<sel base64>$<empreinte base64>
+export async function empreinte(motDePasse, tours = TOURS) {
+  const sel = globalThis.crypto.getRandomValues(new Uint8Array(16));
+  return `pbkdf2$${tours}$${base64(sel)}$${base64(await deriver(String(motDePasse), sel, tours, 32))}`;
+}
+
+const MOTIF = /^pbkdf2\$([0-9]{4,6})\$([A-Za-z0-9+/=]+)\$([A-Za-z0-9+/=]+)$/;
+// Cloudflare refuse plus de 100 000 tours
+export function empreinteValide(h) {
+  const m = MOTIF.exec(h || "");
+  return !!m && Number(m[1]) >= 1000 && Number(m[1]) <= 100000;
+}
+
+export async function verifierMotDePasse(motDePasse, hash) {
+  if (!empreinteValide(hash) || typeof motDePasse !== "string" || !motDePasse || motDePasse.length > 200) {
+    await deriver("x", new Uint8Array(16), TOURS, 32); // même durée qu'une vraie vérification
     return false;
   }
-  const attendu = Buffer.from(m[2], "base64");
-  const h = crypto.scryptSync(motDePasse.normalize("NFC"), Buffer.from(m[1], "base64"), attendu.length, SCRYPT);
-  return crypto.timingSafeEqual(h, attendu);
+  const [, tours, sel, h] = MOTIF.exec(hash);
+  const attendu = depuisBase64(h);
+  return egal(await deriver(motDePasse, depuisBase64(sel), Number(tours), attendu.length), attendu);
 }
 
-const b64u = b => Buffer.from(b).toString("base64url");
-const signer = (data, secret) => crypto.createHmac("sha256", secret).update(data).digest("base64url");
+async function signer(data, secret) {
+  const cle = await sub.importKey("raw", versOctets(secret), { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
+  return base64url(new Uint8Array(await sub.sign("HMAC", cle, versOctets(data))));
+}
 // Empreinte courte du mot de passe dans le jeton : changer le mot de passe déconnecte toutes les sessions.
-const version = hash => crypto.createHash("sha256").update(hash).digest("base64url").slice(0, 12);
+const version = async hash => base64url(new Uint8Array(await sub.digest("SHA-256", versOctets(hash)))).slice(0, 12);
 
-export function creerSession(env, maintenant = Date.now()) {
-  const data = b64u(JSON.stringify({ exp: Math.floor(maintenant / 1000) + DUREE_SESSION, v: version(env.ADMIN_MOT_DE_PASSE_HASH) }));
-  return `${data}.${signer(data, env.SESSION_SECRET)}`;
+export async function creerSession(env, maintenant = Date.now()) {
+  const p = { exp: Math.floor(maintenant / 1000) + DUREE_SESSION, v: await version(env.ADMIN_MOT_DE_PASSE_HASH) };
+  const data = base64url(versOctets(JSON.stringify(p)));
+  return `${data}.${await signer(data, env.SESSION_SECRET)}`;
 }
 
-export function sessionValide(jeton, env, maintenant = Date.now()) {
+export async function sessionValide(jeton, env, maintenant = Date.now()) {
   if (typeof jeton !== "string" || jeton.length > 500) return false;
   const [data, sig] = jeton.split(".");
   if (!data || !sig) return false;
-  const attendu = Buffer.from(signer(data, env.SESSION_SECRET)), recu = Buffer.from(sig);
-  if (attendu.length !== recu.length || !crypto.timingSafeEqual(attendu, recu)) return false;
+  if (!egal(versOctets(await signer(data, env.SESSION_SECRET)), versOctets(sig))) return false;
   try {
-    const p = JSON.parse(Buffer.from(data, "base64url").toString());
-    return p.exp > maintenant / 1000 && p.v === version(env.ADMIN_MOT_DE_PASSE_HASH);
+    const p = JSON.parse(versTexte(depuisBase64url(data)));
+    return p.exp > maintenant / 1000 && p.v === await version(env.ADMIN_MOT_DE_PASSE_HASH);
   } catch { return false; }
 }
 
@@ -55,7 +71,7 @@ export function lireCookie(req, nom = COOKIE) {
 }
 
 // Blocage des essais : 5 échecs par adresse en 15 min, 30 échecs au total par heure.
-// `memoire` : { lire(cle), ecrire(cle, valeur) } (mémoire du processus en local, Netlify Blobs en ligne).
+// `memoire` : { lire(cle), ecrire(cle, valeur) } (mémoire du processus en local, Cloudflare KV en ligne).
 export const LIMITES = { parIp: { max: 5, fenetre: 15 * 60 }, global: { max: 30, fenetre: 3600 } };
 const compteurs = ip => [["ip:" + ip, LIMITES.parIp], ["global", LIMITES.global]];
 

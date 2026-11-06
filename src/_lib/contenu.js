@@ -94,3 +94,12 @@ export const nombre = n => Number(n).toLocaleString("fr-FR").replace(/ /g, " 
 
 // Données pour un <script type="application/json"> : « < » neutralisé pour ne jamais fermer la balise.
 export const jsonScript = obj => JSON.stringify(obj).replace(/</g, "\\u003c");
+
+// Remplace, dans un objet, chaque texte qui commence par « / » (mais pas « // ») par base + texte
+export function absolues(v, base) {
+  const b = String(base || "").replace(/\/+$/, "");
+  if (typeof v === "string") return /^\/(?!\/)/.test(v) || v === "/" ? b + v : v;
+  if (Array.isArray(v)) return v.map(x => absolues(x, b));
+  if (v && typeof v === "object") return Object.fromEntries(Object.entries(v).map(([k, x]) => [k, absolues(x, b)]));
+  return v;
+}

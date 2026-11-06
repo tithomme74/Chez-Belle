@@ -1,5 +1,5 @@
 // Prépare le mot de passe superviseur.
-//   npm run mot-de-passe -- "mon mot de passe"  → affiche l'empreinte à coller dans Netlify (ADMIN_MOT_DE_PASSE_HASH)
+//   npm run mot-de-passe -- "mon mot de passe"  → affiche les deux valeurs à coller dans Cloudflare
 //   npm run mot-de-passe -- --local             → crée .env pour le développement, avec un mot de passe de test aléatoire
 //                                                  (noté en commentaire dans .env, fichier jamais envoyé sur GitHub)
 import fs from "node:fs";
@@ -13,14 +13,14 @@ if (arg === "--local") {
   fs.writeFileSync(".env", [
     "# Configuration locale de l'admin (ne jamais publier ce fichier)",
     `# Mot de passe de test local : ${mdp}`,
-    `ADMIN_MOT_DE_PASSE_HASH=${empreinte(mdp)}`,
+    `ADMIN_MOT_DE_PASSE_HASH=${await empreinte(mdp)}`,
     `SESSION_SECRET=${crypto.randomBytes(48).toString("base64url")}`,
     ""
   ].join("\n"));
   console.log(".env créé. Le mot de passe de test est écrit en commentaire dans .env.");
 } else if (arg) {
   if (arg.length < 12) { console.log("Choisissez au moins 12 caractères."); process.exit(1); }
-  console.log("ADMIN_MOT_DE_PASSE_HASH=" + empreinte(arg));
+  console.log("ADMIN_MOT_DE_PASSE_HASH=" + await empreinte(arg));
   console.log("SESSION_SECRET=" + crypto.randomBytes(48).toString("base64url"));
 } else {
   console.log('Usage : npm run mot-de-passe -- "mot de passe"   ou   npm run mot-de-passe -- --local');

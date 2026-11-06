@@ -22,7 +22,7 @@ const MIME = { ".html": "text/html; charset=utf-8", ".css": "text/css; charset=u
   ".json": "application/json; charset=utf-8", ".svg": "image/svg+xml", ".webp": "image/webp", ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".png": "image/png",
   ".txt": "text/plain; charset=utf-8", ".xml": "application/xml; charset=utf-8", ".ico": "image/x-icon" };
 
-// Mêmes en-têtes de sécurité qu'en ligne (netlify.toml)
+// Mêmes en-têtes de sécurité qu'en ligne (src/_headers)
 const ENTETES_ADMIN = {
   "Content-Security-Policy": "default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'; object-src 'none'",
   "X-Robots-Tag": "noindex, nofollow", "X-Frame-Options": "DENY", "Referrer-Policy": "same-origin"

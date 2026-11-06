@@ -9,7 +9,7 @@ import { stockageLocal, stockageGithub, ConflitVersion } from "../api/stockage.j
 import { empreinte, memoireLocale, creerSession, sessionValide, DUREE_SESSION } from "../api/auth.js";
 
 const MDP = "mot-de-passe-de-test-123";
-const env = { ADMIN_MOT_DE_PASSE_HASH: empreinte(MDP), SESSION_SECRET: "s".repeat(48) };
+const env = { ADMIN_MOT_DE_PASSE_HASH: await empreinte(MDP), SESSION_SECRET: "s".repeat(48) };
 const ORIGINE = "http://localhost:8765";
 let racine, deps, cookie;
 
@@ -64,9 +64,9 @@ test("bonne connexion : cookie protégé", async () => {
 
 test("cookie falsifié ou expiré refusé", async () => {
   const vrai = cookie.split("=")[1];
-  assert.equal(sessionValide(vrai.slice(0, -2) + "xx", env), false);
-  assert.equal(sessionValide(creerSession(env, Date.now() - (DUREE_SESSION + 10) * 1000), env), false);
-  assert.equal(sessionValide(vrai, { ...env, ADMIN_MOT_DE_PASSE_HASH: empreinte("autre-mot-de-passe") }), false, "changer le mot de passe déconnecte");
+  assert.equal(await sessionValide(vrai.slice(0, -2) + "xx", env), false);
+  assert.equal(await sessionValide(await creerSession(env, Date.now() - (DUREE_SESSION + 10) * 1000), env), false);
+  assert.equal(await sessionValide(vrai, { ...env, ADMIN_MOT_DE_PASSE_HASH: await empreinte("autre-mot-de-passe") }), false, "changer le mot de passe déconnecte");
   assert.equal((await appel("GET", "/api/contenus", undefined, { avecCookie: false })).status, 401);
 });
 

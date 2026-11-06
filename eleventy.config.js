@@ -1,12 +1,12 @@
 // Configuration Eleventy : les pages sont dans src/, leurs contenus dans src/_data/*.json, le site produit dans _site/
 // Aperçu local du brouillon : CB_DONNEES=.local/brouillon CB_APERCU=1 (contenus lus ailleurs, bandeau « aperçu »).
 import path from "node:path";
-import { riche, lien, jetons, jsonScript } from "./src/_lib/contenu.js";
+import { riche, lien, jetons, jsonScript, absolues } from "./src/_lib/contenu.js";
 import { calculer } from "./src/_lib/calc.js";
 
 const dossierDonnees = process.env.CB_DONNEES ? path.relative("src", process.env.CB_DONNEES).split(path.sep).join("/") : "_data";
-// Aperçu : bandeau visible et pages non indexées (aperçu local, ou branche de brouillon publiée par Netlify)
-const apercu = process.env.CB_APERCU === "1" || ["branch-deploy", "deploy-preview"].includes(process.env.CONTEXT);
+// Aperçu : bandeau visible et pages non indexées (aperçu local, ou branche de brouillon publiée par Cloudflare Pages)
+const apercu = process.env.CB_APERCU === "1" || (process.env.CF_PAGES === "1" && process.env.CF_PAGES_BRANCH !== "main");
 
 export default function (eleventyConfig) {
   eleventyConfig.addGlobalData("apercu", apercu);
@@ -23,7 +23,8 @@ export default function (eleventyConfig) {
   }
 
   // Fichiers recopiés tels quels
-  ["src/assets", "src/photos", "src/infos", "src/favicon.svg", "src/robots.txt", "src/sitemap.xml"]
+  // _headers : en-têtes de sécurité lus par Cloudflare Pages
+  ["src/assets", "src/photos", "src/favicon.svg", "src/_headers"]
     .forEach(p => eleventyConfig.addPassthroughCopy(p));
   // Espace d'administration : pages statiques + schémas partagés avec le serveur
   eleventyConfig.addPassthroughCopy({ "src/admin": "admin", "src/_lib/schemas.js": "admin/schemas.js", "src/_lib/calc.js": "admin/calc.js", "src/_lib/contenu.js": "admin/contenu.js" });
@@ -38,6 +39,8 @@ export default function (eleventyConfig) {
   // Lien interne écrit depuis la racine (« /autour/ ») rendu relatif à la page
   eleventyConfig.addFilter("lien", function (url) { return lien(url, this.ctx.racine); });
   eleventyConfig.addFilter("jsonScript", jsonScript);
+  // Adresses écrites depuis la racine (« /photos/x.webp ») rendues complètes avec l'adresse du site (données pour Google)
+  eleventyConfig.addFilter("absolues", absolues);
 
   return {
     dir: { input: "src", includes: "_includes", data: dossierDonnees, output: "_site" },

@@ -5,3 +5,5 @@ _site/
 .claude/
 _apercu/
 .local/
+.dev.vars
+.wrangler/

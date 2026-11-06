@@ -1,3 +1,5 @@
+# Ancien hébergement (Netlify), conservé seulement pour que l'ancienne adresse reste un site correct.
+# L'hébergement actuel est Cloudflare Pages : voir src/_headers et functions/.
 # Netlify construit le site avec Eleventy et publie le dossier _site
 [build]
   command = "npm run build"

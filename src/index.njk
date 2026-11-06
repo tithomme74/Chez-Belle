@@ -4,7 +4,7 @@
 {% extends "base.njk" %}
 {% set a = accueil %}
 {% block head %}
-<script type="application/ld+json">{{ a.seo.jsonld | jsonScript | safe }}</script>
+<script type="application/ld+json">{{ a.seo.jsonld | absolues(site.url) | jsonScript | safe }}</script>
 <link rel="preload" as="image" href="{{ a.hero.photo.src | lien }}" imagesrcset="{{ m.srcset(a.hero.photo) }}" imagesizes="(max-width: 900px) 90vw, 480px">
 {% endblock %}
 {% block headFin %}

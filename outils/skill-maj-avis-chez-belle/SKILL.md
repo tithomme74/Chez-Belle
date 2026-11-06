@@ -1,11 +1,11 @@
 ---
 name: "maj-avis-chez-belle"
-description: "Ce flow est lancé à la main par Thomas, deux ou trois fois par an (par exemple en janvier et en septembre). Il remplace les extraits d'avis et les notes affichés sur le site par les données actuelles de l'annonce Airbnb, puis publie la modification. Le site se met à jour tout seul via Netlify."
+description: "Ce flow est lancé à la main par Thomas, deux ou trois fois par an (par exemple en janvier et en septembre). Il remplace les extraits d'avis et les notes affichés sur le site par les données actuelles de l'annonce Airbnb, puis publie la modification. Le site se met à jour tout seul (Cloudflare Pages)."
 ---
 
 # Mettre à jour les avis et les notes du site Chez Belle (V3, site administrable)
 
-Ce flow est lancé à la main par Thomas, deux ou trois fois par an (par exemple en janvier et en septembre). Il remplace les extraits d'avis et les notes affichés sur le site par les données actuelles de l'annonce Airbnb, puis publie la modification. Le site se met à jour tout seul via Netlify.
+Ce flow est lancé à la main par Thomas, deux ou trois fois par an (par exemple en janvier et en septembre). Il remplace les extraits d'avis et les notes affichés sur le site par les données actuelles de l'annonce Airbnb, puis publie la modification. Le site se met à jour tout seul (Cloudflare Pages).
 
 ## Repères
 
@@ -14,7 +14,7 @@ Ce flow est lancé à la main par Thomas, deux ou trois fois par an (par exemple
 - Depuis la refonte administrable, les avis et les notes vivent dans **un seul fichier de données** : `src/_data/avis.json`. Le site (accueil : ouverture, section avis, carrousel) est construit à partir de ce fichier par Eleventy. On ne modifie plus aucune page HTML.
 - Ce fichier n'est **jamais modifié à la main** : on passe toujours par le script `node scripts/maj-avis.js <fichier>`, qui contrôle les données et refuse tout ce qui casserait le site.
 - L'espace d'administration du site (`/admin/`) affiche ces avis en lecture seule, avec la date de dernière mise à jour ; il ne peut pas les modifier. La branche `brouillon` appartient à l'admin : ce flow n'y touche jamais.
-- Site publié : https://chez-belle-pontaillac.netlify.app (ou le nom de domaine propre une fois acheté : lire `url` dans `src/_data/site.json`).
+- Site publié : lire `url` dans `src/_data/site.json` (Cloudflare Pages depuis novembre 2026 ; avant : chez-belle-pontaillac.netlify.app).
 - Version anglaise : pas encore construite. Quand elle existera, ce skill sera mis à jour (notes avec un point, catégories en anglais).
 - **Si `src/_data/avis.json` n'existe pas sur `main`**, la refonte administrable n'est pas encore en ligne : appliquer la méthode V2 décrite en fin de document, puis le signaler à Thomas.
 

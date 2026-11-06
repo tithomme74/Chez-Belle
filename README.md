@@ -1,15 +1,15 @@
 # Chez Belle — site vitrine
 
 Location de vacances à Vaux-sur-Mer, quartier de Pontaillac.
-Site statique construit avec Eleventy, publié automatiquement par Netlify
-depuis la branche `main` : https://chez-belle-pontaillac.netlify.app
+Site statique construit avec Eleventy, publié automatiquement par Cloudflare Pages (offre gratuite)
+depuis la branche `main` (adresse : `url` dans `src/_data/site.json`). Mise en ligne pas à pas : `mise-en-ligne.md` (dossier parent).
 
 ## Travailler en local
 
 - `npm install` (une fois), puis `npm run mot-de-passe -- --local` (une fois : crée `.env` avec un mot de passe de test, noté en commentaire dans ce fichier).
 - `npm run dev` : site « publié » sur http://localhost:8765, aperçu du brouillon sur http://localhost:8765/apercu/, admin sur http://localhost:8765/admin/.
   En local, le site publié est construit depuis `src/_data/`, le brouillon vit dans `.local/brouillon/` et l'historique dans `.local/historique/` (dossiers ignorés par Git).
-- `npm run build` : produit le site dans `_site/` (ce que Netlify publie, voir `netlify.toml`).
+- `npm run build` : produit le site dans `_site/` (ce que Cloudflare publie ; en-têtes de sécurité dans `src/_headers`).
 - `npm test` : reconstruit et vérifie que les pages restent identiques aux références de `tests/reference/`.
 
 Les sources sont dans `src/` : gabarit commun `src/_includes/base.njk` (en-tête, menu, pied de page, barre du bas),
@@ -63,9 +63,9 @@ ou JPEG si le navigateur ne sait pas faire de WebP), puis envoyées à `/api/pho
 
 ## Brouillon, aperçu, publication, historique
 
-- Chaque « Enregistrer le brouillon » écrit dans le brouillon : en ligne, la branche Git `brouillon`, que Netlify publie comme aperçu
+- Chaque « Enregistrer le brouillon » écrit dans le brouillon : en ligne, la branche Git `brouillon`, que Cloudflare publie comme aperçu
   (bandeau « Aperçu du brouillon », pages non indexées) ; en local, `.local/brouillon/` servi sur `/apercu/`.
-- « Publier sur le site » revalide tout le brouillon puis le fusionne dans `main` (Netlify reconstruit le site, 1 à 2 min) ;
+- « Publier sur le site » revalide tout le brouillon puis le fusionne dans `main` (Cloudflare reconstruit le site, 1 à 2 min) ;
   le brouillon repart ensuite de la version publiée. « Abandonner le brouillon » le remet à l'identique du site publié.
 - Historique : chaque rubrique liste ses versions publiées (commits de `main` qui ont modifié son fichier) ; « Reprendre »
   remet une version dans le formulaire, à enregistrer puis publier.
@@ -76,11 +76,11 @@ Mode d'emploi du superviseur : rubrique « Mode d'emploi » de l'admin (`modeEmp
 ## API de l'admin (api/)
 
 - `api/app.js` : routes `/api/connexion`, `/api/deconnexion`, `/api/session`, `/api/contenus`, `/api/contenus/<nom>` (lecture, enregistrement).
-- `api/auth.js` : mot de passe unique (empreinte scrypt), cookie de session signé (HttpOnly, Secure, SameSite=Strict, 8 h), blocage après 5 essais ratés (15 min) et 30 au total par heure.
+- `api/auth.js` : mot de passe unique (empreinte PBKDF2-SHA256, WebCrypto), cookie de session signé (HttpOnly, Secure, SameSite=Strict, 8 h), blocage après 5 essais ratés (15 min) et 30 au total par heure.
 - `src/_lib/schemas.js` : schéma de chaque contenu (libellés, limites, formats) ; tout enregistrement est validé puis contrôlé (dates qui se chevauchent, périodes inconnues…). `avis` est en lecture seule.
 - `api/images.js` : contrôle des photos envoyées (vraie image WebP ou JPEG, dimensions lues dans le fichier).
-- `api/stockage.js` : en local, écrit dans `src/_data/` ; en ligne, écrit sur GitHub (branche de brouillon) via `netlify/functions/api.mjs`.
-- En ligne, variables Netlify à définir : voir `.env.exemple` et l'en-tête de `netlify/functions/api.mjs`. `npm run mot-de-passe -- "…"` calcule l'empreinte du vrai mot de passe.
+- `api/stockage.js` : en local, écrit dans `src/_data/` ; en ligne, écrit sur GitHub (branche de brouillon) via `functions/api/[[route]].js` (fonction Cloudflare Pages ; uniquement des API web standard, vérifié par `tests/cloudflare.test.js`).
+- En ligne, variables Cloudflare à définir : voir `.env.exemple` et l'en-tête de `functions/api/[[route]].js` ; essais de connexion comptés dans Cloudflare KV (liaison `MEMOIRE`). `npm run mot-de-passe -- "…"` calcule l'empreinte du vrai mot de passe.
 
 ## Avis et notes Airbnb
 

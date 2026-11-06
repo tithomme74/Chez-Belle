@@ -48,7 +48,7 @@ function principal(args) {
   if (sansDate(avant) === sansDate(apres)) { console.log("= Aucun changement : les avis sont déjà à jour."); return 0; }
   fs.writeFileSync(CIBLE, apres, "utf8");
   console.log(`✓ src/_data/avis.json mis à jour : note ${valeur.notes.globale} sur ${valeur.notes.nombre} avis, ${valeur.avis.length} extraits.`);
-  console.log("  Étape suivante : commit de ce seul fichier sur main, puis push (Netlify publie en 1 à 2 minutes).");
+  console.log("  Étape suivante : commit de ce seul fichier sur main, puis push (Cloudflare publie en 1 à 2 minutes).");
   return 0;
 }
 

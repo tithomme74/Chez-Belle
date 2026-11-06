@@ -1,0 +1,15 @@
+# En-têtes ajoutés par Cloudflare Pages (les réponses de /api/* ont les leurs, voir api/app.js).
+# Cloudflare additionne les règles qui correspondent : un même en-tête ne doit donc figurer qu'une fois.
+
+# Espace d'administration : jamais indexé, jamais affiché dans un cadre (frame-ancestors), scripts du site seulement
+/admin/*
+  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'; object-src 'none'
+  X-Robots-Tag: noindex, nofollow
+  Cache-Control: no-cache
+
+# Tout le site
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  X-Frame-Options: SAMEORIGIN
+  Permissions-Policy: camera=(), microphone=(), geolocation=()

@@ -1,5 +1,5 @@
 // API de l'espace /admin. Une seule fonction, au format standard Request → Response,
-// utilisée telle quelle par le serveur local (scripts/serveur-local.js) et par la fonction Netlify.
+// utilisée telle quelle par le serveur local (scripts/serveur-local.js) et en ligne (functions/api/[[route]].js, Cloudflare).
 //
 //   POST /api/connexion        { motDePasse }         → ouvre une session (cookie)
 //   POST /api/deconnexion                              → ferme la session
@@ -16,9 +16,10 @@
 //
 // Les enregistrements vont toujours dans le brouillon ; seul « publier » modifie le site en ligne.
 // deps = { env, stockage, memoire, ip }
-import { verifierMotDePasse, creerSession, sessionValide, cookieSession, cookieEfface, lireCookie, estBloque, noterEchec, effacerEchecs } from "./auth.js";
+import { verifierMotDePasse, creerSession, sessionValide, cookieSession, cookieEfface, lireCookie, estBloque, noterEchec, effacerEchecs, empreinteValide } from "./auth.js";
 import { SCHEMAS, LECTURE_SEULE, FICHIERS, LIES, valider, coherence } from "../src/_lib/schemas.js";
-import { ConflitVersion, ConflitPublication } from "./stockage.js";
+import { ConflitVersion, ConflitPublication } from "./stockage-commun.js";
+import { depuisBase64 } from "./octets.js";
 import { dimensionsImage, nomFichier } from "./images.js";
 
 const TAILLE_MAX = 300 * 1024;
@@ -32,7 +33,7 @@ const reponse = (statut, corps, entetes = {}) => new Response(JSON.stringify(cor
 const erreur = (statut, message, plus = {}) => reponse(statut, { erreur: message, ...plus });
 
 export function configurationValide(env) {
-  return /^scrypt\$/.test(env.ADMIN_MOT_DE_PASSE_HASH || "") && (env.SESSION_SECRET || "").length >= 32;
+  return empreinteValide(env.ADMIN_MOT_DE_PASSE_HASH) && (env.SESSION_SECRET || "").length >= 32;
 }
 
 // Les requêtes qui modifient quelque chose doivent venir du site lui-même (protection CSRF, en plus de SameSite=Strict)
@@ -61,7 +62,7 @@ export async function traiter(req, deps) {
     if (!configurationValide(env)) return erreur(503, "Espace d’administration non configuré (mot de passe ou secret de session manquant).");
     if (m !== "GET" && m !== "HEAD" && !origineAutorisee(req, env)) return erreur(403, "Requête refusée (origine).");
 
-    const connecte = sessionValide(lireCookie(req), env);
+    const connecte = await sessionValide(lireCookie(req), env);
 
     if (route === "/api/session" && m === "GET") return reponse(200, { connecte });
 
@@ -69,12 +70,12 @@ export async function traiter(req, deps) {
       const minutes = await estBloque(memoire, ip);
       if (minutes) return erreur(429, `Trop d’essais. Réessayez dans ${minutes} min.`, { minutes });
       const { motDePasse } = await lireJson(req);
-      if (!verifierMotDePasse(motDePasse, env.ADMIN_MOT_DE_PASSE_HASH)) {
+      if (!(await verifierMotDePasse(motDePasse, env.ADMIN_MOT_DE_PASSE_HASH))) {
         await noterEchec(memoire, ip);
         return erreur(401, "Mot de passe incorrect.");
       }
       await effacerEchecs(memoire, ip);
-      return reponse(200, { connecte: true }, { "Set-Cookie": cookieSession(creerSession(env)) });
+      return reponse(200, { connecte: true }, { "Set-Cookie": cookieSession(await creerSession(env)) });
     }
 
     if (route === "/api/deconnexion" && m === "POST") return reponse(200, { connecte: false }, { "Set-Cookie": cookieEfface() });
@@ -92,7 +93,8 @@ export async function traiter(req, deps) {
       const base = `${nomFichier(nom)}-${Date.now().toString(36)}`;
       const prets = [];
       for (const v of variantes) {
-        const octets = Buffer.from(String(v.donnees || ""), "base64");
+        let octets;
+        try { octets = depuisBase64(String(v.donnees || "")); } catch { return erreur(415, "Ce fichier n’est pas une image WebP ou JPEG valide."); }
         if (octets.length > OCTETS_MAX_PHOTO) return erreur(413, "Photo trop lourde (1,5 Mo au plus par taille).");
         const dim = dimensionsImage(octets);
         if (!dim) return erreur(415, "Ce fichier n’est pas une image WebP ou JPEG valide.");
