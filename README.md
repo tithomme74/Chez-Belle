@@ -10,7 +10,7 @@ depuis la branche `main` (adresse : `url` dans `src/_data/site.json`). Mise en l
 - `npm run dev` : site « publié » sur http://localhost:8765, aperçu du brouillon sur http://localhost:8765/apercu/, admin sur http://localhost:8765/admin/.
   En local, le site publié est construit depuis `src/_data/`, le brouillon vit dans `.local/brouillon/` et l'historique dans `.local/historique/` (dossiers ignorés par Git).
 - `npm run build` : produit le site dans `_site/` (ce que Cloudflare publie ; en-têtes de sécurité dans `src/_headers`).
-- `npm test` : reconstruit et vérifie que les pages restent identiques aux références de `tests/reference/`.
+- `npm test` (`scripts/tester.js`) : construit le site avec les vrais contenus (`_site`, doit se construire, contenus valides, liens corrects) et avec des contenus figés (`tests/donnees` → `_test`, comparé aux références de `tests/reference/`). Les modifications faites dans l'admin ne font donc pas échouer les tests ; ne mettre à jour `tests/donnees` et `tests/reference` que lors d'un changement de mise en page voulu.
 
 Les sources sont dans `src/` : gabarit commun `src/_includes/base.njk` (en-tête, menu, pied de page, barre du bas),
 une page `.njk` par onglet ; `assets/`, `photos/`, `infos/` et les fichiers racine sont recopiés tels quels.

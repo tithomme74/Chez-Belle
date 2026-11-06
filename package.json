@@ -6,7 +6,7 @@
     "build": "eleventy",
     "dev": "node scripts/serveur-local.js",
     "mot-de-passe": "node scripts/mot-de-passe.js",
-    "test": "eleventy --quiet && node --test tests/*.test.js"
+    "test": "node scripts/tester.js"
   },
   "devDependencies": {
     "@11ty/eleventy": "3.1.7"

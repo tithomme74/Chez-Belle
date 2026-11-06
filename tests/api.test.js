@@ -16,8 +16,9 @@ let racine, deps, cookie;
 before(() => {
   racine = fs.mkdtempSync(path.join(os.tmpdir(), "chez-belle-api-"));
   fs.mkdirSync(path.join(racine, "src/_data"), { recursive: true });
-  for (const f of fs.readdirSync("src/_data").filter(f => f.endsWith(".json")))
-    fs.copyFileSync(path.join("src/_data", f), path.join(racine, "src/_data", f));
+  // Contenus figés (tests/donnees) : le test ne dépend pas des modifications faites dans l'admin
+  for (const f of fs.readdirSync("tests/donnees").filter(f => f.endsWith(".json")))
+    fs.copyFileSync(path.join("tests/donnees", f), path.join(racine, "src/_data", f));
   deps = { env, stockage: stockageLocal(racine), memoire: memoireLocale(), ip: "1.2.3.4" };
 });
 

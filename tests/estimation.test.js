@@ -1,4 +1,4 @@
-// Estimation du prix (src/assets/reservation.js) à partir des tarifs réels (src/_data/tarifs.json)
+// Estimation du prix (src/assets/reservation.js) à partir de tarifs figés (tests/donnees/tarifs.json)
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
@@ -6,7 +6,7 @@ import "../src/assets/reservation.js";
 
 const { estimer, semainesFixes } = globalThis.ChezBelleEstimation;
 import { calculer } from "../src/_lib/calc.js";
-const lire = n => JSON.parse(fs.readFileSync(`src/_data/${n}.json`, "utf8"));
+const lire = n => JSON.parse(fs.readFileSync(`tests/donnees/${n}.json`, "utf8"));
 const c = calculer(lire("tarifs"), lire("accueil"), lire("maison"));
 const D = { types: c.types, calendrier: c.calendrier, chien: lire("maison").chien };
 

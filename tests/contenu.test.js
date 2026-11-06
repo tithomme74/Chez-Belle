@@ -4,7 +4,8 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import { riche, lien, jetons, jsonScript } from "../src/_lib/contenu.js";
 import { calculer } from "../src/_lib/calc.js";
-const lireJson = n => JSON.parse(fs.readFileSync(`src/_data/${n}.json`, "utf8"));
+// Contenus figés (tests/donnees) : les calculs testés ne dépendent pas des modifications faites dans l'admin
+const lireJson = n => JSON.parse(fs.readFileSync(`tests/donnees/${n}.json`, "utf8"));
 const calc = () => calculer(lireJson("tarifs"), lireJson("accueil"), lireJson("maison"));
 
 test("riche : balises autorisées conservées", () => {

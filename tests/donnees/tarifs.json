@@ -1,0 +1,135 @@
+{
+  "lignes": [
+    {
+      "id": "mai-juin",
+      "nom": "Mai et juin",
+      "dates": [
+        {
+          "du": "2027-05-01",
+          "au": "2027-06-21"
+        }
+      ],
+      "prix": 80,
+      "min": 3,
+      "semaine_fixe": false,
+      "prix_semaine": false,
+      "mise_en_avant": "calme",
+      "etiquette": "plus calme",
+      "dates_texte": "2 mai – 21 juin, hors ponts"
+    },
+    {
+      "id": "ponts",
+      "nom": "Ponts de mai",
+      "dates": [
+        {
+          "du": "2027-05-01",
+          "au": "2027-05-02"
+        },
+        {
+          "du": "2027-05-06",
+          "au": "2027-05-09"
+        },
+        {
+          "du": "2027-05-14",
+          "au": "2027-05-17"
+        }
+      ],
+      "prix": 95,
+      "min": 3,
+      "semaine_fixe": false,
+      "prix_semaine": false,
+      "mise_en_avant": "",
+      "etiquette": "",
+      "dates_texte": "1<sup>er</sup> mai · Ascension 6 – 9 mai · Pentecôte 14 – 17 mai"
+    },
+    {
+      "id": "juillet",
+      "nom": "Début juillet",
+      "dates": [
+        {
+          "du": "2027-06-21",
+          "au": "2027-07-07"
+        }
+      ],
+      "prix": 105,
+      "min": 4,
+      "semaine_fixe": false,
+      "prix_semaine": false,
+      "mise_en_avant": "",
+      "etiquette": "",
+      "dates_texte": ""
+    },
+    {
+      "id": "coeur",
+      "nom": "Cœur de l’été",
+      "dates": [
+        {
+          "du": "2027-07-07",
+          "au": "2027-08-28"
+        }
+      ],
+      "prix": 115,
+      "min": 7,
+      "semaine_fixe": false,
+      "prix_semaine": true,
+      "mise_en_avant": "peak",
+      "etiquette": "",
+      "dates_texte": ""
+    },
+    {
+      "id": "fin",
+      "nom": "Fin d’été",
+      "dates": [
+        {
+          "du": "2027-08-28",
+          "au": "2027-09-05"
+        }
+      ],
+      "prix": 90,
+      "min": 4,
+      "semaine_fixe": false,
+      "prix_semaine": false,
+      "mise_en_avant": "",
+      "etiquette": "",
+      "dates_texte": ""
+    },
+    {
+      "id": "septembre",
+      "nom": "Septembre",
+      "dates": [
+        {
+          "du": "2027-09-05",
+          "au": "2027-09-25"
+        }
+      ],
+      "prix": 80,
+      "min": 3,
+      "semaine_fixe": false,
+      "prix_semaine": false,
+      "mise_en_avant": "calme",
+      "etiquette": "plus calme",
+      "dates_texte": "5 – 25 septembre"
+    },
+    {
+      "id": "noel",
+      "nom": "Noël",
+      "dates": [
+        {
+          "du": "2027-12-18",
+          "au": "2027-12-25"
+        },
+        {
+          "du": "2027-12-25",
+          "au": "2028-01-01"
+        }
+      ],
+      "prix": 85,
+      "min": 7,
+      "semaine_fixe": true,
+      "prix_semaine": false,
+      "mise_en_avant": "",
+      "etiquette": "",
+      "dates_texte": "semaine du 18 ou du 25 décembre"
+    }
+  ]
+}

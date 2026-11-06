@@ -1,5 +1,6 @@
 // Configuration Eleventy : les pages sont dans src/, leurs contenus dans src/_data/*.json, le site produit dans _site/
 // Aperçu local du brouillon : CB_DONNEES=.local/brouillon CB_APERCU=1 (contenus lus ailleurs, bandeau « aperçu »).
+// Tests : CB_DONNEES=tests/donnees CB_SORTIE=_test (contenus figés, voir scripts/tester.js).
 import path from "node:path";
 import { riche, lien, jetons, jsonScript, absolues } from "./src/_lib/contenu.js";
 import { calculer } from "./src/_lib/calc.js";
@@ -43,7 +44,7 @@ export default function (eleventyConfig) {
   eleventyConfig.addFilter("absolues", absolues);
 
   return {
-    dir: { input: "src", includes: "_includes", data: dossierDonnees, output: "_site" },
+    dir: { input: "src", includes: "_includes", data: dossierDonnees, output: process.env.CB_SORTIE || "_site" },
     templateFormats: ["njk"],
     htmlTemplateEngine: "njk"
   };
