@@ -145,7 +145,14 @@ function dessiner(erreurs = []) {
 
 function vueAvis(d) {
   return el("div", {},
-    el("div", { class: "bandeau-info" }, "Ces avis et notes sont mis à jour automatiquement par le flow « maj-avis-chez-belle ». Ils ne sont pas modifiables ici."),
+    el("div", { class: "bandeau-info" }, "Ces avis et notes sont mis à jour automatiquement par le flow « maj-avis-chez-belle ». Ils ne sont pas modifiables ici.",
+      d.mis_a_jour ? el("p", {}, el("strong", {}, "Dernière mise à jour : "), new Date(d.mis_a_jour + "T12:00:00").toLocaleDateString("fr-FR", { dateStyle: "long" })) : null),
+    el("details", { class: "groupe" }, el("summary", {}, "Mettre à jour les avis"), el("div", {},
+      el("ol", {},
+        el("li", {}, "Ouvrez Claude et lancez la tâche « maj-avis-chez-belle »."),
+        el("li", {}, "Elle relève la note et les derniers avis sur Airbnb, les contrôle, puis les publie directement (sans passer par le brouillon)."),
+        el("li", {}, "Le site est à jour une à deux minutes après la fin de la tâche ; rechargez cette page pour voir la nouvelle date.")),
+      el("p", { class: "aide" }, "Le brouillon en cours n’est pas touché par cette mise à jour."))),
     el("div", { class: "lecture" },
       el("p", {}, el("strong", {}, `Note globale ${d.notes.globale} sur ${d.notes.nombre} avis`), " · ", d.notes.categories.map(c => `${c.nom} ${c.note}`).join(" · ")),
       d.avis.map(a => el("figure", {}, el("blockquote", {}, a.extrait), el("figcaption", { class: "aide" }, `${a.prenom} · ${a.date}`)))));

@@ -48,3 +48,25 @@ test("les contenus actuels respectent leurs schémas (sans perte)", async () => 
     assert.deepEqual(r.valeur, tous[n], n + " : rien ne doit être perdu à l'enregistrement");
   }
 });
+
+test("avis : le script du flow valide, nettoie et refuse ce qui casserait le site", async () => {
+  const { preparerAvis } = await import("../scripts/maj-avis.js");
+  const bon = { notes: { globale: "4,85", nombre: 40, categories: [{ nom: "Emplacement", note: "5,0" }] },
+    avis: [{ prenom: "Léa", date: "juillet 2026", extrait: "  Très bien,\n  calme  et propre. " }] };
+  const r = preparerAvis(bon, "2026-11-06");
+  assert.deepEqual(r.erreurs, []);
+  assert.equal(r.valeur.mis_a_jour, "2026-11-06");
+  assert.equal(r.valeur.avis[0].extrait, "Très bien, calme et propre.");
+  const mauvais = [
+    { ...bon, notes: { ...bon.notes, globale: "4.85" } },                                   // point au lieu de virgule
+    { ...bon, avis: [{ ...bon.avis[0], extrait: "<script>alert(1)</script>" }] },          // balise
+    { ...bon, avis: [{ ...bon.avis[0], date: "2026-07" }] },                                // date mal écrite
+    { ...bon, avis: [] },                                                                   // aucun avis
+    { ...bon, avis: Array(13).fill(bon.avis[0]) },                                          // trop d'avis
+    { notes: bon.notes }                                                                    // avis absents
+  ];
+  for (const m of mauvais) assert.ok(preparerAvis(m).erreurs.length > 0, JSON.stringify(m).slice(0, 80));
+  const actuel = JSON.parse(fs.readFileSync("src/_data/avis.json", "utf8"));
+  const { SCHEMA_AVIS, valider } = await import("../src/_lib/schemas.js");
+  assert.deepEqual(valider(SCHEMA_AVIS, actuel).erreurs, [], "avis.json actuel valide");
+});

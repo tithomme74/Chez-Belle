@@ -74,8 +74,11 @@ ou JPEG si le navigateur ne sait pas faire de WebP), puis envoyées à `/api/pho
 
 ## Avis et notes Airbnb
 
-Les avis et les notes sont dans `src/_data/avis.json`, rempli par le flow « maj-avis-chez-belle » (à adapter : il écrivait
-auparavant dans `index.html`). Ce fichier n'est pas modifiable dans l'admin.
+Les avis et les notes sont dans `src/_data/avis.json`, rempli par le flow « maj-avis-chez-belle » avec
+`node scripts/maj-avis.js <fichier>` (validation : note au format « 4,82 », 1 à 12 extraits, pas de balise, date « août 2025 »),
+puis commit de ce seul fichier sur `main`. Instructions complètes de la tâche : `FLOW-AVIS.md`.
+`node scripts/maj-avis.js --verifier` contrôle le fichier actuel. Ce fichier n'est pas modifiable dans l'admin (lecture seule,
+avec la date de dernière mise à jour).
 La page Logement affiche en plus un extrait fixe (Clémence), dans `logement.json` : le flow ne le touche pas.
 
 ## Anciens liens

@@ -315,3 +315,24 @@ export function coherence(nom, d, tous = {}) {
   }
   return e;
 }
+
+// Avis et notes Airbnb : jamais modifiables dans l'admin, mais validés quand le flow « maj-avis-chez-belle »
+// les remplace (scripts/maj-avis.js), pour qu'un avis mal recopié ne casse pas le site.
+const sansBalise = "^[^<>]*$";
+export const SCHEMA_AVIS = objet("Avis et notes Airbnb", {
+  _info: texte("Note", { max: 200, optionnel: true }),
+  mis_a_jour: date("Dernière mise à jour", { optionnel: true }),
+  notes: objet("Notes", {
+    globale: texte("Note globale", { max: 4, motif: "^[0-5],[0-9]{1,2}$", aide: "ex. 4,82" }),
+    nombre: nombre("Nombre d’avis publiés", { min: 1, max: 10000 }),
+    categories: liste("Notes par catégorie", objet("Catégorie", {
+      nom: texte("Catégorie", { max: 40, motif: sansBalise }),
+      note: texte("Note", { max: 4, motif: "^[0-5](,[0-9]{1,2})?$" })
+    }), { max: 6 })
+  }),
+  avis: liste("Extraits d’avis", objet("Avis", {
+    prenom: texte("Prénom", { max: 40, motif: sansBalise }),
+    date: texte("Mois et année", { max: 30, motif: "^[a-zéû]+ [0-9]{4}$", aide: "ex. août 2025" }),
+    extrait: texte("Extrait recopié mot pour mot", { max: 600, motif: sansBalise })
+  }), { min: 1, max: 12 })
+});
