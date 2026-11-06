@@ -20,12 +20,18 @@ const MIME = { ".html": "text/html; charset=utf-8", ".css": "text/css; charset=u
   ".json": "application/json; charset=utf-8", ".svg": "image/svg+xml", ".webp": "image/webp", ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".png": "image/png",
   ".txt": "text/plain; charset=utf-8", ".xml": "application/xml; charset=utf-8", ".ico": "image/x-icon" };
 
+// Mêmes en-têtes de sécurité qu'en ligne (netlify.toml)
+const ENTETES_ADMIN = {
+  "Content-Security-Policy": "default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'; object-src 'none'",
+  "X-Robots-Tag": "noindex, nofollow", "X-Frame-Options": "DENY", "Referrer-Policy": "same-origin"
+};
+
 const deps = { env: process.env, stockage: stockageLocal(RACINE), memoire: memoireLocale() };
 
 async function api(req, res) {
   const corps = req.method === "GET" || req.method === "HEAD" ? undefined : await new Promise((ok, ko) => {
     const morceaux = []; let taille = 0;
-    req.on("data", c => { taille += c.length; if (taille > 1e6) { ko(new Error("trop gros")); req.destroy(); } else morceaux.push(c); });
+    req.on("data", c => { taille += c.length; if (taille > 7e6) { ko(new Error("trop gros")); req.destroy(); } else morceaux.push(c); });
     req.on("end", () => ok(Buffer.concat(morceaux))); req.on("error", ko);
   });
   const requete = new Request(`http://${req.headers.host}${req.url}`, { method: req.method, headers: req.headers, body: corps });
@@ -45,7 +51,7 @@ function fichier(req, res) {
     cible = path.join(cible, "index.html");
   }
   if (!fs.existsSync(cible)) { res.writeHead(404, { "Content-Type": "text/plain; charset=utf-8" }).end("Page introuvable"); return; }
-  res.writeHead(200, { "Content-Type": MIME[path.extname(cible).toLowerCase()] || "application/octet-stream", "Cache-Control": "no-cache", "X-Content-Type-Options": "nosniff" });
+  res.writeHead(200, { "Content-Type": MIME[path.extname(cible).toLowerCase()] || "application/octet-stream", "Cache-Control": "no-cache", "X-Content-Type-Options": "nosniff", ...(p.startsWith("/admin/") ? ENTETES_ADMIN : {}) });
   fs.createReadStream(cible).pipe(res);
 }
 

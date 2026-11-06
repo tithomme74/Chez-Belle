@@ -44,11 +44,20 @@ Tous les textes, prix, listes et photos sont dans des fichiers JSON, un par page
 - **Jetons** utilisables dans les textes : `{prix_min}`, `{depot}`, `{annee}`, `{chien_court}`, `{chien_long}`, `{chien_seuil}`, `{nb_photos}`, `{prix:noel}`, `{semaine:coeur}`, `{min:juillet}`.
 - **Mise en forme** autorisée dans les textes : `<b>`, `<em>`, `<sup>`, `<br>`, `<a href>` (liens internes écrits depuis la racine, ex. `/autour/`). Tout le reste est neutralisé (`src/_lib/contenu.js`).
 
+## Espace d'administration (/admin/)
+
+`src/admin/` : page de connexion puis une rubrique par contenu (Accueil, Le logement, Prix et calendrier, Page Tarifs : textes, Autour,
+Commun, Avis en lecture seule). Les formulaires sont générés à partir de `src/_lib/schemas.js` : ajouter un champ au schéma le fait
+apparaître dans l'admin. Listes : ajouter, supprimer, monter, descendre. Photos : réduites dans le navigateur (480 et 960 px, WebP,
+ou JPEG si le navigateur ne sait pas faire de WebP), puis envoyées à `/api/photos`. Retirer une photo de la liste la retire du site
+(le fichier reste dans `src/photos/`). Contrôles faits dans le navigateur puis refaits par le serveur.
+
 ## API de l'admin (api/)
 
 - `api/app.js` : routes `/api/connexion`, `/api/deconnexion`, `/api/session`, `/api/contenus`, `/api/contenus/<nom>` (lecture, enregistrement).
 - `api/auth.js` : mot de passe unique (empreinte scrypt), cookie de session signé (HttpOnly, Secure, SameSite=Strict, 8 h), blocage après 5 essais ratés (15 min) et 30 au total par heure.
 - `src/_lib/schemas.js` : schéma de chaque contenu (libellés, limites, formats) ; tout enregistrement est validé puis contrôlé (dates qui se chevauchent, périodes inconnues…). `avis` est en lecture seule.
+- `api/images.js` : contrôle des photos envoyées (vraie image WebP ou JPEG, dimensions lues dans le fichier).
 - `api/stockage.js` : en local, écrit dans `src/_data/` ; en ligne, écrit sur GitHub (branche de brouillon) via `netlify/functions/api.mjs`.
 - En ligne, variables Netlify à définir : voir `.env.exemple` et l'en-tête de `netlify/functions/api.mjs`. `npm run mot-de-passe -- "…"` calcule l'empreinte du vrai mot de passe.
 

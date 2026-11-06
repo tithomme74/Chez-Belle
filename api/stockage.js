@@ -15,6 +15,11 @@ const cheminDepot = nom => {
   return `src/_data/${nom}.json`;
 };
 export const serialiser = d => JSON.stringify(d, null, 2) + "\n";
+// Photos : seulement dans src/photos/, nom simple, jamais d'écrasement d'un fichier existant
+const cheminPhoto = nom => {
+  if (!/^[a-z0-9-]{1,60}\.(webp|jpg)$/.test(nom)) throw new Error("Nom de photo non valide : " + nom);
+  return `src/photos/${nom}`;
+};
 
 export function stockageLocal(racineProjet) {
   const sha = t => crypto.createHash("sha1").update(t).digest("hex");
@@ -32,6 +37,9 @@ export function stockageLocal(racineProjet) {
       await fs.writeFile(tmp, t, "utf8");
       await fs.rename(tmp, f);
       return { version: sha(t) };
+    },
+    async ajouterPhoto(nom, octets) {
+      await fs.writeFile(path.join(racineProjet, cheminPhoto(nom)), octets, { flag: "wx" });
     }
   };
 }
@@ -61,6 +69,14 @@ export function stockageGithub(env, f = fetch) {
       if (!r.ok) throw new Error(`GitHub : écriture impossible (${r.status})`);
       const j = await r.json();
       return { version: j.content.sha };
+    },
+    async ajouterPhoto(nom, octets, message) {
+      const r = await f(base + cheminPhoto(nom), {
+        method: "PUT", headers: { ...entetes, "Content-Type": "application/json" },
+        body: JSON.stringify({ message: message || `Admin : photo ${nom}`, content: Buffer.from(octets).toString("base64"), branch: env.GITHUB_BRANCHE,
+          committer: { name: "Admin Chez Belle", email: "admin@chez-belle.invalid" } })
+      });
+      if (!r.ok) throw new Error(`GitHub : envoi de la photo impossible (${r.status})`);
     }
   };
 }

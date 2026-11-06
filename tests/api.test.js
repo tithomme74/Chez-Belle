@@ -164,3 +164,37 @@ test("stockage GitHub : lecture, écriture sur la branche, conflit", async () =>
   await assert.rejects(g.ecrire("tarifs", { depot: 1 }, "vieux"), ConflitVersion);
   await assert.rejects(g.lire("../package"), /inconnu/);
 });
+
+// ---------- Photos ----------
+const webp = (l, h) => { const b = Buffer.alloc(40); b.write("RIFF", 0); b.writeUInt32LE(32, 4); b.write("WEBP", 8); b.write("VP8X", 12); b.writeUInt32LE(10, 16); b.writeUIntLE(l - 1, 24, 3); b.writeUIntLE(h - 1, 27, 3); return b; };
+const jpeg = (l, h) => Buffer.from([0xff, 0xd8, 0xff, 0xe0, 0, 4, 0, 0, 0xff, 0xc0, 0, 17, 8, h >> 8, h & 255, l >> 8, l & 255, 3, ...Array(30).fill(0)]);
+
+test("photos : lecture des dimensions WebP et JPEG", async () => {
+  const { dimensionsImage, nomFichier } = await import("../api/images.js");
+  assert.deepEqual(dimensionsImage(webp(960, 720)), { type: "webp", largeur: 960, hauteur: 720 });
+  assert.deepEqual(dimensionsImage(jpeg(480, 360)), { type: "jpg", largeur: 480, hauteur: 360 });
+  assert.equal(dimensionsImage(Buffer.from("<html><script>alert(1)</script></html>".padEnd(60))), null);
+  assert.equal(nomFichier("La Cuisine d'été ../../x"), "la-cuisine-d-ete-x");
+});
+
+test("photos : envoi accepté, fichiers créés, description renvoyée", async () => {
+  await appel("POST", "/api/connexion", { motDePasse: MDP }).then(r => { cookie = r.headers.get("set-cookie").split(";")[0]; });
+  fs.mkdirSync(path.join(racine, "src/photos"), { recursive: true });
+  const r = await json(await appel("POST", "/api/photos", { nom: "Terrasse fleurie", variantes: [
+    { largeur: 960, donnees: webp(960, 720).toString("base64") }, { largeur: 480, donnees: webp(480, 360).toString("base64") }] }));
+  assert.equal(r.statut, 200, JSON.stringify(r));
+  assert.match(r.photo.src, /^\/photos\/terrasse-fleurie-[a-z0-9]+-960\.webp$/);
+  assert.equal(r.photo.srcset.length, 2); assert.equal(r.photo.srcset[0][1], 480);
+  assert.deepEqual([r.photo.largeur, r.photo.hauteur], [960, 720]);
+  for (const [f] of r.photo.srcset) assert.ok(fs.existsSync(path.join(racine, "src", f)), f);
+});
+
+test("photos : faux fichiers, tailles et accès refusés", async () => {
+  const envoyer = (variantes, o) => appel("POST", "/api/photos", { nom: "x", variantes }, o);
+  assert.equal((await envoyer([{ donnees: Buffer.from("<svg onload=alert(1)>".padEnd(80)).toString("base64") }])).status, 415);
+  assert.equal((await envoyer([{ donnees: webp(50, 50).toString("base64") }])).status, 422);
+  assert.equal((await envoyer([{ donnees: Buffer.concat([webp(960, 720), Buffer.alloc(1.6 * 1024 * 1024)]).toString("base64") }])).status, 413);
+  assert.equal((await envoyer([])).status, 400);
+  assert.equal((await envoyer([{ donnees: webp(960, 720).toString("base64") }], { avecCookie: false })).status, 401);
+  assert.equal((await envoyer([{ donnees: webp(960, 720).toString("base64") }], { origine: "https://pirate.example" })).status, 403);
+});

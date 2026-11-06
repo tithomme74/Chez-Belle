@@ -12,7 +12,6 @@
   },
   "galerie": [
     {
-      "forme": "big",
       "src": "/photos/jardin-960.webp",
       "srcset": [
         [
@@ -27,10 +26,10 @@
       "largeur": 960,
       "hauteur": 720,
       "alt": "Le jardin sous les pins, avec deux transats",
-      "legende": "Le jardin"
+      "legende": "Le jardin",
+      "forme": "big"
     },
     {
-      "forme": "tall",
       "src": "/photos/piece-a-vivre-960.webp",
       "srcset": [
         [
@@ -45,10 +44,10 @@
       "largeur": 960,
       "hauteur": 1280,
       "alt": "Le salon avec canapé-lit et fauteuil en rotin",
-      "legende": "Le salon"
+      "legende": "Le salon",
+      "forme": "tall"
     },
     {
-      "forme": "tall",
       "src": "/photos/chambre-960.webp",
       "srcset": [
         [
@@ -63,10 +62,10 @@
       "largeur": 960,
       "hauteur": 1280,
       "alt": "La chambre, lits rapprochés en grand lit",
-      "legende": "La chambre"
+      "legende": "La chambre",
+      "forme": "tall"
     },
     {
-      "forme": "normale",
       "src": "/photos/cuisine-960.webp",
       "srcset": [
         [
@@ -81,10 +80,10 @@
       "largeur": 720,
       "hauteur": 540,
       "alt": "La cuisine équipée",
-      "legende": "La cuisine"
+      "legende": "La cuisine",
+      "forme": "normale"
     },
     {
-      "forme": "normale",
       "src": "/photos/salle-de-douche-960.webp",
       "srcset": [
         [
@@ -99,52 +98,53 @@
       "largeur": 960,
       "hauteur": 720,
       "alt": "La salle de douche à l’italienne",
-      "legende": "La douche"
+      "legende": "La douche",
+      "forme": "normale"
     },
     {
-      "forme": "normale",
-      "masquee": true,
       "src": "/photos/galerie-1-960.webp",
       "largeur": 960,
       "hauteur": 1280,
       "alt": "Le coin repas et sa table en bois",
-      "legende": "Le coin repas"
+      "legende": "Le coin repas",
+      "forme": "normale",
+      "masquee": true
     },
     {
-      "forme": "normale",
-      "masquee": true,
       "src": "/photos/terrasse-960.webp",
       "largeur": 960,
       "hauteur": 720,
       "alt": "Le côté terrasse du jardin, en fleurs",
-      "legende": "Le côté terrasse"
+      "legende": "Le côté terrasse",
+      "forme": "normale",
+      "masquee": true
     },
     {
-      "forme": "normale",
-      "masquee": true,
       "src": "/photos/galerie-2-480.webp",
       "largeur": 480,
       "hauteur": 640,
       "alt": "L’entrée, avec la porte ouverte sur le jardin",
-      "legende": "L’entrée"
+      "legende": "L’entrée",
+      "forme": "normale",
+      "masquee": true
     },
     {
-      "forme": "normale",
-      "masquee": true,
       "src": "/photos/salle-a-manger-480.webp",
       "largeur": 480,
       "hauteur": 388,
       "alt": "La table de la salle à manger dressée",
-      "legende": "La table"
+      "legende": "La table",
+      "forme": "normale",
+      "masquee": true
     },
     {
-      "forme": "normale",
-      "masquee": true,
       "src": "/photos/galerie-3-480.webp",
       "largeur": 480,
       "hauteur": 640,
       "alt": "La buanderie avec lave-linge",
-      "legende": "La buanderie"
+      "legende": "La buanderie",
+      "forme": "normale",
+      "masquee": true
     }
   ],
   "bouton_photos": "Voir les {nb_photos} photos",

@@ -5,6 +5,9 @@ export default function (eleventyConfig) {
   // Fichiers recopiés tels quels
   ["src/assets", "src/photos", "src/infos", "src/favicon.svg", "src/robots.txt", "src/sitemap.xml"]
     .forEach(p => eleventyConfig.addPassthroughCopy(p));
+  // Espace d'administration : pages statiques + schémas partagés avec le serveur
+  eleventyConfig.addPassthroughCopy({ "src/admin": "admin", "src/_lib/schemas.js": "admin/schemas.js" });
+  eleventyConfig.ignores.add("src/admin/**");
   eleventyConfig.ignores.add("src/photos/**");
   eleventyConfig.ignores.add("src/_lib/**");
 

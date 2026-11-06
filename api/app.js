@@ -7,13 +7,17 @@
 //   GET  /api/contenus                                 → liste des contenus
 //   GET  /api/contenus/<nom>                           → { donnees, version, lectureSeule }
 //   PUT  /api/contenus/<nom>   { donnees, version }    → valide puis enregistre → { version }
+//   POST /api/photos           { nom, variantes[] }    → enregistre une photo (WebP ou JPEG) → { photo }
 //
 // deps = { env, stockage, memoire, ip }
 import { verifierMotDePasse, creerSession, sessionValide, cookieSession, cookieEfface, lireCookie, estBloque, noterEchec, effacerEchecs } from "./auth.js";
 import { SCHEMAS, LECTURE_SEULE, FICHIERS, valider, coherence } from "../src/_lib/schemas.js";
 import { ConflitVersion } from "./stockage.js";
+import { dimensionsImage, nomFichier } from "./images.js";
 
 const TAILLE_MAX = 300 * 1024;
+const OCTETS_MAX_PHOTO = 1.5 * 1024 * 1024;
+const TAILLE_MAX_PHOTO = 3 * OCTETS_MAX_PHOTO * 1.4;
 
 const reponse = (statut, corps, entetes = {}) => new Response(JSON.stringify(corps), {
   status: statut,
@@ -33,10 +37,10 @@ function origineAutorisee(req, env) {
   return permises.has(origine);
 }
 
-async function lireJson(req) {
+async function lireJson(req, max = TAILLE_MAX) {
   if (!(req.headers.get("content-type") || "").startsWith("application/json")) throw Object.assign(new Error("Format attendu : JSON."), { statut: 415 });
   const t = await req.text();
-  if (t.length > TAILLE_MAX) throw Object.assign(new Error("Contenu trop volumineux."), { statut: 413 });
+  if (t.length > max) throw Object.assign(new Error("Contenu trop volumineux."), { statut: 413 });
   try { return JSON.parse(t); } catch { throw Object.assign(new Error("JSON illisible."), { statut: 400 }); }
 }
 
@@ -74,6 +78,31 @@ export async function traiter(req, deps) {
 
     if (route === "/api/contenus" && m === "GET")
       return reponse(200, { contenus: FICHIERS.map(nom => ({ nom, titre: SCHEMAS[nom] ? SCHEMAS[nom].label : "Avis et notes Airbnb (automatiques)", lectureSeule: LECTURE_SEULE.includes(nom) })) });
+
+    // Photo : 1 à 3 variantes (largeurs) préparées par le navigateur, en WebP ou JPEG
+    if (route === "/api/photos" && m === "POST") {
+      const { nom, variantes } = await lireJson(req, TAILLE_MAX_PHOTO);
+      if (!Array.isArray(variantes) || variantes.length < 1 || variantes.length > 3) return erreur(400, "Photo : variantes manquantes.");
+      const base = `${nomFichier(nom)}-${Date.now().toString(36)}`;
+      const prets = [];
+      for (const v of variantes) {
+        const octets = Buffer.from(String(v.donnees || ""), "base64");
+        if (octets.length > OCTETS_MAX_PHOTO) return erreur(413, "Photo trop lourde (1,5 Mo au plus par taille).");
+        const dim = dimensionsImage(octets);
+        if (!dim) return erreur(415, "Ce fichier n’est pas une image WebP ou JPEG valide.");
+        if (dim.largeur < 200 || dim.largeur > 2400 || dim.hauteur < 100 || dim.hauteur > 3200) return erreur(422, "Dimensions de photo inhabituelles.");
+        prets.push({ octets, dim, fichier: `${base}-${dim.largeur}.${dim.type}` });
+      }
+      if (new Set(prets.map(p => p.fichier)).size !== prets.length) return erreur(400, "Photo : deux variantes de même largeur.");
+      prets.sort((a, b) => a.dim.largeur - b.dim.largeur);
+      for (const p of prets) await stockage.ajouterPhoto(p.fichier, p.octets, `Admin : photo ${p.fichier}`);
+      const grande = prets.at(-1);
+      return reponse(200, { photo: {
+        src: `/photos/${grande.fichier}`,
+        ...(prets.length > 1 ? { srcset: prets.map(p => [`/photos/${p.fichier}`, p.dim.largeur]) } : {}),
+        largeur: grande.dim.largeur, hauteur: grande.dim.hauteur
+      } });
+    }
 
     const mc = /^\/api\/contenus\/([a-z]+)$/.exec(route);
     if (mc) {

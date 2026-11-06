@@ -1,0 +1,40 @@
+// Contrôle des photos envoyées par l'admin : on n'accepte que du WebP ou du JPEG réels (signature vérifiée)
+// et on lit leurs dimensions dans l'en-tête, sans dépendance externe.
+
+export function dimensionsImage(b) {
+  if (!b || b.length < 30) return null;
+  // WebP : RIFF....WEBP
+  if (b.toString("ascii", 0, 4) === "RIFF" && b.toString("ascii", 8, 12) === "WEBP") {
+    const bloc = b.toString("ascii", 12, 16);
+    if (bloc === "VP8 " && b[23] === 0x9d && b[24] === 0x01 && b[25] === 0x2a)
+      return { type: "webp", largeur: b.readUInt16LE(26) & 0x3fff, hauteur: b.readUInt16LE(28) & 0x3fff };
+    if (bloc === "VP8L" && b[20] === 0x2f) {
+      const bits = b.readUInt32LE(21);
+      return { type: "webp", largeur: (bits & 0x3fff) + 1, hauteur: ((bits >> 14) & 0x3fff) + 1 };
+    }
+    if (bloc === "VP8X")
+      return { type: "webp", largeur: 1 + b.readUIntLE(24, 3), hauteur: 1 + b.readUIntLE(27, 3) };
+    return null;
+  }
+  // JPEG : FFD8, puis recherche du segment SOF (dimensions)
+  if (b[0] === 0xff && b[1] === 0xd8) {
+    let i = 2;
+    while (i + 9 < b.length) {
+      if (b[i] !== 0xff) { i++; continue; }
+      const marqueur = b[i + 1];
+      if (marqueur === 0xd8 || marqueur === 0x01 || (marqueur >= 0xd0 && marqueur <= 0xd7)) { i += 2; continue; }
+      const longueur = b.readUInt16BE(i + 2);
+      if (marqueur >= 0xc0 && marqueur <= 0xcf && ![0xc4, 0xc8, 0xcc].includes(marqueur))
+        return { type: "jpg", hauteur: b.readUInt16BE(i + 5), largeur: b.readUInt16BE(i + 7) };
+      i += 2 + longueur;
+    }
+  }
+  return null;
+}
+
+// Nom de fichier sûr à partir d'un texte libre (« La Cuisine d'été » → « la-cuisine-d-ete »)
+export function nomFichier(texte) {
+  const s = String(texte || "photo").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 40);
+  return s || "photo";
+}
