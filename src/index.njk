@@ -52,7 +52,7 @@
       <div class="apercu">
         <div class="galerie">
 {%- for p in a.essentiel.photos %}
-          {{ m.figure(p) }}
+          {{ m.figure(p, loop.index0) }}
 {%- endfor %}
         </div>
       </div>

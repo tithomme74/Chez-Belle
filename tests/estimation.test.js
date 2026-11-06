@@ -5,7 +5,10 @@ import fs from "node:fs";
 import "../src/assets/reservation.js";
 
 const { estimer, semainesFixes } = globalThis.ChezBelleEstimation;
-const D = JSON.parse(fs.readFileSync("src/_data/tarifs.json", "utf8"));
+import { calculer } from "../src/_lib/calc.js";
+const lire = n => JSON.parse(fs.readFileSync(`src/_data/${n}.json`, "utf8"));
+const c = calculer(lire("tarifs"), lire("accueil"), lire("maison"));
+const D = { types: c.types, calendrier: c.calendrier, chien: lire("maison").chien };
 
 test("mai calme : 3 nuits à 80 €", () => {
   const r = estimer(D, "2027-05-20", "2027-05-23", false);
@@ -13,7 +16,7 @@ test("mai calme : 3 nuits à 80 €", () => {
 });
 test("pont de l'Ascension sous le minimum : avertissement", () => {
   const r = estimer(D, "2027-05-06", "2027-05-08", false);
-  assert.equal(r.total, 190); assert.match(r.warn, /Pont de mai.*3 nuits/);
+  assert.equal(r.total, 190); assert.match(r.warn, /Ponts de mai.*3 nuits/);
 });
 test("séjour à cheval sur deux périodes : deux lignes", () => {
   const r = estimer(D, "2027-07-04", "2027-07-11", false);

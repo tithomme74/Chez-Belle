@@ -1,12 +1,12 @@
 {
   "seo": {
     "titre": "Tarifs {annee} et réservation en direct | Chez Belle, Pontaillac",
-    "description": "Tarifs {annee} de Chez Belle à Vaux-sur-Mer : dès {prix_min} € la nuit en mai, juin et septembre, {semaine:coeur} € la semaine en cœur d’été. Linge et ménage compris. Estimation immédiate et demande de dates à Belle, réponse sous 24 h.",
+    "description": "Tarifs {annee} de Chez Belle à Vaux-sur-Mer : dès {prix_min} € la nuit en mai, juin et septembre, {semaine:coeur} € la semaine en cœur d’été. {compris}. Estimation immédiate et demande de dates à Belle, réponse sous 24 h.",
     "og_titre": "Chez Belle · tarifs {annee} et demande de réservation"
   },
   "entete": {
     "kicker": "Tarifs {annee} · réservation en direct",
-    "titre": "Dès {prix_min} € la nuit, linge et ménage compris",
+    "titre": "Dès {prix_min} € la nuit, {compris}",
     "texte": "Le prix de la grille est celui du contrat, sans frais de plateforme. Choisissez vos dates : Belle vous répond sous 24 heures.",
     "boutons": [
       {
@@ -26,23 +26,11 @@
     "secret": "<b>Le secret des habitués :</b> en mai, juin et septembre, les plages sont calmes, l’océan est bon et le prix descend à {prix_min} € la nuit."
   },
   "compris": {
-    "titre": "Compris dans le prix",
-    "liste": [
-      "Lits faits, linge de toilette et serviettes de plage",
-      "Ménage de fin de séjour",
-      "Eau, électricité, chauffage et wifi fibre",
-      "Café et produits de base pour démarrer",
-      "Place de parking dans la propriété"
-    ]
+    "titre": "Compris dans le prix"
   },
   "en_plus": {
     "titre": "En plus, selon votre séjour",
-    "liste": [
-      "Taxe de séjour : par adulte et par nuit, mineurs exonérés",
-      "Chien : {chien_court} € jusqu’à {chien_seuil} nuits, {chien_long} € au-delà",
-      "Lit parapluie et chaise haute : gratuits, sur demande"
-    ],
-    "note": "Arrivée dès 16 h · départ avant 10 h · 4 personnes au maximum, bébés compris."
+    "note": "Arrivée dès {arrivee} · départ avant {depart} · {capacite} personnes au maximum, bébés compris."
   },
   "etapes": {
     "titre": "Réserver en trois étapes",
@@ -92,7 +80,7 @@
     "questions": [
       {
         "question": "Comment se passent l’arrivée et le départ ?",
-        "reponse": "En autonomie, avec une boîte à clés : arrivée dès 16 h, départ avant 10 h. Le code vous est envoyé au plus tard trois jours avant, une fois le séjour réglé."
+        "reponse": "En autonomie, avec une boîte à clés : arrivée dès {arrivee}, départ avant {depart}. Le code vous est envoyé au plus tard trois jours avant, une fois le séjour réglé."
       },
       {
         "question": "Combien coûte la taxe de séjour ?",

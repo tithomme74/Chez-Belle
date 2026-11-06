@@ -1,9 +1,9 @@
 {
   "seo": {
     "titre": "Location Pontaillac avec jardin, mer à pied | Chez Belle, Vaux-sur-Mer",
-    "description": "Location de vacances à Vaux-sur-Mer, quartier de Pontaillac : rez-de-jardin de 55 m² avec jardin clos et ombragé, conche à 5 minutes à pied, plage de Pontaillac à 7 minutes. 4 voyageurs, linge et ménage compris, chien bienvenu. Réservation en direct.",
+    "description": "Location de vacances à Vaux-sur-Mer, quartier de Pontaillac : rez-de-jardin de {surface} m² avec jardin clos et ombragé, conche à {dist_conche} minutes à pied, plage de Pontaillac à {dist_plage} minutes. {capacite} voyageurs, {compris}, chien bienvenu. Réservation en direct.",
     "og_titre": "Chez Belle · flâner sous les pins, l’océan au bout de la rue",
-    "og_description": "Rez-de-jardin au calme à Pontaillac, jardin ombragé, plage à pied. Linge et ménage compris, chien bienvenu.",
+    "og_description": "Rez-de-jardin au calme à Pontaillac, jardin ombragé, plage à pied. {compris}, chien bienvenu.",
     "jsonld": {
       "@context": "https://schema.org",
       "@type": "VacationRental",
@@ -86,7 +86,7 @@
   "hero": {
     "kicker": "Vaux-sur-Mer · quartier de Pontaillac",
     "titre": "Flâner sous les pins, <em>l’océan</em> au bout de la rue",
-    "texte": "Un rez-de-jardin indépendant de 55&nbsp;m², au calme, sous la maison de Belle, avec un grand jardin clos à l’ombre des pins. La petite conche de Saint-Sordelin est à 5&nbsp;minutes à pied, la plage de Pontaillac à 7. Lits faits, linge et ménage compris.",
+    "texte": "Un rez-de-jardin indépendant de {surface}&nbsp;m², au calme, sous la maison de Belle, avec un grand jardin clos à l’ombre des pins. La petite conche de Saint-Sordelin est à {dist_conche}&nbsp;minutes à pied, la plage de Pontaillac à {dist_plage}. Lits faits, {compris}.",
     "boutons": [
       {
         "label": "Demander mes dates",
@@ -121,20 +121,20 @@
     "titre": "Chez Belle en un coup d’œil",
     "points": [
       {
-        "titre": "55 m² de plain-pied",
+        "titre": "{surface} m² de plain-pied",
         "texte": "Votre propre entrée, au rez-de-jardin"
       },
       {
-        "titre": "4 voyageurs",
+        "titre": "{capacite} voyageurs",
         "texte": "1 chambre, 1 canapé-lit"
       },
       {
-        "titre": "Jardin clos de 200 m²",
+        "titre": "Jardin clos de {jardin} m²",
         "texte": "Sous les pins, partagé avec Belle qui vit à l’étage"
       },
       {
         "titre": "La mer à pied",
-        "texte": "Conche à 5 min, plage de Pontaillac à 7"
+        "texte": "Conche à {dist_conche} min, plage de Pontaillac à {dist_plage}"
       },
       {
         "titre": "Tout compris",
@@ -142,12 +142,11 @@
       },
       {
         "titre": "Chien bienvenu",
-        "texte": "Parking dans la propriété · arrivée dès 16 h"
+        "texte": "Parking dans la propriété · arrivée dès {arrivee}"
       }
     ],
     "photos": [
       {
-        "forme": "big",
         "src": "/photos/terrasse-960.webp",
         "srcset": [
           [
@@ -165,7 +164,6 @@
         "legende": "Le jardin"
       },
       {
-        "forme": "tall",
         "src": "/photos/piece-a-vivre-960.webp",
         "srcset": [
           [
@@ -183,7 +181,6 @@
         "legende": "Le salon"
       },
       {
-        "forme": "tall",
         "src": "/photos/chambre-960.webp",
         "srcset": [
           [
@@ -210,13 +207,14 @@
   "zoom": {
     "kicker": "Tarifs {annee} en réservation directe",
     "titre": "Zoom sur les prix",
-    "texte": "Linge et ménage compris. Seule la taxe de séjour s’ajoute.",
+    "texte": "{compris}. Seule la taxe de séjour s’ajoute.",
     "cartes": [
       {
         "titre": "Mai, juin, septembre",
         "dates": "la plus belle saison",
         "types": [
-          "basse"
+          "mai-juin",
+          "septembre"
         ],
         "unite": "nuit",
         "vedette": ""
@@ -225,7 +223,7 @@
         "titre": "Ponts, début juillet, fin d’été",
         "dates": "ponts de mai, 21 juin – 7 juillet, 28 août – 5 septembre",
         "types": [
-          "pont",
+          "ponts",
           "juillet",
           "fin"
         ],

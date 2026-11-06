@@ -3,7 +3,7 @@
 ---
 {% extends "base.njk" %}
 {% set r = reservation %}
-{% set fo = tarifs.formulaire %}
+{% set fo = calc.formulaire %}
 {% set tx = r.formulaire %}
 {% block main %}
 <main>
@@ -40,7 +40,7 @@
       <div class="stack">
         <h2>{{ r.compris.titre | riche | safe }}</h2>
         <ul class="coches">
-{%- for c in r.compris.liste %}
+{%- for c in calc.compris %}
           <li>{{ c | riche | safe }}</li>
 {%- endfor %}
         </ul>
@@ -48,7 +48,7 @@
       <div class="stack">
         <h2>{{ r.en_plus.titre | riche | safe }}</h2>
         <ul class="coches plus-s">
-{%- for c in r.en_plus.liste %}
+{%- for c in calc.enPlus %}
           <li>{{ c | riche | safe }}</li>
 {%- endfor %}
         </ul>
@@ -129,6 +129,6 @@
 </main>
 {% endblock %}
 {% block scripts %}
-<script type="application/json" id="donnees-tarifs">{{ { types: tarifs.types, calendrier: tarifs.calendrier, chien: tarifs.chien, email: site.email } | jsonScript | safe }}</script>
+<script type="application/json" id="donnees-tarifs">{{ { types: calc.types, calendrier: calc.calendrier, chien: maison.chien, email: site.email } | jsonScript | safe }}</script>
 <script src="{{ racine }}assets/reservation.js"></script>
 {% endblock %}

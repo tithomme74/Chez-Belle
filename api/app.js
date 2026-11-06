@@ -17,7 +17,7 @@
 // Les enregistrements vont toujours dans le brouillon ; seul « publier » modifie le site en ligne.
 // deps = { env, stockage, memoire, ip }
 import { verifierMotDePasse, creerSession, sessionValide, cookieSession, cookieEfface, lireCookie, estBloque, noterEchec, effacerEchecs } from "./auth.js";
-import { SCHEMAS, LECTURE_SEULE, FICHIERS, valider, coherence } from "../src/_lib/schemas.js";
+import { SCHEMAS, LECTURE_SEULE, FICHIERS, LIES, valider, coherence } from "../src/_lib/schemas.js";
 import { ConflitVersion, ConflitPublication } from "./stockage.js";
 import { dimensionsImage, nomFichier } from "./images.js";
 
@@ -160,7 +160,7 @@ export async function traiter(req, deps) {
         if (erreurs.length) return erreur(422, "Certains champs sont à corriger.", { erreurs });
         // Cohérence avec les autres contenus (périodes de prix utilisées par l'accueil, etc.)
         const autres = {};
-        for (const n of ["tarifs", "accueil", "autour"]) if (n !== nom) autres[n] = (await stockage.lire(n)).donnees;
+        for (const n of LIES) if (n !== nom) autres[n] = (await stockage.lire(n)).donnees;
         const incoherences = coherence(nom, valeur, autres);
         if (incoherences.length) return erreur(422, "Certains champs sont incohérents.", { erreurs: incoherences });
         try {

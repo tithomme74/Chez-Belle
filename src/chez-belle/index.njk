@@ -13,7 +13,7 @@
       <p class="lead">{{ l.entete.texte | riche | safe }}</p>
       <div class="galerie g5" id="photos">
 {%- for p in l.galerie %}
-        {{ m.figure(p, not loop.first) }}
+        {{ m.figure(p, loop.index0, not loop.first) }}
 {%- endfor %}
       </div>
       <p class="plus"><button type="button" class="btn line" data-galerie-ouvrir>{{ l.bouton_photos | jetons }}</button></p>

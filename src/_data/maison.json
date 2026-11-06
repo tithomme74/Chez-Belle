@@ -1,0 +1,60 @@
+{
+  "compris": "linge et ménage compris",
+  "capacite": 4,
+  "surface": 55,
+  "jardin": 200,
+  "arrivee": "16 h",
+  "depart": "10 h",
+  "distances": {
+    "conche": 5,
+    "plage": 7
+  },
+  "depot": 300,
+  "chien": {
+    "court": 15,
+    "long": 25,
+    "seuil": 3
+  },
+  "services": [
+    {
+      "nom": "Lits faits, linge de toilette et serviettes de plage",
+      "statut": "compris",
+      "precision": ""
+    },
+    {
+      "nom": "Ménage de fin de séjour",
+      "statut": "compris",
+      "precision": ""
+    },
+    {
+      "nom": "Eau, électricité, chauffage et wifi fibre",
+      "statut": "compris",
+      "precision": ""
+    },
+    {
+      "nom": "Café et produits de base pour démarrer",
+      "statut": "compris",
+      "precision": ""
+    },
+    {
+      "nom": "Place de parking dans la propriété",
+      "statut": "compris",
+      "precision": ""
+    },
+    {
+      "nom": "Taxe de séjour",
+      "statut": "en_plus",
+      "precision": "par adulte et par nuit, mineurs exonérés"
+    },
+    {
+      "nom": "Chien",
+      "statut": "en_plus",
+      "precision": "{chien_court} € jusqu’à {chien_seuil} nuits, {chien_long} € au-delà"
+    },
+    {
+      "nom": "Lit parapluie et chaise haute",
+      "statut": "sur_demande",
+      "precision": "gratuits, sur demande"
+    }
+  ]
+}

@@ -72,52 +72,54 @@ test("cookie falsifié ou expiré refusé", async () => {
 
 test("liste et lecture des contenus", async () => {
   const l = await json(await appel("GET", "/api/contenus"));
-  assert.deepEqual(l.contenus.map(c => c.nom).sort(), ["accueil", "autour", "avis", "logement", "reservation", "site", "tarifs"]);
-  const t = await json(await appel("GET", "/api/contenus/tarifs"));
+  assert.deepEqual(l.contenus.map(c => c.nom).sort(), ["accueil", "autour", "avis", "logement", "maison", "reservation", "site", "tarifs"]);
+  const t = await json(await appel("GET", "/api/contenus/maison"));
   assert.equal(t.donnees.depot, 300); assert.equal(typeof t.version, "string"); assert.equal(t.lectureSeule, false);
 });
 
 test("enregistrement dans le brouillon seulement, puis conflit de version", async () => {
-  const t = await json(await appel("GET", "/api/contenus/tarifs"));
+  const t = await json(await appel("GET", "/api/contenus/maison"));
   t.donnees.depot = 350;
   t.donnees.champInconnu = "<script>";
-  const r = await json(await appel("PUT", "/api/contenus/tarifs", { donnees: t.donnees, version: t.version }));
+  const r = await json(await appel("PUT", "/api/contenus/maison", { donnees: t.donnees, version: t.version }));
   assert.equal(r.statut, 200, JSON.stringify(r));
-  const brouillon = JSON.parse(fs.readFileSync(path.join(racine, ".local/brouillon/tarifs.json"), "utf8"));
+  const brouillon = JSON.parse(fs.readFileSync(path.join(racine, ".local/brouillon/maison.json"), "utf8"));
   assert.equal(brouillon.depot, 350);
   assert.equal(brouillon.champInconnu, undefined, "champ hors schéma ignoré");
-  const publie = JSON.parse(fs.readFileSync(path.join(racine, "src/_data/tarifs.json"), "utf8"));
+  const publie = JSON.parse(fs.readFileSync(path.join(racine, "src/_data/maison.json"), "utf8"));
   assert.equal(publie.depot, 300, "le site publié n'a pas bougé");
-  const r2 = await appel("PUT", "/api/contenus/tarifs", { donnees: t.donnees, version: t.version });
+  const r2 = await appel("PUT", "/api/contenus/maison", { donnees: t.donnees, version: t.version });
   assert.equal(r2.status, 409);
 });
 
 test("contenu invalide : erreurs détaillées, rien n'est écrit", async () => {
   const t = await json(await appel("GET", "/api/contenus/tarifs"));
   const avant = fs.readFileSync(path.join(racine, "src/_data/tarifs.json"), "utf8");
-  t.donnees.types.basse.prix = -5;
-  t.donnees.calendrier[0].du = "2027-02-30";
+  t.donnees.lignes[0].prix = -5;
+  t.donnees.lignes[0].dates[0].du = "2027-02-30";
   const r = await json(await appel("PUT", "/api/contenus/tarifs", { donnees: t.donnees, version: t.version }));
   assert.equal(r.statut, 422);
-  assert.ok(r.erreurs.some(e => e.chemin === "types.basse.prix"));
-  assert.ok(r.erreurs.some(e => e.chemin === "calendrier[0].du"));
+  assert.ok(r.erreurs.some(e => e.chemin === "lignes[0].prix"));
+  assert.ok(r.erreurs.some(e => e.chemin === "lignes[0].dates[0].du"));
   assert.equal(fs.readFileSync(path.join(racine, "src/_data/tarifs.json"), "utf8"), avant);
 });
 
 test("incohérence entre contenus : période utilisée par l'accueil", async () => {
   const t = await json(await appel("GET", "/api/contenus/tarifs"));
-  delete t.donnees.types.juillet;
-  t.donnees.calendrier = t.donnees.calendrier.filter(p => p.type !== "juillet");
-  t.donnees.grille = t.donnees.grille.filter(g => g.type !== "juillet");
+  t.donnees.lignes = t.donnees.lignes.filter(l => l.id !== "juillet");
   const r = await json(await appel("PUT", "/api/contenus/tarifs", { donnees: t.donnees, version: t.version }));
   assert.equal(r.statut, 422); assert.match(JSON.stringify(r.erreurs), /accueil/);
 });
 
-test("chevauchement de dates dans le calendrier refusé", async () => {
+test("deux périodes aux mêmes dates refusées ; départ avant arrivée refusé ; semaine fixe contrôlée", async () => {
   const t = await json(await appel("GET", "/api/contenus/tarifs"));
-  t.donnees.calendrier[1].du = "2027-05-01";
+  t.donnees.lignes[2].dates = [...t.donnees.lignes[3].dates];
+  t.donnees.lignes[4].dates[0] = { du: "2027-09-05", au: "2027-08-28" };
+  t.donnees.lignes[6].dates[0].au = "2027-12-24";
   const r = await json(await appel("PUT", "/api/contenus/tarifs", { donnees: t.donnees, version: t.version }));
-  assert.equal(r.statut, 422); assert.match(JSON.stringify(r.erreurs), /chevauche/);
+  assert.equal(r.statut, 422);
+  const msg = JSON.stringify(r.erreurs);
+  assert.match(msg, /mêmes dates/); assert.match(msg, /départ doit être après/); assert.match(msg, /exactement 7 nuits/);
 });
 
 test("lien dangereux refusé", async () => {
@@ -208,37 +210,37 @@ test("GitHub : état, publication (fusion dans main), historique, abandon", asyn
 // ---------- Brouillon, publication, historique (stockage local) ----------
 test("brouillon : état, publication, historique, reprise d'une version, abandon", async () => {
   const etat = await json(await appel("GET", "/api/brouillon"));
-  assert.deepEqual(etat.modifies, ["tarifs"]);
+  assert.deepEqual(etat.modifies, ["maison"]);
   assert.equal(etat.apercu, "/apercu/");
   const pub = await json(await appel("POST", "/api/publier", {}));
   assert.equal(pub.statut, 200, JSON.stringify(pub));
-  assert.equal(JSON.parse(fs.readFileSync(path.join(racine, "src/_data/tarifs.json"), "utf8")).depot, 350, "publié");
+  assert.equal(JSON.parse(fs.readFileSync(path.join(racine, "src/_data/maison.json"), "utf8")).depot, 350, "publié");
   assert.deepEqual((await json(await appel("GET", "/api/brouillon"))).modifies, []);
-  const h = await json(await appel("GET", "/api/historique/tarifs"));
+  const h = await json(await appel("GET", "/api/historique/maison"));
   assert.equal(h.versions.length, 2);
-  assert.match(h.versions[0].message, /Publication depuis l’admin : Tarifs/);
+  assert.match(h.versions[0].message, /Publication depuis l’admin : Ce qui est compris/);
   assert.equal(h.versions[1].message, "Version d’origine");
-  const origine = await json(await appel("GET", `/api/historique/tarifs/${h.versions[1].id}`));
+  const origine = await json(await appel("GET", `/api/historique/maison/${h.versions[1].id}`));
   assert.equal(origine.donnees.depot, 300);
-  assert.equal((await appel("GET", "/api/historique/tarifs/inexistant")).status, 404);
+  assert.equal((await appel("GET", "/api/historique/maison/inexistant")).status, 404);
   assert.equal((await appel("GET", "/api/historique/avis")).status, 404);
   // Modification puis abandon : le brouillon redevient le site publié
-  const t = await json(await appel("GET", "/api/contenus/tarifs"));
+  const t = await json(await appel("GET", "/api/contenus/maison"));
   t.donnees.depot = 400;
-  await appel("PUT", "/api/contenus/tarifs", { donnees: t.donnees, version: t.version });
-  assert.deepEqual((await json(await appel("GET", "/api/brouillon"))).modifies, ["tarifs"]);
+  await appel("PUT", "/api/contenus/maison", { donnees: t.donnees, version: t.version });
+  assert.deepEqual((await json(await appel("GET", "/api/brouillon"))).modifies, ["maison"]);
   assert.equal((await appel("POST", "/api/abandonner", {})).status, 200);
   assert.deepEqual((await json(await appel("GET", "/api/brouillon"))).modifies, []);
-  assert.equal((await json(await appel("GET", "/api/contenus/tarifs"))).donnees.depot, 350);
+  assert.equal((await json(await appel("GET", "/api/contenus/maison"))).donnees.depot, 350);
 });
 
 test("publication refusée si le brouillon est invalide (fichier modifié à la main)", async () => {
   const f = path.join(racine, ".local/brouillon/tarifs.json");
-  const d = JSON.parse(fs.readFileSync(f, "utf8")); d.types.basse.prix = -1;
+  const d = JSON.parse(fs.readFileSync(f, "utf8")); d.lignes[0].prix = -1;
   fs.writeFileSync(f, JSON.stringify(d));
   const r = await json(await appel("POST", "/api/publier", {}));
-  assert.equal(r.statut, 422); assert.match(r.erreurs[0].message, /Tarifs et calendrier/);
-  assert.equal(JSON.parse(fs.readFileSync(path.join(racine, "src/_data/tarifs.json"), "utf8")).types.basse.prix, 80, "rien publié");
+  assert.equal(r.statut, 422); assert.match(r.erreurs[0].message, /Mes prix/);
+  assert.equal(JSON.parse(fs.readFileSync(path.join(racine, "src/_data/tarifs.json"), "utf8")).lignes[0].prix, 80, "rien publié");
   await appel("POST", "/api/abandonner", {});
 });
 

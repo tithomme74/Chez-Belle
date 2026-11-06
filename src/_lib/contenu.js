@@ -39,30 +39,58 @@ export function riche(texte, racine = "") {
 }
 const texteSur = t => t.replace(/&(?![a-z]+;|#\d+;)/gi, "&amp;").replace(/[<>"]/g, c => ECHAP[c]);
 
-// Jetons remplacés dans les textes, pour que prix, dépôt, etc. ne soient saisis qu'une fois (dans les tarifs).
-//   {prix_min} {depot} {annee} {nb_photos} {chien_court} {chien_long} {chien_seuil} {prix:noel} {semaine:coeur} {min:juillet}
+// Pastilles (jetons) : valeurs saisies une seule fois et reprises dans les textes. Dans l'admin, elles
+// s'affichent comme des pastilles bleues avec leur valeur actuelle ; dans les données, sous la forme {nom} ou {prix:ligne}.
+export const PASTILLES = [
+  ["prix_min", "Prix le plus bas (par nuit)"], ["compris", "Ce qui est compris (« linge et ménage compris »)"],
+  ["arrivee", "Heure d’arrivée"], ["depart", "Heure de départ"], ["capacite", "Nombre de voyageurs"],
+  ["surface", "Surface du logement (m²)"], ["jardin", "Surface du jardin (m²)"],
+  ["dist_conche", "Minutes à pied jusqu’à la conche"], ["dist_plage", "Minutes à pied jusqu’à la plage"],
+  ["depot", "Dépôt de garantie (€)"], ["chien_court", "Chien : prix séjour court (€)"], ["chien_long", "Chien : prix séjour long (€)"],
+  ["chien_seuil", "Chien : séjour court jusqu’à (nuits)"], ["annee", "Année des tarifs"], ["nb_photos", "Nombre de photos"]
+];
+
+// Remplace les jetons par leur valeur. ctx = { tarifs, maison, logement, calc }.
+// Un jeton placé en début de phrase prend une majuscule (« Linge et ménage compris. »).
 export function jetons(texte, ctx) {
   if (texte == null) return "";
-  const t = ctx && ctx.tarifs, c = ctx && ctx.calc;
-  if (!t || !c) return String(texte);
-  return String(texte).replace(/\{([a-z_]+)(?::([a-z0-9_]+))?\}/g, (tout, nom, cle) => {
-    const type = cle && t.types[cle];
-    switch (nom) {
-      case "prix_min": return nombre(c.prixMin);
-      case "depot": return nombre(t.depot);
-      case "annee": return String(t.annee);
-      case "chien_court": return nombre(t.chien.court);
-      case "chien_long": return nombre(t.chien.long);
-      case "chien_seuil": return String(t.chien.seuil);
-      case "nb_photos": return String(ctx.logement ? ctx.logement.galerie.length : 0);
-      case "prix": return type ? nombre(type.prix) : tout;
-      case "semaine": return type ? nombre(type.prix * 7) : tout;
-      case "min": return type ? String(type.min) : tout;
-      default: return tout;
-    }
+  const c = ctx && ctx.calc, m = (ctx && ctx.maison) || {};
+  if (!c) return String(texte);
+  const s = String(texte);
+  return s.replace(/\{([a-z_]+)(?::([a-z0-9_-]+))?\}/g, (tout, nom, cle, pos) => {
+    const v = valeurJeton(nom, cle, c, m, ctx);
+    if (v === null) return tout;
+    const debutPhrase = pos === 0 || /[.!?]\s+$/.test(s.slice(Math.max(0, pos - 3), pos));
+    return debutPhrase ? v.charAt(0).toUpperCase() + v.slice(1) : v;
   });
 }
-export const nombre = n => Number(n).toLocaleString("fr-FR").replace(/\u202f/g, "\u00a0");
+
+export function valeurJeton(nom, cle, c, m, ctx = {}) {
+  const ligne = cle && c.types && c.types[cle];
+  const ch = m.chien || {};
+  switch (nom) {
+    case "prix_min": return nombre(c.prixMin);
+    case "annee": return String(c.annee);
+    case "compris": return m.compris || "";
+    case "arrivee": return m.arrivee || "";
+    case "depart": return m.depart || "";
+    case "capacite": return String(m.capacite ?? "");
+    case "surface": return String(m.surface ?? "");
+    case "jardin": return String(m.jardin ?? "");
+    case "dist_conche": return String((m.distances || {}).conche ?? "");
+    case "dist_plage": return String((m.distances || {}).plage ?? "");
+    case "depot": return nombre(m.depot ?? 0);
+    case "chien_court": return nombre(ch.court ?? 0);
+    case "chien_long": return nombre(ch.long ?? 0);
+    case "chien_seuil": return String(ch.seuil ?? "");
+    case "nb_photos": return String(ctx.logement && ctx.logement.galerie ? ctx.logement.galerie.length : 0);
+    case "prix": return ligne ? nombre(ligne.prix) : null;
+    case "semaine": return ligne ? nombre(ligne.prix * 7) : null;
+    case "min": return ligne ? String(ligne.min) : null;
+    default: return null;
+  }
+}
+export const nombre = n => Number(n).toLocaleString("fr-FR").replace(/ /g, " ");
 
 // Données pour un <script type="application/json"> : « < » neutralisé pour ne jamais fermer la balise.
-export const jsonScript = obj => JSON.stringify(obj).replace(/</g, "\u003c");
+export const jsonScript = obj => JSON.stringify(obj).replace(/</g, "\\u003c");

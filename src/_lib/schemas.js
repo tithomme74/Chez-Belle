@@ -21,16 +21,17 @@ const seo = (avecOgDescription = true) => objet("Référencement (Google, partag
   description: texte("Description pour Google", { max: 320, lignes: 3 }),
   og_titre: texte("Titre lors d’un partage", { max: 120 }),
   ...(avecOgDescription ? { og_description: texte("Description lors d’un partage", { max: 320, lignes: 2, optionnel: true }) } : {})
-}, { replie: true });
+}, { avance: true });
 
 const bouton = objet("Bouton", {
   label: texte("Texte du bouton", { max: 60 }),
-  lien: lienUrl("Lien"),
-  style: choix("Apparence", [["", "Bouton plein"], ["line", "Bouton contour"], ["lien", "Simple lien"]])
+  lien: lienUrl("Lien", { avance: true }),
+  style: choix("Apparence", [["", "Bouton plein"], ["line", "Bouton contour"], ["lien", "Simple lien"]], { avance: true })
 });
 const boutons = (label = "Boutons") => liste(label, bouton, { max: 3, titre: "label" });
-const lienSimple = (label) => objet(label, { label: texte("Texte", { max: 80 }), lien: lienUrl("Lien") });
+const lienSimple = (label) => objet(label, { label: texte("Texte", { max: 80 }), lien: lienUrl("Lien", { avance: true }) });
 const photos = (label, o) => liste(label, photo("Photo"), { titre: "legende", ...o });
+const minutes = label => nombre(label, { min: 0, max: 600 });
 
 // ---------- Fichiers ----------
 export const SCHEMAS = {
@@ -41,7 +42,7 @@ export const SCHEMAS = {
       utilisateur: texte("Partie avant @", { max: 64, motif: "^[A-Za-z0-9._+-]+$" }),
       domaine: texte("Partie après @", { max: 64, motif: "^[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$" })
     }),
-    airbnb: lienUrl("Annonce Airbnb"),
+    airbnb: lienUrl("Adresse de l’annonce Airbnb"),
     menu: liste("Menu (onglets)", lienSimple("Onglet"), { min: 1, max: 6, titre: "label", avance: true }),
     bouton_reserver: lienSimple("Bouton « réserver » de l’en-tête"),
     pied: objet("Pied de page", {
@@ -55,7 +56,7 @@ export const SCHEMAS = {
   }),
 
   accueil: objet("Accueil", {
-    seo: objet("Référencement (Google, partages)", { ...seo().champs, jsonld: json("Données structurées pour Google") }, { replie: true }),
+    seo: objet("Référencement (Google, partages)", { ...seo().champs, jsonld: json("Données structurées pour Google") }, { avance: true }),
     hero: objet("En-tête", {
       kicker: texte("Surtitre", { max: 80 }),
       titre: texte("Accroche", { max: 120, riche: true }),
@@ -74,7 +75,7 @@ export const SCHEMAS = {
       kicker: texte("Surtitre", { max: 80 }), titre: texte("Titre", { max: 120, riche: true }), texte: long("Texte"),
       cartes: liste("Cartes de prix", objet("Carte", {
         titre: texte("Titre", { max: 60 }), dates: texte("Dates ou sous-titre", { max: 120 }),
-        types: liste("Périodes de prix concernées", texte("Période", { max: 30, ref: "tarifs.types" }), { min: 1, max: 6 }),
+        types: liste("Périodes de prix concernées", texte("Période", { max: 30, ref: "tarifs.lignes" }), { min: 1, max: 6 }),
         unite: choix("Prix affiché", [["nuit", "à la nuit"], ["semaine", "à la semaine"]]),
         vedette: texte("Étiquette mise en avant (vide = aucune)", { max: 40, optionnel: true })
       }), { min: 1, max: 4, titre: "titre", aide: "Les prix et durées sont calculés à partir des tarifs" }),
@@ -110,50 +111,54 @@ export const SCHEMAS = {
     boutons: boutons()
   }),
 
-  tarifs: objet("Tarifs et calendrier", {
-    annee: nombre("Année de la grille", { min: 2026, max: 2100 }),
-    types: { type: "dictionnaire", label: "Périodes de prix", cle: cle("Code de la période"), de: objet("Période", {
-      label: texte("Nom affiché dans l’estimation", { max: 60 }),
+  tarifs: objet("Mes prix", {
+    lignes: liste("Périodes", objet("Période", {
+      id: texte("Identifiant interne", { max: 40, motif: "^[a-z0-9-]+$", cache: true }),
+      nom: texte("Période", { max: 40 }),
+      dates: liste("Dates (arrivée → départ)", objet("Dates", { du: date("Arrivée"), au: date("Départ") }), { min: 1, max: 8 }),
       prix: nombre("Prix par nuit (€)", { min: 1, max: 2000 }),
-      min: nombre("Durée minimale (nuits)", { min: 1, max: 60 }),
-      arrivees: liste("Dates d’arrivée imposées (semaine fixe, ex. Noël)", date("Arrivée"), { max: 10, optionnel: true })
-    }), max: 20 },
-    calendrier: liste("Calendrier : quelle période s’applique à chaque nuit", objet("Plage de dates", {
-      du: date("Première nuit"), au: date("Dernière nuit (incluse)"), type: texte("Période", { max: 30, ref: "tarifs.types" })
-    }), { min: 1, max: 60, titre: "du" }),
-    grille: liste("Lignes de la grille affichée", objet("Ligne", {
-      type: texte("Période de prix", { max: 30, ref: "tarifs.types" }),
-      titre: texte("Titre", { max: 60 }), etiquette: texte("Étiquette (vide = aucune)", { max: 30, optionnel: true }),
-      dates: texte("Dates affichées", { max: 160, riche: true }),
-      style: choix("Mise en avant", [["", "Normale"], ["calme", "Plus calme"], ["peak", "Haute saison"]]),
-      unite: choix("Prix affiché", [["nuit", "à la nuit"], ["semaine", "à la semaine"]])
-    }), { min: 1, max: 15, titre: "titre" }),
-    chien: objet("Supplément chien", {
-      court: nombre("Montant pour un séjour court (€)", { max: 500 }), long: nombre("Montant au-delà (€)", { max: 500 }),
+      min: nombre("Minimum (nuits)", { min: 1, max: 60 }),
+      semaine_fixe: booleen("Semaine fixe : arrivée seulement le premier jour de chaque plage (ex. Noël)"),
+      prix_semaine: booleen("Afficher le prix à la semaine"),
+      mise_en_avant: choix("Mise en avant dans la grille", [["", "Aucune"], ["calme", "Période calme"], ["peak", "Haute saison"]]),
+      etiquette: texte("Petite étiquette (ex. « plus calme »)", { max: 30, optionnel: true }),
+      dates_texte: texte("Dates écrites dans la grille (vide = automatique)", { max: 160, riche: true, optionnel: true })
+    }), { min: 1, max: 15, titre: "nom" })
+  }),
+
+  maison: objet("Ce qui est compris", {
+    compris: texte("En quelques mots, ce qui est compris", { max: 80, aide: "repris sur tout le site, ex. « linge et ménage compris »" }),
+    capacite: nombre("Nombre de voyageurs au maximum", { min: 1, max: 20 }),
+    surface: nombre("Surface du logement (m²)", { min: 1, max: 1000 }),
+    jardin: nombre("Surface du jardin (m²)", { min: 0, max: 100000 }),
+    arrivee: texte("Arrivée à partir de", { max: 10, motif: "^[0-9]{1,2} h( [0-9]{2})?$", aide: "ex. 16 h" }),
+    depart: texte("Départ avant", { max: 10, motif: "^[0-9]{1,2} h( [0-9]{2})?$", aide: "ex. 10 h" }),
+    distances: objet("À pied depuis la maison", { conche: minutes("Minutes jusqu’à la conche"), plage: minutes("Minutes jusqu’à la plage de Pontaillac") }),
+    depot: nombre("Dépôt de garantie (€)", { max: 10000 }),
+    chien: objet("Chien", {
+      court: nombre("Prix pour un séjour court (€)", { max: 500 }), long: nombre("Prix au-delà (€)", { max: 500 }),
       seuil: nombre("Séjour court jusqu’à (nuits)", { min: 1, max: 60 })
     }),
-    depot: nombre("Dépôt de garantie (€)", { max: 10000 }),
-    formulaire: objet("Formulaire de demande", {
-      arrivee_min: date("Arrivée au plus tôt"), arrivee_max: date("Arrivée au plus tard"),
-      depart_min: date("Départ au plus tôt"), depart_max: date("Départ au plus tard"),
-      voyageurs_max: nombre("Voyageurs maximum", { min: 1, max: 20 }), voyageurs_defaut: nombre("Voyageurs proposés par défaut", { min: 1, max: 20 }),
-      enfants_max: nombre("Enfants maximum", { max: 20 })
-    })
+    services: liste("Services", objet("Service", {
+      nom: texte("Service", { max: 120 }),
+      statut: choix("Statut", [["compris", "Compris"], ["sur_demande", "Sur demande"], ["en_plus", "En plus"], ["non", "Non proposé"]]),
+      precision: texte("Précision (ex. « gratuits, sur demande »)", { max: 160, optionnel: true })
+    }), { max: 30, titre: "nom" })
   }),
 
   reservation: objet("Tarifs et réservation (textes)", {
     seo: seo(false),
     entete: objet("En-tête", { kicker: texte("Surtitre", { max: 80 }), titre: texte("Titre", { max: 120, riche: true }), texte: long("Texte"), boutons: boutons() }),
     grille: objet("Grille", { titre: texte("Titre", { max: 120, riche: true }), secret: texte("Phrase sous la grille", { max: 300, riche: true, optionnel: true }) }),
-    compris: objet("Compris dans le prix", { titre: texte("Titre", { max: 80, riche: true }), liste: liste("Éléments", texte("Élément", { max: 200, riche: true }), { max: 12 }) }),
-    en_plus: objet("En plus", { titre: texte("Titre", { max: 80, riche: true }), liste: liste("Éléments", texte("Élément", { max: 200, riche: true }), { max: 12 }), note: texte("Note", { max: 300, riche: true }) }),
+    compris: objet("Compris dans le prix (la liste vient de « Ce qui est compris »)", { titre: texte("Titre", { max: 80, riche: true }) }),
+    en_plus: objet("En plus (la liste vient de « Ce qui est compris »)", { titre: texte("Titre", { max: 80, riche: true }), note: texte("Note sous la liste", { max: 300, riche: true }) }),
     etapes: objet("Étapes de réservation", { titre: texte("Titre", { max: 80, riche: true }), liste: liste("Étapes", objet("Étape", { titre: texte("Titre", { max: 60 }), texte: texte("Texte", { max: 300, riche: true }) }), { max: 6, titre: "titre" }) }),
     formulaire: objet("Formulaire : libellés", Object.fromEntries([
       ["titre", "Titre"], ["arrivee", "Arrivée"], ["depart", "Départ"], ["voyageurs", "Voyageurs"], ["enfants", "Enfants"], ["chien", "Case chien"],
       ["nom", "Nom"], ["nom_exemple", "Exemple de nom"], ["contact", "Contact"], ["contact_exemple", "Exemple de contact"], ["message", "Message"],
       ["message_exemple", "Exemple de message"], ["bouton", "Bouton d’envoi"], ["estimation_titre", "Titre de l’estimation"], ["estimation_note", "Note sous l’estimation"],
       ["demande_titre", "Titre de la demande prête"], ["copier", "Bouton copier"], ["messagerie", "Bouton messagerie"], ["copiee", "Confirmation de copie"], ["ecrire", "Texte avant l’e-mail"]
-    ].map(([k, l]) => [k, texte(l, { max: 200, riche: k === "estimation_note" })])), { replie: true }),
+    ].map(([k, l]) => [k, texte(l, { max: 200, riche: k === "estimation_note" })])), { avance: true }),
     mot_de_belle: objet("Mot de Belle", { texte: long("Texte (vide = masqué)", { optionnel: true }), signature: texte("Signature", { max: 40 }) }),
     faq: objet("Questions fréquentes", {
       titre: texte("Titre", { max: 80, riche: true }),
@@ -186,6 +191,8 @@ export const SCHEMAS = {
 
 // Fichiers lisibles mais jamais modifiables par l'admin
 export const LECTURE_SEULE = ["avis"];
+// Ordre de lecture pour les contrôles de cohérence entre fichiers
+export const LIES = ["tarifs", "accueil", "autour", "maison"];
 export const FICHIERS = [...Object.keys(SCHEMAS), ...LECTURE_SEULE];
 
 // ---------- Validation ----------
@@ -245,8 +252,6 @@ export function valider(schema, v, chemin = "") {
         for (const k of ["largeur", "hauteur"]) { if (!Number.isInteger(x[k]) || x[k] < 1 || x[k] > 10000) err(c + "." + k, `Photo : ${k} non valide.`); r[k] = x[k]; }
         r.alt = v1(texte("Description de la photo (pour les malvoyants et Google)", { max: 200 }), x.alt, c + ".alt");
         if (x.legende !== undefined) r.legende = v1(texte("Légende", { max: 60, optionnel: true }), x.legende, c + ".legende");
-        if (x.forme !== undefined) { if (!["big", "tall", "normale"].includes(x.forme)) err(c + ".forme", "Photo : forme non prévue."); r.forme = x.forme; }
-        if (x.masquee !== undefined) r.masquee = x.masquee === true;
         return r;
       }
       case "liste": {
@@ -286,23 +291,26 @@ export function valider(schema, v, chemin = "") {
 export function coherence(nom, d, tous = {}) {
   const e = [];
   const err = (c, m) => e.push({ chemin: c, message: m });
-  const types = nom === "tarifs" ? d.types : (tous.tarifs || {}).types || {};
+  const lignesPrix = nom === "tarifs" ? d.lignes : ((tous.tarifs || {}).lignes || []);
+  const idsPrix = new Set(lignesPrix.map(l => l.id));
   if (nom === "tarifs") {
-    const tri = [...d.calendrier].map((p, i) => ({ ...p, i })).sort((a, b) => a.du.localeCompare(b.du));
-    tri.forEach((p, k) => {
-      if (!types[p.type]) err(`calendrier[${p.i}].type`, `Période « ${p.type} » inconnue.`);
-      if (p.au < p.du) err(`calendrier[${p.i}]`, `La plage du ${p.du} finit avant de commencer.`);
-      if (k > 0 && p.du <= tri[k - 1].au) err(`calendrier[${p.i}]`, `La plage du ${p.du} chevauche celle du ${tri[k - 1].du}.`);
-    });
-    d.grille.forEach((g, i) => { if (!types[g.type]) err(`grille[${i}].type`, `Période « ${g.type} » inconnue.`); });
-    for (const [k, t] of Object.entries(d.types)) (t.arrivees || []).forEach((a, i) => { if (!d.calendrier.some(p => p.type === k && p.du <= a && a <= p.au)) err(`types.${k}.arrivees[${i}]`, `L’arrivée du ${a} n’est pas dans une plage « ${k} » du calendrier.`); });
-    const f = d.formulaire;
-    if (f.arrivee_max < f.arrivee_min) err("formulaire.arrivee_max", "L’arrivée au plus tard précède l’arrivée au plus tôt.");
-    if (f.depart_max < f.depart_min) err("formulaire.depart_max", "Le départ au plus tard précède le départ au plus tôt.");
-    if (f.voyageurs_defaut > f.voyageurs_max) err("formulaire.voyageurs_defaut", "Plus de voyageurs par défaut que le maximum.");
-    if (tous.accueil) tous.accueil.zoom.cartes.forEach((c, i) => c.types.forEach(t => { if (!types[t]) err("types", `La carte « ${c.titre} » de l’accueil utilise la période « ${t} » : ne la supprimez pas, ou modifiez d’abord l’accueil.`); }));
+    if (idsPrix.size !== d.lignes.length) err("lignes", "Deux périodes ont le même identifiant interne.");
+    const plages = [];
+    d.lignes.forEach((l, i) => l.dates.forEach((p, k) => {
+      if (p.au <= p.du) err(`lignes[${i}].dates[${k}]`, `« ${l.nom} » : le départ doit être après l’arrivée.`);
+      else plages.push({ i, k, nom: l.nom, du: p.du, au: p.au, duree: Date.parse(p.au) - Date.parse(p.du) });
+      if (l.semaine_fixe && p.au > p.du && Math.round((Date.parse(p.au) - Date.parse(p.du)) / 864e5) !== l.min)
+        err(`lignes[${i}].dates[${k}]`, `« ${l.nom} » : en semaine fixe, chaque plage doit durer exactement ${l.min} nuits.`);
+    }));
+    // Deux plages qui se chevauchent : la plus courte l'emporte ; à durée égale, c'est ambigu
+    for (let a = 0; a < plages.length; a++) for (let b = a + 1; b < plages.length; b++) {
+      const x = plages[a], y = plages[b];
+      if (x.du < y.au && y.du < x.au && x.duree === y.duree && x.i !== y.i)
+        err(`lignes[${y.i}].dates[${y.k}]`, `« ${y.nom} » et « ${x.nom} » ont les mêmes dates : impossible de savoir quel prix appliquer.`);
+    }
+    if (tous.accueil) tous.accueil.zoom.cartes.forEach(c => c.types.forEach(t => { if (!idsPrix.has(t)) err("lignes", `La carte « ${c.titre} » de l’accueil utilise une période supprimée : modifiez d’abord l’encadré prix de l’accueil.`); }));
   }
-  if (nom === "accueil") d.zoom.cartes.forEach((c, i) => c.types.forEach((t, j) => { if (!types[t]) err(`zoom.cartes[${i}].types[${j}]`, `Période « ${t} » inconnue dans les tarifs.`); }));
+  if (nom === "accueil") d.zoom.cartes.forEach((c, i) => c.types.forEach((t, j) => { if (!idsPrix.has(t)) err(`zoom.cartes[${i}].types[${j}]`, `Période « ${t} » inconnue dans les prix.`); }));
   if (nom === "autour") {
     const zones = new Set(d.zones.map(z => z.cle)), filtres = new Set(d.filtres.map(f => f.cle));
     if (zones.size !== d.zones.length) err("zones", "Deux colonnes ont le même code.");

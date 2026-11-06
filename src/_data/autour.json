@@ -186,8 +186,8 @@
   },
   "appel": {
     "kicker": "Vos dates",
-    "titre": "La plage à 5 minutes, le reste à vélo",
-    "texte": "Dès {prix_min} € la nuit, linge et ménage compris. Réponse de Belle sous 24 heures.",
+    "titre": "La plage à {dist_conche} minutes, le reste à vélo",
+    "texte": "Dès {prix_min} € la nuit, {compris}. Réponse de Belle sous 24 heures.",
     "boutons": [
       {
         "label": "Demander mes dates",

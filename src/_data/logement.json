@@ -1,14 +1,14 @@
 {
   "seo": {
-    "titre": "Le logement : rez-de-jardin de 55 m² à Pontaillac | Chez Belle",
-    "description": "Chez Belle, rez-de-jardin indépendant de 55 m² à Vaux-sur-Mer : pièce à vivre, chambre, douche à l’italienne, jardin clos de 200 m² sous les pins. Lits faits, linge et ménage compris. Toutes les photos.",
+    "titre": "Le logement : rez-de-jardin de {surface} m² à Pontaillac | Chez Belle",
+    "description": "Chez Belle, rez-de-jardin indépendant de {surface} m² à Vaux-sur-Mer : pièce à vivre, chambre, douche à l’italienne, jardin clos de {jardin} m² sous les pins. Lits faits, {compris}. Toutes les photos.",
     "og_titre": "Chez Belle · le logement et ses prestations",
-    "og_description": "Rez-de-jardin de 55 m² au calme à Pontaillac, jardin clos et ombragé, linge et ménage compris, chien bienvenu."
+    "og_description": "Rez-de-jardin de {surface} m² au calme à Pontaillac, jardin clos et ombragé, {compris}, chien bienvenu."
   },
   "entete": {
     "kicker": "Le logement",
-    "titre": "55 m² de plain-pied, ouverts sur un jardin sous les pins",
-    "texte": "Pour 4 personnes au maximum, au calme, à 7 minutes à pied de la plage de Pontaillac."
+    "titre": "{surface} m² de plain-pied, ouverts sur un jardin sous les pins",
+    "texte": "Pour {capacite} personnes au maximum, au calme, à {dist_plage} minutes à pied de la plage de Pontaillac."
   },
   "galerie": [
     {
@@ -26,8 +26,7 @@
       "largeur": 960,
       "hauteur": 720,
       "alt": "Le jardin sous les pins, avec deux transats",
-      "legende": "Le jardin",
-      "forme": "big"
+      "legende": "Le jardin"
     },
     {
       "src": "/photos/piece-a-vivre-960.webp",
@@ -44,8 +43,7 @@
       "largeur": 960,
       "hauteur": 1280,
       "alt": "Le salon avec canapé-lit et fauteuil en rotin",
-      "legende": "Le salon",
-      "forme": "tall"
+      "legende": "Le salon"
     },
     {
       "src": "/photos/chambre-960.webp",
@@ -62,8 +60,7 @@
       "largeur": 960,
       "hauteur": 1280,
       "alt": "La chambre, lits rapprochés en grand lit",
-      "legende": "La chambre",
-      "forme": "tall"
+      "legende": "La chambre"
     },
     {
       "src": "/photos/cuisine-960.webp",
@@ -80,8 +77,7 @@
       "largeur": 720,
       "hauteur": 540,
       "alt": "La cuisine équipée",
-      "legende": "La cuisine",
-      "forme": "normale"
+      "legende": "La cuisine"
     },
     {
       "src": "/photos/salle-de-douche-960.webp",
@@ -98,71 +94,60 @@
       "largeur": 960,
       "hauteur": 720,
       "alt": "La salle de douche à l’italienne",
-      "legende": "La douche",
-      "forme": "normale"
+      "legende": "La douche"
     },
     {
       "src": "/photos/galerie-1-960.webp",
       "largeur": 960,
       "hauteur": 1280,
       "alt": "Le coin repas et sa table en bois",
-      "legende": "Le coin repas",
-      "forme": "normale",
-      "masquee": true
+      "legende": "Le coin repas"
     },
     {
       "src": "/photos/terrasse-960.webp",
       "largeur": 960,
       "hauteur": 720,
       "alt": "Le côté terrasse du jardin, en fleurs",
-      "legende": "Le côté terrasse",
-      "forme": "normale",
-      "masquee": true
+      "legende": "Le côté terrasse"
     },
     {
       "src": "/photos/galerie-2-480.webp",
       "largeur": 480,
       "hauteur": 640,
       "alt": "L’entrée, avec la porte ouverte sur le jardin",
-      "legende": "L’entrée",
-      "forme": "normale",
-      "masquee": true
+      "legende": "L’entrée"
     },
     {
       "src": "/photos/salle-a-manger-480.webp",
       "largeur": 480,
       "hauteur": 388,
       "alt": "La table de la salle à manger dressée",
-      "legende": "La table",
-      "forme": "normale",
-      "masquee": true
+      "legende": "La table"
     },
     {
       "src": "/photos/galerie-3-480.webp",
       "largeur": 480,
       "hauteur": 640,
       "alt": "La buanderie avec lave-linge",
-      "legende": "La buanderie",
-      "forme": "normale",
-      "masquee": true
+      "legende": "La buanderie"
     }
   ],
   "bouton_photos": "Voir les {nb_photos} photos",
   "chiffres": [
     {
-      "valeur": "55 m²",
+      "valeur": "{surface} m²",
       "texte": "de plain-pied, entrée indépendante"
     },
     {
-      "valeur": "4 personnes",
+      "valeur": "{capacite} personnes",
       "texte": "1 chambre et 1 canapé-lit"
     },
     {
-      "valeur": "200 m²",
+      "valeur": "{jardin} m²",
       "texte": "de jardin clos, sous les pins"
     },
     {
-      "valeur": "7 min",
+      "valeur": "{dist_plage} min",
       "texte": "à pied jusqu’à la plage"
     }
   ],
@@ -180,7 +165,7 @@
       {
         "titre": "Dehors",
         "points": [
-          "Un jardin clos de 200 m², à l’ombre des pins",
+          "Un jardin clos de {jardin} m², à l’ombre des pins",
           "Une table sous l’auvent pour dîner dehors",
           "Barbecue Weber et 2 transats"
         ]
@@ -246,7 +231,7 @@
     },
     {
       "kicker": "La maison",
-      "texte": "Non-fumeur, ni fête ni réception. Arrivée dès 16 h, départ avant 10 h."
+      "texte": "Non-fumeur, ni fête ni réception. Arrivée dès {arrivee}, départ avant {depart}."
     }
   ],
   "avis_fixe": {

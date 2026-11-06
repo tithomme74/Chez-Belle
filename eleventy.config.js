@@ -14,7 +14,7 @@ export default function (eleventyConfig) {
   eleventyConfig.addGlobalData("eleventyComputed", {
     // Chemin relatif vers la racine du site : "" pour l'accueil, "../" pour les onglets (liens relatifs conservés)
     racine: data => "../".repeat(Math.max(0, (data.page.url || "/").split("/").filter(Boolean).length)),
-    calc: data => calculer(data.tarifs, data.accueil)
+    calc: data => calculer(data.tarifs, data.accueil, data.maison)
   });
   if (process.env.CB_DONNEES) {
     // Le dossier du brouillon est ignoré par Git : sans ceci, Eleventy ne surveillerait pas ses changements

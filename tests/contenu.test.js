@@ -2,10 +2,10 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
-import { riche, lien, jetons } from "../src/_lib/contenu.js";
+import { riche, lien, jetons, jsonScript } from "../src/_lib/contenu.js";
 import { calculer } from "../src/_lib/calc.js";
 const lireJson = n => JSON.parse(fs.readFileSync(`src/_data/${n}.json`, "utf8"));
-const calc = () => calculer(lireJson("tarifs"), lireJson("accueil"));
+const calc = () => calculer(lireJson("tarifs"), lireJson("accueil"), lireJson("maison"));
 
 test("riche : balises autorisées conservées", () => {
   assert.equal(riche("<b>a</b> <em>b</em> 1<sup>er</sup><br>&nbsp;€"), "<b>a</b> <em>b</em> 1<sup>er</sup><br>&nbsp;€");
@@ -25,15 +25,14 @@ test("lien : relatif à la page", () => {
   assert.equal(lien("/autour/", ""), "autour/"); assert.equal(lien("#reserver", "../"), "#reserver");
 });
 test("jetons : valeurs lues dans les tarifs", () => {
-  const tarifs = JSON.parse(fs.readFileSync("src/_data/tarifs.json", "utf8"));
-  const ctx = { tarifs, calc: calc(), logement: { galerie: [1, 2, 3] } };
+  const ctx = { maison: lireJson("maison"), calc: calc(), logement: { galerie: [1, 2, 3] } };
   assert.equal(jetons("Dès {prix_min} €, dépôt {depot} €, {semaine:coeur} €, {nb_photos} photos, {annee}, {inconnu}", ctx),
     "Dès 80 €, dépôt 300 €, 805 €, 3 photos, 2027, {inconnu}");
 });
 test("une modification de prix se répercute partout", () => {
   const c = calc();
   assert.equal(c.prixMin, 80);
-  assert.equal(c.grille.find(g => g.type === "coeur").prix, "805 €");
+  assert.equal(c.grille.find(g => g.titre === "Cœur de l’été").prix, "805 €");
   assert.deepEqual(c.zoom.map(z => z.prix), ["80 €", "90 à 105 €", "805 €"]);
   assert.deepEqual(c.zoom.map(z => z.sejour), ["3 nuits minimum", "3 ou 4 nuits minimum", "7 nuits minimum"]);
 });
@@ -86,4 +85,36 @@ test("liens : barre oblique inversée et espaces refusés (redirection vers un a
 test("gabarits : textes saisis jamais interprétés comme du code de gabarit", async () => {
   // Le contenu est une donnée : « {{ 7*7 }} » doit s'afficher tel quel (vérifié aussi à la main au lot 7)
   assert.equal(riche("{{ 7*7 }} {% raw %}"), "{{ 7*7 }} {% raw %}");
+});
+
+test("pastilles : valeurs de la fiche, majuscule en début de phrase seulement", () => {
+  const ctx = { maison: lireJson("maison"), calc: calc() };
+  assert.equal(jetons("{compris}. Arrivée dès {arrivee}, {capacite} voyageurs, {surface}&nbsp;m², lits faits, {compris}.", ctx),
+    "Linge et ménage compris. Arrivée dès 16 h, 4 voyageurs, 55&nbsp;m², lits faits, linge et ménage compris.");
+  assert.equal(jetons("dès <b>{prix_min} €</b><br>{compris}", ctx), "dès <b>80 €</b><br>linge et ménage compris");
+  assert.equal(jetons("{prix:noel} € · {semaine:coeur} € · {prix:inconnu}", ctx), "85 € · 805 € · {prix:inconnu}");
+});
+
+test("prix en lignes : calendrier nuit par nuit (la plage la plus courte l'emporte), bornes du formulaire, dates en clair", async () => {
+  const { datesEnClair } = await import("../src/_lib/calc.js");
+  const c = calc();
+  const nuit = s => c.calendrier.find(p => p.du <= s && s <= p.au)?.type;
+  assert.equal(nuit("2027-05-01"), "ponts"); assert.equal(nuit("2027-05-02"), "mai-juin");
+  assert.equal(nuit("2027-05-08"), "ponts"); assert.equal(nuit("2027-05-09"), "mai-juin");
+  assert.equal(nuit("2027-06-20"), "mai-juin"); assert.equal(nuit("2027-06-21"), "juillet");
+  assert.equal(nuit("2027-12-31"), "noel"); assert.equal(nuit("2027-10-01"), undefined);
+  assert.deepEqual(c.formulaire, { arrivee_min: "2027-05-01", arrivee_max: "2027-12-31", depart_min: "2027-05-02", depart_max: "2028-01-01", voyageurs_max: 4, voyageurs_defaut: 2, enfants_max: 3 });
+  assert.equal(c.annee, 2027);
+  assert.equal(datesEnClair([{ du: "2027-05-01", au: "2027-05-02" }, { du: "2027-05-06", au: "2027-05-09" }, { du: "2027-06-21", au: "2027-07-07" }]), "1er mai · 6 – 9 mai · 21 juin – 7 juillet");
+  assert.deepEqual(c.types.noel.arrivees, ["2027-12-18", "2027-12-25"]);
+});
+
+test("services : listes « compris » et « en plus » tirées de la fiche", () => {
+  const c = calc();
+  assert.equal(c.compris.length, 5);
+  assert.deepEqual(c.enPlus, ["Taxe de séjour : par adulte et par nuit, mineurs exonérés", "Chien : {chien_court} € jusqu’à {chien_seuil} nuits, {chien_long} € au-delà", "Lit parapluie et chaise haute : gratuits, sur demande"]);
+});
+
+test("données dans une balise script : « </script> » neutralisé", () => {
+  assert.equal(jsonScript({ a: "</script><script>alert(1)</script>" }).includes("</script>"), false);
 });

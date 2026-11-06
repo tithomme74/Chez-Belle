@@ -12,7 +12,9 @@
 {% for s in p.srcset %}{{ s[0] | lien }} {{ s[1] }}w{% if not loop.last %}, {% endif %}{% endfor %}
 {%- endmacro %}
 
-{#- Photo de galerie. forme : big, tall ou normale ; masquee : visible seulement en grand ; tailles selon la forme -#}
-{%- macro figure(p, paresseuse=true, tailles=null) -%}
-<figure{% if p.forme and p.forme != "normale" %} class="{{ p.forme }}"{% endif %}{% if p.masquee %} hidden{% endif %}><img src="{{ p.src | lien }}"{% if p.srcset and not p.masquee %} srcset="{{ srcset(p) }}" sizes="{{ tailles or ('(max-width: 900px) 100vw, 560px' if p.forme == 'big' else '(max-width: 900px) 50vw, 280px') }}"{% endif %} width="{{ p.largeur }}" height="{{ p.hauteur }}"{% if paresseuse %} loading="lazy"{% endif %} alt="{{ p.alt }}">{% if p.legende %}<figcaption>{{ p.legende }}</figcaption>{% endif %}</figure>
+{#- Photo de galerie : la 1re est grande, les suivantes hautes (portrait) ou normales ; à partir de la 6e, visibles seulement en grand -#}
+{%- macro figure(p, rang=0, paresseuse=true, tailles=null) -%}
+{%- set forme = "big" if rang == 0 else ("tall" if p.hauteur > p.largeur and rang < 5 else "normale") -%}
+{%- set masquee = rang >= 5 -%}
+<figure{% if forme != "normale" %} class="{{ forme }}"{% endif %}{% if masquee %} hidden{% endif %}><img src="{{ p.src | lien }}"{% if p.srcset and not masquee %} srcset="{{ srcset(p) }}" sizes="{{ tailles or ('(max-width: 900px) 100vw, 560px' if forme == 'big' else '(max-width: 900px) 50vw, 280px') }}"{% endif %} width="{{ p.largeur }}" height="{{ p.hauteur }}"{% if paresseuse %} loading="lazy"{% endif %} alt="{{ p.alt }}">{% if p.legende %}<figcaption>{{ p.legende }}</figcaption>{% endif %}</figure>
 {%- endmacro %}

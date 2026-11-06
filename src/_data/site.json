@@ -52,5 +52,5 @@
       }
     ]
   },
-  "barre": "dès <b>{prix_min} €</b> la nuit<br>linge et ménage compris"
+  "barre": "dès <b>{prix_min} €</b> la nuit<br>{compris}"
 }
