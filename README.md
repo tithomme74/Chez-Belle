@@ -6,7 +6,8 @@ depuis la branche `main` : https://chez-belle-pontaillac.netlify.app
 
 ## Travailler en local
 
-- `npm install` (une fois), puis `npm run dev` : site sur http://localhost:8765, rechargé à chaque modification.
+- `npm install` (une fois), puis `npm run mot-de-passe -- --local` (une fois : crée `.env` avec un mot de passe de test, noté en commentaire dans ce fichier).
+- `npm run dev` : site et API de l'admin sur http://localhost:8765 ; chaque contenu enregistré reconstruit le site.
 - `npm run build` : produit le site dans `_site/` (ce que Netlify publie, voir `netlify.toml`).
 - `npm test` : reconstruit et vérifie que les pages restent identiques aux références de `tests/reference/`.
 
@@ -42,6 +43,14 @@ Tous les textes, prix, listes et photos sont dans des fichiers JSON, un par page
 - **Tarifs saisis une seule fois** : la grille, le zoom de l'accueil, la barre du bas et l'estimation sont calculés depuis `tarifs.json` (`src/_data/calc.js`).
 - **Jetons** utilisables dans les textes : `{prix_min}`, `{depot}`, `{annee}`, `{chien_court}`, `{chien_long}`, `{chien_seuil}`, `{nb_photos}`, `{prix:noel}`, `{semaine:coeur}`, `{min:juillet}`.
 - **Mise en forme** autorisée dans les textes : `<b>`, `<em>`, `<sup>`, `<br>`, `<a href>` (liens internes écrits depuis la racine, ex. `/autour/`). Tout le reste est neutralisé (`src/_lib/contenu.js`).
+
+## API de l'admin (api/)
+
+- `api/app.js` : routes `/api/connexion`, `/api/deconnexion`, `/api/session`, `/api/contenus`, `/api/contenus/<nom>` (lecture, enregistrement).
+- `api/auth.js` : mot de passe unique (empreinte scrypt), cookie de session signé (HttpOnly, Secure, SameSite=Strict, 8 h), blocage après 5 essais ratés (15 min) et 30 au total par heure.
+- `src/_lib/schemas.js` : schéma de chaque contenu (libellés, limites, formats) ; tout enregistrement est validé puis contrôlé (dates qui se chevauchent, périodes inconnues…). `avis` est en lecture seule.
+- `api/stockage.js` : en local, écrit dans `src/_data/` ; en ligne, écrit sur GitHub (branche de brouillon) via `netlify/functions/api.mjs`.
+- En ligne, variables Netlify à définir : voir `.env.exemple` et l'en-tête de `netlify/functions/api.mjs`. `npm run mot-de-passe -- "…"` calcule l'empreinte du vrai mot de passe.
 
 ## Avis et notes Airbnb
 

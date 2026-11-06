@@ -1,15 +1,33 @@
 {
   "url": "https://chez-belle-pontaillac.netlify.app",
   "nom": "Chez Belle",
-  "email": { "utilisateur": "chez.belle.pontaillac", "domaine": "gmail.com" },
+  "email": {
+    "utilisateur": "chez.belle.pontaillac",
+    "domaine": "gmail.com"
+  },
   "airbnb": "https://www.airbnb.fr/rooms/25931091",
   "menu": [
-    { "lien": "/", "label": "Accueil" },
-    { "lien": "/chez-belle/", "label": "Le logement" },
-    { "lien": "/tarifs-reservation/", "label": "Tarifs" },
-    { "lien": "/autour/", "label": "Autour" }
+    {
+      "lien": "/",
+      "label": "Accueil"
+    },
+    {
+      "lien": "/chez-belle/",
+      "label": "Le logement"
+    },
+    {
+      "lien": "/tarifs-reservation/",
+      "label": "Tarifs"
+    },
+    {
+      "lien": "/autour/",
+      "label": "Autour"
+    }
   ],
-  "bouton_reserver": { "label": "Demander mes dates", "lien": "/tarifs-reservation/#reserver" },
+  "bouton_reserver": {
+    "label": "Demander mes dates",
+    "lien": "/tarifs-reservation/#reserver"
+  },
   "pied": {
     "presentation": "Location de vacances de particulier · quartier de Pontaillac, 17640 Vaux-sur-Mer",
     "legal_titre": "Informations légales",
@@ -20,9 +38,18 @@
     ],
     "liens_titre": "Liens",
     "liens": [
-      { "label": "Tous les avis sur Airbnb", "lien": "https://www.airbnb.fr/rooms/25931091" },
-      { "label": "Demander mes dates", "lien": "/tarifs-reservation/#reserver" },
-      { "label": "Vos questions", "lien": "/tarifs-reservation/#questions" }
+      {
+        "label": "Tous les avis sur Airbnb",
+        "lien": "https://www.airbnb.fr/rooms/25931091"
+      },
+      {
+        "label": "Demander mes dates",
+        "lien": "/tarifs-reservation/#reserver"
+      },
+      {
+        "label": "Vos questions",
+        "lien": "/tarifs-reservation/#questions"
+      }
     ]
   },
   "barre": "dès <b>{prix_min} €</b> la nuit<br>linge et ménage compris"

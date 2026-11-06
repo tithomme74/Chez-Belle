@@ -4,10 +4,14 @@
   "type": "module",
   "scripts": {
     "build": "eleventy",
-    "dev": "eleventy --serve --port=8765",
+    "dev": "node scripts/serveur-local.js",
+    "mot-de-passe": "node scripts/mot-de-passe.js",
     "test": "eleventy --quiet && node --test tests/*.test.js"
   },
   "devDependencies": {
     "@11ty/eleventy": "3.1.7"
+  },
+  "dependencies": {
+    "@netlify/blobs": "11.1.6"
   }
 }

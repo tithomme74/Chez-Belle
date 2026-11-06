@@ -35,3 +35,14 @@ test("une modification de prix se répercute partout", () => {
   assert.deepEqual(c.zoom.map(z => z.prix), ["80 €", "90 à 105 €", "805 €"]);
   assert.deepEqual(c.zoom.map(z => z.sejour), ["3 nuits minimum", "3 ou 4 nuits minimum", "7 nuits minimum"]);
 });
+
+test("les contenus actuels respectent leurs schémas (sans perte)", async () => {
+  const { SCHEMAS, valider, coherence } = await import("../src/_lib/schemas.js");
+  const tous = Object.fromEntries(Object.keys(SCHEMAS).map(n => [n, JSON.parse(fs.readFileSync(`src/_data/${n}.json`, "utf8"))]));
+  for (const n of Object.keys(SCHEMAS)) {
+    const r = valider(SCHEMAS[n], tous[n]);
+    assert.deepEqual(r.erreurs, [], n);
+    assert.deepEqual(coherence(n, r.valeur, tous), [], n);
+    assert.deepEqual(r.valeur, tous[n], n + " : rien ne doit être perdu à l'enregistrement");
+  }
+});

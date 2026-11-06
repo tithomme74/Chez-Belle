@@ -10,30 +10,173 @@
     "texte": "La mer au bout de la rue, Royan par la piste cyclable, la Côte de Beauté à moins de 30 minutes."
   },
   "filtres": [
-    { "cle": "plage",   "label": "Plages",           "conseil": "Saint-Sordelin pour le calme, Pontaillac pour l’animation et la surveillance en été.", "encadre": false },
-    { "cle": "balade",  "label": "Balades",          "conseil": "Le sentier des douaniers est à son plus beau au coucher du soleil.", "encadre": false },
-    { "cle": "enfants", "label": "Avec des enfants", "conseil": "Lit parapluie et chaise haute prêtés gratuitement par Belle, sur demande.", "encadre": false },
-    { "cle": "pluie",   "label": "Jour de pluie",    "conseil": "Le marché couvert de Royan le matin, les grottes de Meschers l’après-midi.", "encadre": false },
-    { "cle": "chien",   "label": "Avec un chien",    "conseil": "Du 1<sup>er</sup> avril au 30 septembre, chiens interdits, même en laisse, sur les plages de Royan, dont Pontaillac, et à Saint-Sordelin. Le sentier des douaniers leur est ouvert.", "encadre": true },
-    { "cle": "marche",  "label": "Marchés",          "conseil": "Vaux-sur-Mer : tous les matins en juillet-août ; mardi, jeudi et samedi matin d’avril à juin et en septembre.", "encadre": false }
+    {
+      "cle": "plage",
+      "label": "Plages",
+      "conseil": "Saint-Sordelin pour le calme, Pontaillac pour l’animation et la surveillance en été.",
+      "encadre": false
+    },
+    {
+      "cle": "balade",
+      "label": "Balades",
+      "conseil": "Le sentier des douaniers est à son plus beau au coucher du soleil.",
+      "encadre": false
+    },
+    {
+      "cle": "enfants",
+      "label": "Avec des enfants",
+      "conseil": "Lit parapluie et chaise haute prêtés gratuitement par Belle, sur demande.",
+      "encadre": false
+    },
+    {
+      "cle": "pluie",
+      "label": "Jour de pluie",
+      "conseil": "Le marché couvert de Royan le matin, les grottes de Meschers l’après-midi.",
+      "encadre": false
+    },
+    {
+      "cle": "chien",
+      "label": "Avec un chien",
+      "conseil": "Du 1<sup>er</sup> avril au 30 septembre, chiens interdits, même en laisse, sur les plages de Royan, dont Pontaillac, et à Saint-Sordelin. Le sentier des douaniers leur est ouvert.",
+      "encadre": true
+    },
+    {
+      "cle": "marche",
+      "label": "Marchés",
+      "conseil": "Vaux-sur-Mer : tous les matins en juillet-août ; mardi, jeudi et samedi matin d’avril à juin et en septembre.",
+      "encadre": false
+    }
   ],
   "zones": [
-    { "cle": "pied",    "titre": "À pied",     "sous_titre": "laissez la voiture au jardin", "vide": "Rien dans cette catégorie à pied." },
-    { "cle": "velo",    "titre": "À vélo",     "sous_titre": "temps indicatifs", "vide": "Rien dans cette catégorie à vélo." },
-    { "cle": "voiture", "titre": "En voiture", "sous_titre": "temps indicatifs", "vide": "Rien dans cette catégorie en voiture." }
+    {
+      "cle": "pied",
+      "titre": "À pied",
+      "sous_titre": "laissez la voiture au jardin",
+      "vide": "Rien dans cette catégorie à pied."
+    },
+    {
+      "cle": "velo",
+      "titre": "À vélo",
+      "sous_titre": "temps indicatifs",
+      "vide": "Rien dans cette catégorie à vélo."
+    },
+    {
+      "cle": "voiture",
+      "titre": "En voiture",
+      "sous_titre": "temps indicatifs",
+      "vide": "Rien dans cette catégorie en voiture."
+    }
   ],
   "lieux": [
-    { "zone": "pied",    "temps": "5 min",  "nom": "Conche de Saint-Sordelin", "texte": "La crique la plus proche, calme et abritée.", "filtres": ["plage", "enfants"] },
-    { "zone": "pied",    "temps": "7 min",  "nom": "Plage de Pontaillac", "texte": "La grande plage familiale, surveillée l’été.", "filtres": ["plage", "enfants"] },
-    { "zone": "pied",    "temps": "10 min", "nom": "Marché de Vaux-sur-Mer", "texte": "Produits locaux, tous les matins l’été.", "filtres": ["marche"] },
-    { "zone": "pied",    "temps": "30 min", "nom": "Sentier des douaniers", "texte": "Falaises et villas Belle Époque jusqu’à Nauzan.", "filtres": ["balade", "chien"] },
-    { "zone": "velo",    "temps": "10 min", "nom": "Conche de Nauzan", "texte": "Sable fin entre deux falaises vertes.", "filtres": ["plage", "enfants"] },
-    { "zone": "velo",    "temps": "15 min", "nom": "Royan", "texte": "Front de mer, port et marché couvert.", "filtres": ["marche", "pluie"] },
-    { "zone": "velo",    "temps": "25 min", "nom": "Saint-Palais et le Pont du Diable", "texte": "Rochers sculptés et carrelets de pêcheurs.", "filtres": ["balade"] },
-    { "zone": "voiture", "temps": "20 min", "nom": "Zoo de La Palmyre", "texte": "Une journée entière avec les enfants.", "filtres": ["enfants"] },
-    { "zone": "voiture", "temps": "20 min", "nom": "Grottes de Meschers", "texte": "Habitations creusées dans la falaise.", "filtres": ["pluie", "enfants"] },
-    { "zone": "voiture", "temps": "25 min", "nom": "Phare de la Coubre", "texte": "On monte au sommet, puis cap sur la Côte sauvage.", "filtres": ["balade"] },
-    { "zone": "voiture", "temps": "Royan",  "nom": "Phare de Cordouan en bateau", "texte": "Le « roi des phares », d’avril à octobre, sur réservation.", "filtres": ["enfants"], "lien": { "label": "Horaires et réservation", "lien": "https://www.phare-de-cordouan.fr/" } }
+    {
+      "zone": "pied",
+      "temps": "5 min",
+      "nom": "Conche de Saint-Sordelin",
+      "texte": "La crique la plus proche, calme et abritée.",
+      "filtres": [
+        "plage",
+        "enfants"
+      ]
+    },
+    {
+      "zone": "pied",
+      "temps": "7 min",
+      "nom": "Plage de Pontaillac",
+      "texte": "La grande plage familiale, surveillée l’été.",
+      "filtres": [
+        "plage",
+        "enfants"
+      ]
+    },
+    {
+      "zone": "pied",
+      "temps": "10 min",
+      "nom": "Marché de Vaux-sur-Mer",
+      "texte": "Produits locaux, tous les matins l’été.",
+      "filtres": [
+        "marche"
+      ]
+    },
+    {
+      "zone": "pied",
+      "temps": "30 min",
+      "nom": "Sentier des douaniers",
+      "texte": "Falaises et villas Belle Époque jusqu’à Nauzan.",
+      "filtres": [
+        "balade",
+        "chien"
+      ]
+    },
+    {
+      "zone": "velo",
+      "temps": "10 min",
+      "nom": "Conche de Nauzan",
+      "texte": "Sable fin entre deux falaises vertes.",
+      "filtres": [
+        "plage",
+        "enfants"
+      ]
+    },
+    {
+      "zone": "velo",
+      "temps": "15 min",
+      "nom": "Royan",
+      "texte": "Front de mer, port et marché couvert.",
+      "filtres": [
+        "marche",
+        "pluie"
+      ]
+    },
+    {
+      "zone": "velo",
+      "temps": "25 min",
+      "nom": "Saint-Palais et le Pont du Diable",
+      "texte": "Rochers sculptés et carrelets de pêcheurs.",
+      "filtres": [
+        "balade"
+      ]
+    },
+    {
+      "zone": "voiture",
+      "temps": "20 min",
+      "nom": "Zoo de La Palmyre",
+      "texte": "Une journée entière avec les enfants.",
+      "filtres": [
+        "enfants"
+      ]
+    },
+    {
+      "zone": "voiture",
+      "temps": "20 min",
+      "nom": "Grottes de Meschers",
+      "texte": "Habitations creusées dans la falaise.",
+      "filtres": [
+        "pluie",
+        "enfants"
+      ]
+    },
+    {
+      "zone": "voiture",
+      "temps": "25 min",
+      "nom": "Phare de la Coubre",
+      "texte": "On monte au sommet, puis cap sur la Côte sauvage.",
+      "filtres": [
+        "balade"
+      ]
+    },
+    {
+      "zone": "voiture",
+      "temps": "Royan",
+      "nom": "Phare de Cordouan en bateau",
+      "texte": "Le « roi des phares », d’avril à octobre, sur réservation.",
+      "filtres": [
+        "enfants"
+      ],
+      "lien": {
+        "label": "Horaires et réservation",
+        "lien": "https://www.phare-de-cordouan.fr/"
+      }
+    }
   ],
   "aussi": "Et aussi : le village fortifié de Talmont-sur-Gironde, à 30 min en voiture.",
   "adresses": {
@@ -46,8 +189,16 @@
     "titre": "La plage à 5 minutes, le reste à vélo",
     "texte": "Dès {prix_min} € la nuit, linge et ménage compris. Réponse de Belle sous 24 heures.",
     "boutons": [
-      { "label": "Demander mes dates", "lien": "/tarifs-reservation/#reserver", "style": "" },
-      { "label": "Visiter le logement", "lien": "/chez-belle/", "style": "line" }
+      {
+        "label": "Demander mes dates",
+        "lien": "/tarifs-reservation/#reserver",
+        "style": ""
+      },
+      {
+        "label": "Visiter le logement",
+        "lien": "/chez-belle/",
+        "style": "line"
+      }
     ]
   }
 }

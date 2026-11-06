@@ -9,8 +9,16 @@
     "titre": "Dès {prix_min} € la nuit, linge et ménage compris",
     "texte": "Le prix de la grille est celui du contrat, sans frais de plateforme. Choisissez vos dates : Belle vous répond sous 24 heures.",
     "boutons": [
-      { "label": "Estimer mon séjour", "lien": "#reserver", "style": "" },
-      { "label": "Voir les prix", "lien": "#tarifs", "style": "line" }
+      {
+        "label": "Estimer mon séjour",
+        "lien": "#reserver",
+        "style": ""
+      },
+      {
+        "label": "Voir les prix",
+        "lien": "#tarifs",
+        "style": "line"
+      }
     ]
   },
   "grille": {
@@ -39,9 +47,18 @@
   "etapes": {
     "titre": "Réserver en trois étapes",
     "liste": [
-      { "titre": "Vous demandez vos dates", "texte": "Belle répond sous 24 heures et vous envoie le contrat." },
-      { "titre": "Vous confirmez", "texte": "Contrat signé et 30 % d’arrhes par virement." },
-      { "titre": "Un mois avant", "texte": "Vous réglez le solde, puis recevez le livret d’accueil et le code de la boîte à clés." }
+      {
+        "titre": "Vous demandez vos dates",
+        "texte": "Belle répond sous 24 heures et vous envoie le contrat."
+      },
+      {
+        "titre": "Vous confirmez",
+        "texte": "Contrat signé et 30 % d’arrhes par virement."
+      },
+      {
+        "titre": "Un mois avant",
+        "texte": "Vous réglez le solde, puis recevez le livret d’accueil et le code de la boîte à clés."
+      }
     ]
   },
   "formulaire": {
@@ -73,12 +90,30 @@
   "faq": {
     "titre": "Vos questions",
     "questions": [
-      { "question": "Comment se passent l’arrivée et le départ ?", "reponse": "En autonomie, avec une boîte à clés : arrivée dès 16 h, départ avant 10 h. Le code vous est envoyé au plus tard trois jours avant, une fois le séjour réglé." },
-      { "question": "Combien coûte la taxe de séjour ?", "reponse": "Elle est due par adulte et par nuit, au tarif de la Communauté d’Agglomération Royan Atlantique en vigueur à la date du séjour. Les mineurs en sont exonérés. Belle vous indique le montant exact avec le contrat." },
-      { "question": "Y a-t-il un dépôt de garantie ?", "reponse": "Oui, {depot} €, versés avec le solde et rendus par virement au plus tard quatorze jours après votre départ, déduction faite d’éventuels dégâts justifiés." },
-      { "question": "Et si je dois annuler ?", "reponse": "Avant le paiement du solde, vous renoncez en abandonnant les arrhes. Après, le séjour reste dû, mais Belle vous rembourse les nuits qu’elle parvient à relouer. Une assurance annulation est recommandée." },
-      { "question": "Je viens avec mon chien, comment ça se passe ?", "reponse": "Il est le bienvenu : signalez-le dans votre demande. Il ne monte ni sur les lits ni sur le canapé et ne reste pas seul dans le logement. Du 1<sup>er</sup> avril au 30 septembre, les chiens ne sont admis ni sur les plages de Royan, dont Pontaillac, ni sur la conche de Saint-Sordelin, mais le sentier des douaniers est tout proche." },
-      { "question": "Peut-on venir en dehors de mai à septembre ?", "reponse": "Oui à Noël : une semaine à {prix:noel} € la nuit, du 18 ou du 25 décembre. Pour d’autres dates, écrivez à Belle." }
+      {
+        "question": "Comment se passent l’arrivée et le départ ?",
+        "reponse": "En autonomie, avec une boîte à clés : arrivée dès 16 h, départ avant 10 h. Le code vous est envoyé au plus tard trois jours avant, une fois le séjour réglé."
+      },
+      {
+        "question": "Combien coûte la taxe de séjour ?",
+        "reponse": "Elle est due par adulte et par nuit, au tarif de la Communauté d’Agglomération Royan Atlantique en vigueur à la date du séjour. Les mineurs en sont exonérés. Belle vous indique le montant exact avec le contrat."
+      },
+      {
+        "question": "Y a-t-il un dépôt de garantie ?",
+        "reponse": "Oui, {depot} €, versés avec le solde et rendus par virement au plus tard quatorze jours après votre départ, déduction faite d’éventuels dégâts justifiés."
+      },
+      {
+        "question": "Et si je dois annuler ?",
+        "reponse": "Avant le paiement du solde, vous renoncez en abandonnant les arrhes. Après, le séjour reste dû, mais Belle vous rembourse les nuits qu’elle parvient à relouer. Une assurance annulation est recommandée."
+      },
+      {
+        "question": "Je viens avec mon chien, comment ça se passe ?",
+        "reponse": "Il est le bienvenu : signalez-le dans votre demande. Il ne monte ni sur les lits ni sur le canapé et ne reste pas seul dans le logement. Du 1<sup>er</sup> avril au 30 septembre, les chiens ne sont admis ni sur les plages de Royan, dont Pontaillac, ni sur la conche de Saint-Sordelin, mais le sentier des douaniers est tout proche."
+      },
+      {
+        "question": "Peut-on venir en dehors de mai à septembre ?",
+        "reponse": "Oui à Noël : une semaine à {prix:noel} € la nuit, du 18 ou du 25 décembre. Pour d’autres dates, écrivez à Belle."
+      }
     ],
     "note": "Couchages, parking, Belle à l’étage : tout est détaillé sur la page <a href=\"/chez-belle/\">Le logement</a>."
   }
