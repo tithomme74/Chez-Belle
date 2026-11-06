@@ -1,0 +1,40 @@
+{
+  "annee": 2027,
+  "types": {
+    "basse":   { "label": "Mai, juin, septembre", "prix": 80,  "min": 3 },
+    "pont":    { "label": "Pont de mai",           "prix": 95,  "min": 3 },
+    "juillet": { "label": "Début juillet",         "prix": 105, "min": 4 },
+    "coeur":   { "label": "Cœur de l’été",         "prix": 115, "min": 7 },
+    "fin":     { "label": "Fin d’été",             "prix": 90,  "min": 4 },
+    "noel":    { "label": "Noël",                  "prix": 85,  "min": 7, "arrivees": ["2027-12-18", "2027-12-25"] }
+  },
+  "calendrier": [
+    { "du": "2027-05-01", "au": "2027-05-01", "type": "pont" },
+    { "du": "2027-05-02", "au": "2027-05-05", "type": "basse" },
+    { "du": "2027-05-06", "au": "2027-05-08", "type": "pont" },
+    { "du": "2027-05-09", "au": "2027-05-13", "type": "basse" },
+    { "du": "2027-05-14", "au": "2027-05-16", "type": "pont" },
+    { "du": "2027-05-17", "au": "2027-06-20", "type": "basse" },
+    { "du": "2027-06-21", "au": "2027-07-06", "type": "juillet" },
+    { "du": "2027-07-07", "au": "2027-08-27", "type": "coeur" },
+    { "du": "2027-08-28", "au": "2027-09-04", "type": "fin" },
+    { "du": "2027-09-05", "au": "2027-09-24", "type": "basse" },
+    { "du": "2027-12-18", "au": "2027-12-31", "type": "noel" }
+  ],
+  "grille": [
+    { "type": "basse",   "titre": "Mai et juin",   "etiquette": "plus calme", "dates": "2 mai – 21 juin, hors ponts", "style": "calme", "unite": "nuit" },
+    { "type": "pont",    "titre": "Ponts de mai",  "etiquette": "", "dates": "1<sup>er</sup> mai · Ascension 6 – 9 mai · Pentecôte 14 – 17 mai", "style": "", "unite": "nuit" },
+    { "type": "juillet", "titre": "Début juillet", "etiquette": "", "dates": "21 juin – 7 juillet", "style": "", "unite": "nuit" },
+    { "type": "coeur",   "titre": "Cœur de l’été", "etiquette": "", "dates": "7 juillet – 28 août", "style": "peak", "unite": "semaine" },
+    { "type": "fin",     "titre": "Fin d’été",     "etiquette": "", "dates": "28 août – 5 septembre", "style": "", "unite": "nuit" },
+    { "type": "basse",   "titre": "Septembre",     "etiquette": "plus calme", "dates": "5 – 25 septembre", "style": "calme", "unite": "nuit" },
+    { "type": "noel",    "titre": "Noël",          "etiquette": "", "dates": "semaine du 18 ou du 25 décembre", "style": "", "unite": "nuit" }
+  ],
+  "chien": { "court": 15, "long": 25, "seuil": 3 },
+  "depot": 300,
+  "formulaire": {
+    "arrivee_min": "2027-05-01", "arrivee_max": "2027-12-31",
+    "depart_min": "2027-05-02", "depart_max": "2028-01-01",
+    "voyageurs_max": 4, "voyageurs_defaut": 2, "enfants_max": 3
+  }
+}

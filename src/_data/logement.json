@@ -1,0 +1,64 @@
+{
+  "seo": {
+    "titre": "Le logement : rez-de-jardin de 55 m² à Pontaillac | Chez Belle",
+    "description": "Chez Belle, rez-de-jardin indépendant de 55 m² à Vaux-sur-Mer : pièce à vivre, chambre, douche à l’italienne, jardin clos de 200 m² sous les pins. Lits faits, linge et ménage compris. Toutes les photos.",
+    "og_titre": "Chez Belle · le logement et ses prestations",
+    "og_description": "Rez-de-jardin de 55 m² au calme à Pontaillac, jardin clos et ombragé, linge et ménage compris, chien bienvenu."
+  },
+  "entete": {
+    "kicker": "Le logement",
+    "titre": "55 m² de plain-pied, ouverts sur un jardin sous les pins",
+    "texte": "Pour 4 personnes au maximum, au calme, à 7 minutes à pied de la plage de Pontaillac."
+  },
+  "galerie": [
+    { "forme": "big",  "src": "/photos/jardin-960.webp", "srcset": [["/photos/jardin-480.webp", 480], ["/photos/jardin-960.webp", 960]], "largeur": 960, "hauteur": 720, "alt": "Le jardin sous les pins, avec deux transats", "legende": "Le jardin" },
+    { "forme": "tall", "src": "/photos/piece-a-vivre-960.webp", "srcset": [["/photos/piece-a-vivre-480.webp", 480], ["/photos/piece-a-vivre-960.webp", 960]], "largeur": 960, "hauteur": 1280, "alt": "Le salon avec canapé-lit et fauteuil en rotin", "legende": "Le salon" },
+    { "forme": "tall", "src": "/photos/chambre-960.webp", "srcset": [["/photos/chambre-480.webp", 480], ["/photos/chambre-960.webp", 960]], "largeur": 960, "hauteur": 1280, "alt": "La chambre, lits rapprochés en grand lit", "legende": "La chambre" },
+    { "forme": "normale", "src": "/photos/cuisine-960.webp", "srcset": [["/photos/cuisine-480.webp", 480], ["/photos/cuisine-960.webp", 720]], "largeur": 720, "hauteur": 540, "alt": "La cuisine équipée", "legende": "La cuisine" },
+    { "forme": "normale", "src": "/photos/salle-de-douche-960.webp", "srcset": [["/photos/salle-de-douche-480.webp", 480], ["/photos/salle-de-douche-960.webp", 960]], "largeur": 960, "hauteur": 720, "alt": "La salle de douche à l’italienne", "legende": "La douche" },
+    { "forme": "normale", "masquee": true, "src": "/photos/galerie-1-960.webp", "largeur": 960, "hauteur": 1280, "alt": "Le coin repas et sa table en bois", "legende": "Le coin repas" },
+    { "forme": "normale", "masquee": true, "src": "/photos/terrasse-960.webp", "largeur": 960, "hauteur": 720, "alt": "Le côté terrasse du jardin, en fleurs", "legende": "Le côté terrasse" },
+    { "forme": "normale", "masquee": true, "src": "/photos/galerie-2-480.webp", "largeur": 480, "hauteur": 640, "alt": "L’entrée, avec la porte ouverte sur le jardin", "legende": "L’entrée" },
+    { "forme": "normale", "masquee": true, "src": "/photos/salle-a-manger-480.webp", "largeur": 480, "hauteur": 388, "alt": "La table de la salle à manger dressée", "legende": "La table" },
+    { "forme": "normale", "masquee": true, "src": "/photos/galerie-3-480.webp", "largeur": 480, "hauteur": 640, "alt": "La buanderie avec lave-linge", "legende": "La buanderie" }
+  ],
+  "bouton_photos": "Voir les {nb_photos} photos",
+  "chiffres": [
+    { "valeur": "55 m²", "texte": "de plain-pied, entrée indépendante" },
+    { "valeur": "4 personnes", "texte": "1 chambre et 1 canapé-lit" },
+    { "valeur": "200 m²", "texte": "de jardin clos, sous les pins" },
+    { "valeur": "7 min", "texte": "à pied jusqu’à la plage" }
+  ],
+  "organisation": {
+    "titre": "Comment c’est organisé",
+    "cartes": [
+      { "titre": "Dedans", "points": ["La chambre : 2 lits simples, à jumeler en grand lit ou à séparer", "Le salon : un canapé-lit, à côté du coin repas", "Une cuisine équipée et une douche à l’italienne rénovée"] },
+      { "titre": "Dehors", "points": ["Un jardin clos de 200 m², à l’ombre des pins", "Une table sous l’auvent pour dîner dehors", "Barbecue Weber et 2 transats"] },
+      { "titre": "Avec Belle", "points": ["Votre propre porte, de plain-pied sur le jardin", "Belle vit à l’étage, avec son entrée à elle", "Portail et jardin partagés, place de parking réservée"] }
+    ],
+    "option": "<b>En option :</b> la caravane « cosy » dans le jardin, avec un lit double · 20 € par jour, en réservation directe."
+  },
+  "equipements": {
+    "titre": "Les équipements",
+    "familles": [
+      { "titre": "Cuisine", "liste": ["Lave-vaisselle", "four", "micro-ondes", "plaque vitrocéramique", "réfrigérateur et congélateur", "Nespresso", "grille-pain"] },
+      { "titre": "Confort", "liste": ["Wifi fibre", "télévision", "lave-linge", "fer à repasser", "sèche-cheveux", "volets roulants"] },
+      { "titre": "Plage", "liste": ["Parasol", "jeux de plage", "serviettes de plage fournies"] },
+      { "titre": "Bébé et chien", "liste": ["Lit parapluie et chaise haute prêtés sur demande", "chien bienvenu"] }
+    ]
+  },
+  "bandeau": [
+    { "kicker": "Compris dans le prix", "texte": "Lits faits, linge de toilette et ménage de fin de séjour." },
+    { "kicker": "La maison", "texte": "Non-fumeur, ni fête ni réception. Arrivée dès 16 h, départ avant 10 h." }
+  ],
+  "avis_fixe": {
+    "texte": "Nous avons passé une agréable semaine, le logement est bien équipé, spacieux et possède un grand extérieur ombragé. Le quartier est calme, à proximité de la plage Pontaillac et des commerces.",
+    "prenom": "Clémence",
+    "date": "août 2025",
+    "lien_autres": "les autres avis"
+  },
+  "boutons": [
+    { "label": "Voir les prix et demander mes dates", "lien": "/tarifs-reservation/", "style": "" },
+    { "label": "Les plages et adresses autour →", "lien": "/autour/", "style": "lien" }
+  ]
+}

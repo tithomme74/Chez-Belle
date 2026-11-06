@@ -1,37 +1,22 @@
-// Demande de réservation : estimation du prix et brouillon de message (adresse de Belle masquée aux robots)
-const CONFIG = {
-  user: "chez.belle.pontaillac", domain: "gmail.com",
-  chienCourt: 15, chienLong: 25, chienSeuil: 3
-};
-const EMAIL = CONFIG.user + "@" + CONFIG.domain;
-
-// Nuits concernées : dates de début et de fin incluses (la nuit du 2027-05-01 va du 1er au 2 mai)
-const PERIODS = [
-  ["2027-05-01", "2027-05-01", "pont"],    ["2027-05-02", "2027-05-05", "basse"],
-  ["2027-05-06", "2027-05-08", "pont"],    ["2027-05-09", "2027-05-13", "basse"],
-  ["2027-05-14", "2027-05-16", "pont"],    ["2027-05-17", "2027-06-20", "basse"],
-  ["2027-06-21", "2027-07-06", "juillet"], ["2027-07-07", "2027-08-27", "coeur"],
-  ["2027-08-28", "2027-09-04", "fin"],     ["2027-09-05", "2027-09-24", "basse"],
-  ["2027-12-18", "2027-12-31", "noel"]
-];
-const RATES = {
-  basse:   { label: "Mai, juin, septembre", min: 3, price: 80 },
-  pont:    { label: "Pont de mai",           min: 3, price: 95 },
-  juillet: { label: "Début juillet",         min: 4, price: 105 },
-  coeur:   { label: "Cœur de l’été",         min: 7, price: 115 },
-  fin:     { label: "Fin d’été",             min: 4, price: 90 },
-  noel:    { label: "Noël",                  min: 7, price: 85 }
-};
-const NOEL_ARRIVEES = ["2027-12-18", "2027-12-25"];
+// Demande de réservation : estimation du prix et brouillon de message (adresse de Belle masquée aux robots).
+// Les tarifs viennent de src/_data/tarifs.json, transmis par la page dans <script id="donnees-tarifs">.
+(() => {
 const DAY = 86400000;
 const toUTC = s => { const [y, m, d] = s.split("-").map(Number); return Date.UTC(y, m - 1, d); };
 const iso = t => new Date(t).toISOString().slice(0, 10);
-const frDate = s => new Date(toUTC(s)).toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long", timeZone: "UTC" });
-const eur = n => n.toLocaleString("fr-FR") + " €";
-const periodOf = s => { const t = toUTC(s); const p = PERIODS.find(([a, b]) => t >= toUTC(a) && t <= toUTC(b)); return p ? p[2] : null; };
-const $ = id => document.getElementById(id);
+const jourMois = (s, avecMois = true) => { const d = new Date(toUTC(s)); const j = d.getUTCDate(); return (j === 1 ? "1er" : String(j)) + (avecMois ? " " + d.toLocaleDateString("fr-FR", { month: "long", timeZone: "UTC" }) : ""); };
 
-function estimate(arr, dep, pet) {
+// « du 18 au 25 décembre ou du 25 décembre au 1er janvier » pour les arrivées imposées d'une période
+function semainesFixes(arrivees, nuits) {
+  return arrivees.map(a => {
+    const fin = iso(toUTC(a) + nuits * DAY), memeMois = a.slice(0, 7) === fin.slice(0, 7);
+    return `du ${jourMois(a, !memeMois)} au ${jourMois(fin)}`;
+  }).join(" ou ");
+}
+
+// Calcul pur (testé dans tests/estimation.test.js) : D = { types, calendrier, chien }
+function estimer(D, arr, dep, pet) {
+  const periodOf = s => { const t = toUTC(s); const p = D.calendrier.find(c => t >= toUTC(c.du) && t <= toUTC(c.au)); return p ? p.type : null; };
   const res = { nights: 0, total: 0, lines: [], warn: "", out: false };
   if (!arr || !dep) { res.warn = "Indiquez vos dates d’arrivée et de départ."; return res; }
   const a = toUTC(arr), d = toUTC(dep), n = Math.round((d - a) / DAY);
@@ -41,19 +26,28 @@ function estimate(arr, dep, pet) {
   for (let t = a; t < d; t += DAY) {
     const k = periodOf(iso(t));
     if (!k) { res.out = true; res.warn = "Une partie de ces dates sort des périodes affichées. Écrivez à Belle : elle vous répondra pour ces dates."; return res; }
-    const p = RATES[k].price, key = k + p;
-    groups[key] = groups[key] || { label: RATES[k].label, price: p, count: 0 };
-    groups[key].count++; res.total += p;
+    const ty = D.types[k], key = k + ty.prix;
+    groups[key] = groups[key] || { label: ty.label, price: ty.prix, count: 0 };
+    groups[key].count++; res.total += ty.prix;
   }
   res.lines = Object.values(groups).map(l => `${l.label} : ${l.count} × ${l.price} €`);
-  if (pet) { const f = n <= CONFIG.chienSeuil ? CONFIG.chienCourt : CONFIG.chienLong; res.total += f; res.lines.push(`Chien : ${f} €`); }
-  const r0 = RATES[periodOf(arr)];
-  if (r0 === RATES.noel && (n !== 7 || !NOEL_ARRIVEES.includes(arr))) res.warn = "À Noël, le séjour dure une semaine : du 18 au 25 décembre ou du 25 décembre au 1er janvier.";
+  if (pet) { const f = n <= D.chien.seuil ? D.chien.court : D.chien.long; res.total += f; res.lines.push(`Chien : ${f} €`); }
+  const r0 = D.types[periodOf(arr)];
+  if (r0.arrivees && (n !== r0.min || !r0.arrivees.includes(arr))) res.warn = `À ${r0.label}, le séjour dure une semaine : ${semainesFixes(r0.arrivees, r0.min)}.`;
   else if (n < r0.min) res.warn = `En période « ${r0.label} », le séjour minimum est de ${r0.min} nuits.`;
   return res;
 }
+globalThis.ChezBelleEstimation = { estimer, semainesFixes };
+
+if (typeof document === "undefined") return;
+const $ = id => document.getElementById(id);
+const D = JSON.parse($("donnees-tarifs").textContent);
+const EMAIL = D.email.utilisateur + "@" + D.email.domaine;
+const frDate = s => new Date(toUTC(s)).toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long", timeZone: "UTC" });
+const eur = n => n.toLocaleString("fr-FR") + " €";
+
 function render(envoi) {
-  const r = estimate($("arr").value, $("dep").value, $("pet").checked);
+  const r = estimer(D, $("arr").value, $("dep").value, $("pet").checked);
   const vide = !$("arr").value || !$("dep").value;
   $("total").textContent = r.total && !r.out ? eur(r.total) : "—";
   $("detail").textContent = r.nights > 0 && !r.out ? `${r.nights} nuit${r.nights > 1 ? "s" : ""}, linge et ménage compris` : (vide ? "Choisissez vos dates pour voir le prix." : "");
@@ -91,3 +85,4 @@ $("copy").addEventListener("click", () => {
 });
 $("belle-mail").textContent = EMAIL;
 render();
+})();

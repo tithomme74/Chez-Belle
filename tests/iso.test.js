@@ -1,5 +1,5 @@
 // Non-régression : les pages produites par Eleventy doivent rester identiques au site d'origine
-// (références dans tests/reference, issues du commit 091e57e). Lancer « npm test » après « npm run build ».
+// (références dans tests/reference, issues du commit 091e57e). « npm test » reconstruit puis compare.
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
@@ -8,11 +8,20 @@ const PAGES = { accueil: "index.html", "chez-belle": "chez-belle/index.html", "t
 
 // Écarts acceptés et volontaires par rapport à la référence
 const ECARTS = [
-  [/href="\/favicon\.svg"/g, 'href="favicon.svg"'],                       // accueil : chemin relatif comme les autres pages
-  [/Éditrice du site : Isabelle Leseigneur/g, "Éditrice du site : Isabelle L."] // nom unifié sur toutes les pages
+  [/href="\/favicon\.svg"/g, 'href="favicon.svg"'],                        // accueil : chemin relatif comme les autres pages
+  [/Éditrice du site : Isabelle Leseigneur/g, "Éditrice du site : Isabelle L."], // nom unifié sur toutes les pages
+  [/<script type="application\/json" id="donnees-tarifs">[\s\S]*?<\/script>/g, ""] // tarifs transmis à l'estimation
 ];
-const normaliser = html => ECARTS.reduce((h, [re, r]) => h.replace(re, r), html)
-  .replace(/\r\n/g, "\n").replace(/>\s+</g, "><").replace(/\s+/g, " ").trim();
+
+// Données JS (avis, notes) comparées sur leur contenu, pas sur leur mise en forme
+const canonJS = html => html.replace(/(const (?:AVIS|NOTES) = )([\s\S]*?);\n\/\/ FIN/g,
+  (t, debut, json) => `${debut}${JSON.stringify(JSON.parse(json))};\n// FIN`);
+
+export const normaliser = html => ECARTS.reduce((h, [re, r]) => h.replace(re, r), canonJS(html.replace(/\r\n/g, "\n")))
+  .replace(/<!--[\s\S]*?-->/g, "")   // commentaires HTML
+  .replace(/^[ \t]*\/\/.*$/gm, "")   // commentaires JS sur une ligne
+  .replace(/&nbsp;/g, " ")
+  .replace(/>\s+</g, "><").replace(/\s+/g, " ").replace(/> </g, "><").trim();
 
 for (const [nom, chemin] of Object.entries(PAGES)) {
   test(`page ${nom} identique à la référence`, () => {

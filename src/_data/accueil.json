@@ -1,0 +1,72 @@
+{
+  "seo": {
+    "titre": "Location Pontaillac avec jardin, mer à pied | Chez Belle, Vaux-sur-Mer",
+    "description": "Location de vacances à Vaux-sur-Mer, quartier de Pontaillac : rez-de-jardin de 55 m² avec jardin clos et ombragé, conche à 5 minutes à pied, plage de Pontaillac à 7 minutes. 4 voyageurs, linge et ménage compris, chien bienvenu. Réservation en direct.",
+    "og_titre": "Chez Belle · flâner sous les pins, l’océan au bout de la rue",
+    "og_description": "Rez-de-jardin au calme à Pontaillac, jardin ombragé, plage à pied. Linge et ménage compris, chien bienvenu.",
+    "jsonld": {"@context":"https://schema.org","@type":"VacationRental","name":"Chez Belle","url":"https://chez-belle-pontaillac.netlify.app/","description":"Rez-de-jardin indépendant de 55 m² avec jardin clos et ombragé, à 5 minutes à pied d'une conche et à 7 minutes de la plage de Pontaillac, à Vaux-sur-Mer. 4 voyageurs, linge et ménage compris, chien bienvenu.","image":["https://chez-belle-pontaillac.netlify.app/photos/jardin-960.webp","https://chez-belle-pontaillac.netlify.app/photos/terrasse-960.webp","https://chez-belle-pontaillac.netlify.app/photos/piece-a-vivre-960.webp","https://chez-belle-pontaillac.netlify.app/photos/chambre-960.webp"],"address":{"@type":"PostalAddress","addressLocality":"Vaux-sur-Mer","postalCode":"17640","addressRegion":"Charente-Maritime","addressCountry":"FR"},"containsPlace":{"@type":"Accommodation","additionalType":"EntirePlace","occupancy":{"@type":"QuantitativeValue","maxValue":4},"numberOfBedrooms":1,"floorSize":{"@type":"QuantitativeValue","value":55,"unitCode":"MTK"},"amenityFeature":[{"@type":"LocationFeatureSpecification","name":"Jardin","value":true},{"@type":"LocationFeatureSpecification","name":"Parking gratuit","value":true},{"@type":"LocationFeatureSpecification","name":"Wifi","value":true},{"@type":"LocationFeatureSpecification","name":"Lave-linge","value":true},{"@type":"LocationFeatureSpecification","name":"Lave-vaisselle","value":true},{"@type":"LocationFeatureSpecification","name":"Barbecue","value":true},{"@type":"LocationFeatureSpecification","name":"Animaux acceptés","value":true},{"@type":"LocationFeatureSpecification","name":"Linge fourni","value":true}]},"checkinTime":"16:00","checkoutTime":"10:00"}
+  },
+  "hero": {
+    "kicker": "Vaux-sur-Mer · quartier de Pontaillac",
+    "titre": "Flâner sous les pins, <em>l’océan</em> au bout de la rue",
+    "texte": "Un rez-de-jardin indépendant de 55&nbsp;m², au calme, sous la maison de Belle, avec un grand jardin clos à l’ombre des pins. La petite conche de Saint-Sordelin est à 5&nbsp;minutes à pied, la plage de Pontaillac à 7. Lits faits, linge et ménage compris.",
+    "boutons": [
+      { "label": "Demander mes dates", "lien": "/tarifs-reservation/#reserver", "style": "" },
+      { "label": "Visiter le logement", "lien": "/chez-belle/", "style": "line" }
+    ],
+    "photo": {
+      "src": "/photos/jardin-960.webp",
+      "srcset": [["/photos/jardin-480.webp", 480], ["/photos/jardin-960.webp", 960]],
+      "largeur": 960, "hauteur": 812,
+      "alt": "Le jardin de Chez Belle sous les pins, deux transats à l’ombre"
+    }
+  },
+  "essentiel": {
+    "kicker": "L’essentiel",
+    "titre": "Chez Belle en un coup d’œil",
+    "points": [
+      { "titre": "55 m² de plain-pied", "texte": "Votre propre entrée, au rez-de-jardin" },
+      { "titre": "4 voyageurs", "texte": "1 chambre, 1 canapé-lit" },
+      { "titre": "Jardin clos de 200 m²", "texte": "Sous les pins, partagé avec Belle qui vit à l’étage" },
+      { "titre": "La mer à pied", "texte": "Conche à 5 min, plage de Pontaillac à 7" },
+      { "titre": "Tout compris", "texte": "Lits faits, linge et ménage de fin de séjour" },
+      { "titre": "Chien bienvenu", "texte": "Parking dans la propriété · arrivée dès 16 h" }
+    ],
+    "photos": [
+      { "forme": "big", "src": "/photos/terrasse-960.webp", "srcset": [["/photos/terrasse-480.webp", 480], ["/photos/terrasse-960.webp", 960]], "largeur": 960, "hauteur": 720, "alt": "Le jardin côté terrasse, en fleurs", "legende": "Le jardin" },
+      { "forme": "tall", "src": "/photos/piece-a-vivre-960.webp", "srcset": [["/photos/piece-a-vivre-480.webp", 480], ["/photos/piece-a-vivre-960.webp", 960]], "largeur": 960, "hauteur": 1280, "alt": "Le salon avec canapé-lit et fauteuil en rotin", "legende": "Le salon" },
+      { "forme": "tall", "src": "/photos/chambre-960.webp", "srcset": [["/photos/chambre-480.webp", 480], ["/photos/chambre-960.webp", 960]], "largeur": 960, "hauteur": 1280, "alt": "La chambre, lits rapprochés en grand lit", "legende": "La chambre" }
+    ],
+    "bouton_photos": "Voir les {nb_photos} photos",
+    "lien_suite": { "label": "Le logement et ses prestations →", "lien": "/chez-belle/" }
+  },
+  "zoom": {
+    "kicker": "Tarifs {annee} en réservation directe",
+    "titre": "Zoom sur les prix",
+    "texte": "Linge et ménage compris. Seule la taxe de séjour s’ajoute.",
+    "cartes": [
+      { "titre": "Mai, juin, septembre", "dates": "la plus belle saison", "types": ["basse"], "unite": "nuit", "vedette": "" },
+      { "titre": "Ponts, début juillet, fin d’été", "dates": "ponts de mai, 21 juin – 7 juillet, 28 août – 5 septembre", "types": ["pont", "juillet", "fin"], "unite": "nuit", "vedette": "" },
+      { "titre": "Juillet et août", "dates": "du 7 juillet au 28 août", "types": ["coeur"], "unite": "semaine", "vedette": "Cœur de l’été" }
+    ],
+    "boutons": [
+      { "label": "Toute la grille et l’estimation", "lien": "/tarifs-reservation/", "style": "" },
+      { "label": "Demander mes dates →", "lien": "/tarifs-reservation/#reserver", "style": "lien" }
+    ]
+  },
+  "avis": {
+    "kicker": "Ils en parlent mieux que nous",
+    "titre": "Ce qu’en disent les voyageurs",
+    "mention": "Extraits d’avis publiés sur Airbnb, recopiés mot pour mot.",
+    "lien_tous": "Lire tous les avis"
+  },
+  "suite": {
+    "kicker": "Pour préparer votre séjour",
+    "titre": "Les conseils de Belle, du marché aux conches",
+    "texte": "Plages à pied, balades à vélo, sorties en famille ou jour de pluie : ses idées classées par distance, et toutes les réponses pratiques.",
+    "boutons": [
+      { "label": "Conseils et adresses", "lien": "/autour/", "style": "" },
+      { "label": "Infos pratiques", "lien": "/tarifs-reservation/#questions", "style": "line" }
+    ]
+  }
+}

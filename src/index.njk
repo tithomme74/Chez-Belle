@@ -1,13 +1,11 @@
----
-titre: "Location Pontaillac avec jardin, mer à pied | Chez Belle, Vaux-sur-Mer"
-description: "Location de vacances à Vaux-sur-Mer, quartier de Pontaillac : rez-de-jardin de 55 m² avec jardin clos et ombragé, conche à 5 minutes à pied, plage de Pontaillac à 7 minutes. 4 voyageurs, linge et ménage compris, chien bienvenu. Réservation en direct."
-og_titre: "Chez Belle · flâner sous les pins, l’océan au bout de la rue"
-og_description: "Rez-de-jardin au calme à Pontaillac, jardin ombragé, plage à pied. Linge et ménage compris, chien bienvenu."
+---js
+{ eleventyComputed: { seo: data => data.accueil.seo } }
 ---
 {% extends "base.njk" %}
+{% set a = accueil %}
 {% block head %}
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"VacationRental","name":"Chez Belle","url":"https://chez-belle-pontaillac.netlify.app/","description":"Rez-de-jardin indépendant de 55 m² avec jardin clos et ombragé, à 5 minutes à pied d'une conche et à 7 minutes de la plage de Pontaillac, à Vaux-sur-Mer. 4 voyageurs, linge et ménage compris, chien bienvenu.","image":["https://chez-belle-pontaillac.netlify.app/photos/jardin-960.webp","https://chez-belle-pontaillac.netlify.app/photos/terrasse-960.webp","https://chez-belle-pontaillac.netlify.app/photos/piece-a-vivre-960.webp","https://chez-belle-pontaillac.netlify.app/photos/chambre-960.webp"],"address":{"@type":"PostalAddress","addressLocality":"Vaux-sur-Mer","postalCode":"17640","addressRegion":"Charente-Maritime","addressCountry":"FR"},"containsPlace":{"@type":"Accommodation","additionalType":"EntirePlace","occupancy":{"@type":"QuantitativeValue","maxValue":4},"numberOfBedrooms":1,"floorSize":{"@type":"QuantitativeValue","value":55,"unitCode":"MTK"},"amenityFeature":[{"@type":"LocationFeatureSpecification","name":"Jardin","value":true},{"@type":"LocationFeatureSpecification","name":"Parking gratuit","value":true},{"@type":"LocationFeatureSpecification","name":"Wifi","value":true},{"@type":"LocationFeatureSpecification","name":"Lave-linge","value":true},{"@type":"LocationFeatureSpecification","name":"Lave-vaisselle","value":true},{"@type":"LocationFeatureSpecification","name":"Barbecue","value":true},{"@type":"LocationFeatureSpecification","name":"Animaux acceptés","value":true},{"@type":"LocationFeatureSpecification","name":"Linge fourni","value":true}]},"checkinTime":"16:00","checkoutTime":"10:00"}</script>
-<link rel="preload" as="image" href="photos/jardin-960.webp" imagesrcset="photos/jardin-480.webp 480w, photos/jardin-960.webp 960w" imagesizes="(max-width: 900px) 90vw, 480px">
+<script type="application/ld+json">{{ a.seo.jsonld | jsonScript | safe }}</script>
+<link rel="preload" as="image" href="{{ a.hero.photo.src | lien }}" imagesrcset="{{ m.srcset(a.hero.photo) }}" imagesizes="(max-width: 900px) 90vw, 480px">
 {% endblock %}
 {% block headFin %}
 <script>
@@ -24,19 +22,18 @@ og_description: "Rez-de-jardin au calme à Pontaillac, jardin ombragé, plage à
   <section class="hero">
     <div class="wrap hero-grid">
       <div>
-        <div class="kicker">Vaux-sur-Mer · quartier de Pontaillac</div>
-        <h1 style="margin-top:14px">Flâner sous les pins, <em>l’océan</em> au bout de la rue</h1>
-        <p class="lead">Un rez-de-jardin indépendant de 55&nbsp;m², au calme, sous la maison de Belle, avec un grand jardin clos à l’ombre des pins. La petite conche de Saint-Sordelin est à 5&nbsp;minutes à pied, la plage de Pontaillac à 7. Lits faits, linge et ménage compris.</p>
+        <div class="kicker">{{ a.hero.kicker | jetons }}</div>
+        <h1 style="margin-top:14px">{{ a.hero.titre | riche | safe }}</h1>
+        <p class="lead">{{ a.hero.texte | riche | safe }}</p>
         <div class="hero-actions">
-          <a class="btn" href="tarifs-reservation/#reserver">Demander mes dates</a>
-          <a class="btn line" href="chez-belle/">Visiter le logement</a>
+          {{ m.boutons(a.hero.boutons) }}
         </div>
       </div>
       <div class="hero-photo">
         <div class="arch">
-          <img src="photos/jardin-960.webp" srcset="photos/jardin-480.webp 480w, photos/jardin-960.webp 960w" sizes="(max-width: 900px) 90vw, 480px" width="960" height="812" alt="Le jardin de Chez Belle sous les pins, deux transats à l’ombre" fetchpriority="high">
+          <img src="{{ a.hero.photo.src | lien }}" srcset="{{ m.srcset(a.hero.photo) }}" sizes="(max-width: 900px) 90vw, 480px" width="{{ a.hero.photo.largeur }}" height="{{ a.hero.photo.hauteur }}" alt="{{ a.hero.photo.alt }}" fetchpriority="high">
         </div>
-        <div class="badge-ticket"><b><span data-note="globale">4,82</span> ★</b><span data-note="badge">sur 33 avis Airbnb</span></div>
+        <div class="badge-ticket"><b><span data-note="globale">{{ avis.notes.globale }}</span> ★</b><span data-note="badge">sur {{ avis.notes.nombre }} avis Airbnb</span></div>
       </div>
     </div>
   </section>
@@ -45,43 +42,39 @@ og_description: "Rez-de-jardin au calme à Pontaillac, jardin ombragé, plage à
 
   <section aria-labelledby="t-essentiel">
     <div class="wrap">
-      <div class="kicker">L’essentiel</div>
-      <h2 id="t-essentiel" style="margin-top:10px">Chez Belle en un coup d’œil</h2>
+      <div class="kicker">{{ a.essentiel.kicker | jetons }}</div>
+      <h2 id="t-essentiel" style="margin-top:10px">{{ a.essentiel.titre | riche | safe }}</h2>
       <ul class="essentiels">
-        <li><b>55 m² de plain-pied</b><span>Votre propre entrée, au rez-de-jardin</span></li>
-        <li><b>4 voyageurs</b><span>1 chambre, 1 canapé-lit</span></li>
-        <li><b>Jardin clos de 200 m²</b><span>Sous les pins, partagé avec Belle qui vit à l’étage</span></li>
-        <li><b>La mer à pied</b><span>Conche à 5 min, plage de Pontaillac à 7</span></li>
-        <li><b>Tout compris</b><span>Lits faits, linge et ménage de fin de séjour</span></li>
-        <li><b>Chien bienvenu</b><span>Parking dans la propriété · arrivée dès 16 h</span></li>
+{%- for p in a.essentiel.points %}
+        <li><b>{{ p.titre | jetons }}</b><span>{{ p.texte | riche | safe }}</span></li>
+{%- endfor %}
       </ul>
       <div class="apercu">
         <div class="galerie">
-          <figure class="big"><img src="photos/terrasse-960.webp" srcset="photos/terrasse-480.webp 480w, photos/terrasse-960.webp 960w" sizes="(max-width: 900px) 100vw, 560px" width="960" height="720" loading="lazy" alt="Le jardin côté terrasse, en fleurs"><figcaption>Le jardin</figcaption></figure>
-          <figure class="tall"><img src="photos/piece-a-vivre-960.webp" srcset="photos/piece-a-vivre-480.webp 480w, photos/piece-a-vivre-960.webp 960w" sizes="(max-width: 900px) 50vw, 280px" width="960" height="1280" loading="lazy" alt="Le salon avec canapé-lit et fauteuil en rotin"><figcaption>Le salon</figcaption></figure>
-          <figure class="tall"><img src="photos/chambre-960.webp" srcset="photos/chambre-480.webp 480w, photos/chambre-960.webp 960w" sizes="(max-width: 900px) 50vw, 280px" width="960" height="1280" loading="lazy" alt="La chambre, lits rapprochés en grand lit"><figcaption>La chambre</figcaption></figure>
+{%- for p in a.essentiel.photos %}
+          {{ m.figure(p) }}
+{%- endfor %}
         </div>
       </div>
       <div class="plus">
-        <a class="btn line" href="chez-belle/#photos">Voir les 10 photos</a>
-        <a href="chez-belle/">Le logement et ses prestations →</a>
+        <a class="btn line" href="{{ '/chez-belle/#photos' | lien }}">{{ a.essentiel.bouton_photos | jetons }}</a>
+        {{ m.lienA(a.essentiel.lien_suite) }}
       </div>
     </div>
   </section>
 
   <section class="tarifs" aria-labelledby="t-zoom">
     <div class="wrap">
-      <div class="kicker">Tarifs 2027 en réservation directe</div>
-      <h2 id="t-zoom" style="margin-top:10px">Zoom sur les prix</h2>
-      <p style="margin-top:14px">Linge et ménage compris. Seule la taxe de séjour s’ajoute.</p>
+      <div class="kicker">{{ a.zoom.kicker | jetons }}</div>
+      <h2 id="t-zoom" style="margin-top:10px">{{ a.zoom.titre | riche | safe }}</h2>
+      <p style="margin-top:14px">{{ a.zoom.texte | riche | safe }}</p>
       <div class="cabines zoom">
-        <div class="cabine"><div class="toit"></div><div class="in"><h3>Mai, juin, septembre</h3><span class="dates">la plus belle saison</span><span class="p num">80 € <small>la nuit</small></span><span class="cond">3 nuits minimum</span></div></div>
-        <div class="cabine"><div class="toit"></div><div class="in"><h3>Ponts, début juillet, fin d’été</h3><span class="dates">ponts de mai, 21 juin – 7 juillet, 28 août – 5 septembre</span><span class="p num">90 à 105 € <small>la nuit</small></span><span class="cond">3 ou 4 nuits minimum</span></div></div>
-        <div class="cabine peak"><div class="toit"></div><div class="in"><span class="peak-tag">Cœur de l’été</span><h3>Juillet et août</h3><span class="dates">du 7 juillet au 28 août</span><span class="p num">805 € <small>la semaine</small></span><span class="cond">7 nuits minimum</span></div></div>
+{%- for c in calc.zoom %}
+        <div class="cabine{% if c.vedette %} peak{% endif %}"><div class="toit"></div><div class="in">{% if c.vedette %}<span class="peak-tag">{{ c.vedette }}</span>{% endif %}<h3>{{ c.titre }}</h3><span class="dates">{{ c.dates }}</span><span class="p num">{{ c.prix }} <small>{{ c.unite }}</small></span><span class="cond">{{ c.sejour }}</span></div></div>
+{%- endfor %}
       </div>
       <div class="plus">
-        <a class="btn" href="tarifs-reservation/">Toute la grille et l’estimation</a>
-        <a href="tarifs-reservation/#reserver">Demander mes dates →</a>
+        {{ m.boutons(a.zoom.boutons) }}
       </div>
     </div>
   </section>
@@ -90,30 +83,31 @@ og_description: "Rez-de-jardin au calme à Pontaillac, jardin ombragé, plage à
     <div class="wrap">
       <div class="avis-head">
         <div class="stack" style="gap:10px">
-          <div class="kicker">Ils en parlent mieux que nous</div>
-          <h2 id="t-avis">Ce qu’en disent les voyageurs</h2>
+          <div class="kicker">{{ a.avis.kicker | jetons }}</div>
+          <h2 id="t-avis">{{ a.avis.titre | riche | safe }}</h2>
         </div>
         <div class="notes">
-          <span class="score num" data-note="globale">4,82</span>
+          <span class="score num" data-note="globale">{{ avis.notes.globale }}</span>
           <dl class="num" id="notes-dl">
-            <dt>Emplacement</dt><dd>4,9</dd>
-            <dt>Communication</dt><dd>4,9</dd>
-            <dt>Avis publiés</dt><dd>33</dd>
+{%- for c in avis.notes.categories %}
+            <dt>{{ c.nom }}</dt><dd>{{ c.note }}</dd>
+{%- endfor %}
+            <dt>Avis publiés</dt><dd>{{ avis.notes.nombre }}</dd>
           </dl>
           <div class="car-nav"><button type="button" id="prev" aria-label="Avis précédents">←</button><button type="button" id="next" aria-label="Avis suivants">→</button></div>
         </div>
       </div>
       <div class="car" id="car" tabindex="0" role="region" aria-label="Extraits d’avis, faire défiler"></div>
-      <p class="fine">Extraits d’avis publiés sur Airbnb, recopiés mot pour mot. <a href="https://www.airbnb.fr/rooms/25931091" rel="noopener" target="_blank">Lire tous les avis</a></p>
+      <p class="fine">{{ a.avis.mention }} <a href="{{ site.airbnb }}" rel="noopener" target="_blank">{{ a.avis.lien_tous }}</a></p>
     </div>
   </section>
 
   <section class="cta-final" aria-labelledby="t-suite">
     <div class="wrap">
-      <div class="kicker">Pour préparer votre séjour</div>
-      <h2 id="t-suite" style="margin-top:10px">Les conseils de Belle, du marché aux conches</h2>
-      <p class="lead">Plages à pied, balades à vélo, sorties en famille ou jour de pluie : ses idées classées par distance, et toutes les réponses pratiques.</p>
-      <div class="hero-actions"><a class="btn" href="autour/">Conseils et adresses</a><a class="btn line" href="tarifs-reservation/#questions">Infos pratiques</a></div>
+      <div class="kicker">{{ a.suite.kicker | jetons }}</div>
+      <h2 id="t-suite" style="margin-top:10px">{{ a.suite.titre | riche | safe }}</h2>
+      <p class="lead">{{ a.suite.texte | riche | safe }}</p>
+      <div class="hero-actions">{{ m.boutons(a.suite.boutons) }}</div>
     </div>
   </section>
 </main>
@@ -121,19 +115,12 @@ og_description: "Rez-de-jardin au calme à Pontaillac, jardin ombragé, plage à
 {% block scripts %}
 <script>
 const $ = id => document.getElementById(id);
-// Avis : extraits recopiés mot pour mot, mis à jour par le flow « maj-avis-chez-belle »
+// Avis et notes : fichier src/_data/avis.json, rempli par le flow « maj-avis-chez-belle »
 // DEBUT AVIS
-const AVIS = [
-  { "prenom": "Clémence", "date": "août 2025", "extrait": "Nous avons passé une agréable semaine, le logement est bien équipé, spacieux et possède un grand extérieur ombragé. Le quartier est calme, à proximité de la plage Pontaillac et des commerces." },
-  { "prenom": "Fabrice", "date": "août 2025", "extrait": "Chien bienvenu. Tout cela a un prix plus que correct. Je te recommande vivement pour 2 , y compris avec un chien. Encore Merci Belle pour ce séjours" },
-  { "prenom": "Sadron", "date": "juillet 2025", "extrait": "Belle est une hôte très sympathique et très disponible quand on a besoin d'elle. Le logement situé en rez-de-chaussée, est spacieux et refait à neuf." },
-  { "prenom": "Elodie", "date": "août 2024", "extrait": "Une semaine de vacances très agréable  avec nos 2 enfants qui ont pu profiter du jardin et de la plage accessible à pieds." },
-  { "prenom": "Alexia", "date": "août 2023", "extrait": "La location est conforme à la description . Très proche du bord de mer à pied mais super calme et reposant .Le jardin et la surface du logement sont un vrai plus ." },
-  { "prenom": "Pascale", "date": "juillet 2021", "extrait": "Beau jardin ombragé sans vis à vis, table et chaises à l’abri du vent et du soleil grâce à la présence d’une tonnelle." }
-];
+const AVIS = {{ avis.avis | jsonScript | safe }};
 // FIN AVIS
 // DEBUT NOTES
-const NOTES = { "globale": "4,82", "nombre": 33, "categories": [ { "nom": "Emplacement", "note": "4,9" }, { "nom": "Communication", "note": "4,9" } ] };
+const NOTES = {{ avis.notes | jsonScript | safe }};
 // FIN NOTES
 document.querySelectorAll('[data-note="globale"]').forEach(e => { e.textContent = NOTES.globale; });
 document.querySelectorAll('[data-note="badge"]').forEach(e => { e.textContent = `sur ${NOTES.nombre} avis Airbnb`; });
@@ -150,5 +137,5 @@ const slide = d => $("car").scrollBy({ left: d * $("car").clientWidth * 0.8, beh
 $("prev").addEventListener("click", () => slide(-1));
 $("next").addEventListener("click", () => slide(1));
 </script>
-<script src="assets/galerie.js"></script>
+<script src="{{ racine }}assets/galerie.js"></script>
 {% endblock %}

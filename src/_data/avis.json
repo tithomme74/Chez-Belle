@@ -1,0 +1,12 @@
+{
+  "_info": "Rempli automatiquement par le flow « maj-avis-chez-belle ». Non modifiable dans l’admin.",
+  "notes": { "globale": "4,82", "nombre": 33, "categories": [ { "nom": "Emplacement", "note": "4,9" }, { "nom": "Communication", "note": "4,9" } ] },
+  "avis": [
+    { "prenom": "Clémence", "date": "août 2025", "extrait": "Nous avons passé une agréable semaine, le logement est bien équipé, spacieux et possède un grand extérieur ombragé. Le quartier est calme, à proximité de la plage Pontaillac et des commerces." },
+    { "prenom": "Fabrice", "date": "août 2025", "extrait": "Chien bienvenu. Tout cela a un prix plus que correct. Je te recommande vivement pour 2 , y compris avec un chien. Encore Merci Belle pour ce séjours" },
+    { "prenom": "Sadron", "date": "juillet 2025", "extrait": "Belle est une hôte très sympathique et très disponible quand on a besoin d'elle. Le logement situé en rez-de-chaussée, est spacieux et refait à neuf." },
+    { "prenom": "Elodie", "date": "août 2024", "extrait": "Une semaine de vacances très agréable  avec nos 2 enfants qui ont pu profiter du jardin et de la plage accessible à pieds." },
+    { "prenom": "Alexia", "date": "août 2023", "extrait": "La location est conforme à la description . Très proche du bord de mer à pied mais super calme et reposant .Le jardin et la surface du logement sont un vrai plus ." },
+    { "prenom": "Pascale", "date": "juillet 2021", "extrait": "Beau jardin ombragé sans vis à vis, table et chaises à l’abri du vent et du soleil grâce à la présence d’une tonnelle." }
+  ]
+}

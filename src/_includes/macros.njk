@@ -1,0 +1,18 @@
+{#- Petits blocs réutilisés par les pages. Les liens internes s'écrivent depuis la racine (« /autour/ »). -#}
+
+{%- macro lienA(l, classe="") -%}
+<a{% if classe %} class="{{ classe }}"{% endif %} href="{{ l.lien | lien }}"{% if l.lien.startsWith("http") %} rel="noopener" target="_blank"{% endif %}>{{ l.label | jetons }}</a>
+{%- endmacro %}
+
+{%- macro boutons(liste) -%}
+{%- for b in liste %}{% if b.style == "lien" %}{{ lienA(b) }}{% else %}{{ lienA(b, "btn line" if b.style == "line" else "btn") }}{% endif %}{% endfor -%}
+{%- endmacro %}
+
+{%- macro srcset(p) -%}
+{% for s in p.srcset %}{{ s[0] | lien }} {{ s[1] }}w{% if not loop.last %}, {% endif %}{% endfor %}
+{%- endmacro %}
+
+{#- Photo de galerie. forme : big, tall ou normale ; masquee : visible seulement en grand ; tailles selon la forme -#}
+{%- macro figure(p, paresseuse=true, tailles=null) -%}
+<figure{% if p.forme and p.forme != "normale" %} class="{{ p.forme }}"{% endif %}{% if p.masquee %} hidden{% endif %}><img src="{{ p.src | lien }}"{% if p.srcset and not p.masquee %} srcset="{{ srcset(p) }}" sizes="{{ tailles or ('(max-width: 900px) 100vw, 560px' if p.forme == 'big' else '(max-width: 900px) 50vw, 280px') }}"{% endif %} width="{{ p.largeur }}" height="{{ p.hauteur }}"{% if paresseuse %} loading="lazy"{% endif %} alt="{{ p.alt }}">{% if p.legende %}<figcaption>{{ p.legende }}</figcaption>{% endif %}</figure>
+{%- endmacro %}

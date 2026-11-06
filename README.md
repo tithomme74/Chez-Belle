@@ -33,11 +33,21 @@ Fichiers communs :
 
 L’en-tête, le menu et le pied de page sont écrits une seule fois dans `src/_includes/base.njk`.
 
+## Contenus (src/_data/)
+
+Tous les textes, prix, listes et photos sont dans des fichiers JSON, un par page, que l'espace `/admin` modifiera :
+`site.json` (menu, pied de page, barre du bas, e-mail), `accueil.json`, `logement.json`, `reservation.json` (textes de la page Tarifs),
+`autour.json`, `tarifs.json` (types de période, prix, durées minimales, calendrier, chien, dépôt, bornes du formulaire) et `avis.json`.
+
+- **Tarifs saisis une seule fois** : la grille, le zoom de l'accueil, la barre du bas et l'estimation sont calculés depuis `tarifs.json` (`src/_data/calc.js`).
+- **Jetons** utilisables dans les textes : `{prix_min}`, `{depot}`, `{annee}`, `{chien_court}`, `{chien_long}`, `{chien_seuil}`, `{nb_photos}`, `{prix:noel}`, `{semaine:coeur}`, `{min:juillet}`.
+- **Mise en forme** autorisée dans les textes : `<b>`, `<em>`, `<sup>`, `<br>`, `<a href>` (liens internes écrits depuis la racine, ex. `/autour/`). Tout le reste est neutralisé (`src/_lib/contenu.js`).
+
 ## Avis et notes Airbnb
 
-Le flow « maj-avis-chez-belle » met à jour les blocs `// DEBUT AVIS … // FIN AVIS` et
-`// DEBUT NOTES … // FIN NOTES` : ils restent dans **`src/index.njk`** (l’accueil), comme avant.
-La page Logement affiche en plus un extrait fixe (Clémence) écrit en dur dans `src/chez-belle/index.njk` : le flow ne le touche pas.
+Les avis et les notes sont dans `src/_data/avis.json`, rempli par le flow « maj-avis-chez-belle » (à adapter : il écrivait
+auparavant dans `index.html`). Ce fichier n'est pas modifiable dans l'admin.
+La page Logement affiche en plus un extrait fixe (Clémence), dans `logement.json` : le flow ne le touche pas.
 
 ## Anciens liens
 

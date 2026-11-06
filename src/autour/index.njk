@@ -1,121 +1,71 @@
----
-titre: "Conseils et bonnes adresses autour de Pontaillac | Chez Belle"
-description: "Les conseils de Belle autour de Pontaillac et Vaux-sur-Mer : conches et plages à pied, Royan et Saint-Palais à vélo, Côte de Beauté en voiture. Filtres par envie : enfants, jour de pluie, chien, marchés."
-og_titre: "Chez Belle · conseils et bonnes adresses autour"
+---js
+{ eleventyComputed: { seo: data => data.autour.seo } }
 ---
 {% extends "base.njk" %}
+{% set au = autour %}
+{% set icones = {
+  pied: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="13" cy="4" r="2"/><path d="M10 21l2-6 3 3v3"/><path d="M8 11l3-3 3 2 3 1"/><path d="M12 15l-1-5"/></svg>',
+  velo: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="5.5" cy="16.5" r="3.5"/><circle cx="18.5" cy="16.5" r="3.5"/><path d="M5.5 16.5L9 9h6l3.5 7.5"/><path d="M12 16.5L9 9"/><path d="M14 6h2.5L15 9"/></svg>',
+  voiture: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M5 17h14v-4l-2-5H7l-2 5z"/><circle cx="8" cy="17" r="2"/><circle cx="16" cy="17" r="2"/><path d="M5 13h14"/></svg>'
+} %}
 {% block main %}
 <main>
   <section id="autour" class="page-head" aria-labelledby="t-autour" style="padding-bottom:72px">
     <div class="wrap">
-      <div class="kicker">Autour de Chez Belle</div>
-      <h1 id="t-autour" style="margin-top:10px">Tout se fait à pied, à vélo, ou presque</h1>
-      <p class="lead" style="margin-top:14px">La mer au bout de la rue, Royan par la piste cyclable, la Côte de Beauté à moins de 30 minutes.</p>
+      <div class="kicker">{{ au.entete.kicker | jetons }}</div>
+      <h1 id="t-autour" style="margin-top:10px">{{ au.entete.titre | riche | safe }}</h1>
+      <p class="lead" style="margin-top:14px">{{ au.entete.texte | riche | safe }}</p>
       <div class="filtres" role="group" aria-label="Filtrer par envie">
         <button type="button" data-f="tout" aria-pressed="true">Tout</button>
-        <button type="button" data-f="plage" aria-pressed="false">Plages</button>
-        <button type="button" data-f="balade" aria-pressed="false">Balades</button>
-        <button type="button" data-f="enfants" aria-pressed="false">Avec des enfants</button>
-        <button type="button" data-f="pluie" aria-pressed="false">Jour de pluie</button>
-        <button type="button" data-f="chien" aria-pressed="false">Avec un chien</button>
-        <button type="button" data-f="marche" aria-pressed="false">Marchés</button>
+{%- for f in au.filtres %}
+        <button type="button" data-f="{{ f.cle }}" aria-pressed="false">{{ f.label }}</button>
+{%- endfor %}
       </div>
       <div aria-live="polite">
-        <p class="conseil" data-c="plage" hidden>Saint-Sordelin pour le calme, Pontaillac pour l’animation et la surveillance en été.</p>
-        <p class="conseil" data-c="balade" hidden>Le sentier des douaniers est à son plus beau au coucher du soleil.</p>
-        <p class="conseil" data-c="enfants" hidden>Lit parapluie et chaise haute prêtés gratuitement par Belle, sur demande.</p>
-        <p class="conseil" data-c="pluie" hidden>Le marché couvert de Royan le matin, les grottes de Meschers l’après-midi.</p>
-        <p class="conseil chien" data-c="chien" hidden>Du 1<sup>er</sup> avril au 30 septembre, chiens interdits, même en laisse, sur les plages de Royan, dont Pontaillac, et à Saint-Sordelin. Le sentier des douaniers leur est ouvert.</p>
-        <p class="conseil" data-c="marche" hidden>Vaux-sur-Mer : tous les matins en juillet-août ; mardi, jeudi et samedi matin d’avril à juin et en septembre.</p>
+{%- for f in au.filtres %}{% if f.conseil %}
+        <p class="conseil{% if f.encadre %} chien{% endif %}" data-c="{{ f.cle }}" hidden>{{ f.conseil | riche | safe }}</p>
+{%- endif %}{% endfor %}
       </div>
       <div class="zones">
+{%- for z in au.zones %}
         <div>
           <div class="zone-head">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="13" cy="4" r="2"/><path d="M10 21l2-6 3 3v3"/><path d="M8 11l3-3 3 2 3 1"/><path d="M12 15l-1-5"/></svg>
-            <h3>À pied</h3><span>laissez la voiture au jardin</span>
+            {{ icones[z.cle] | safe }}
+            <h3>{{ z.titre }}</h3><span>{{ z.sous_titre }}</span>
           </div>
-          <div class="lieu" data-t="plage enfants">
-            <span class="t">5 min</span>
-            <div><h4>Conche de Saint-Sordelin</h4><p>La crique la plus proche, calme et abritée.</p></div>
+{%- for l in au.lieux %}{% if l.zone == z.cle %}
+          <div class="lieu" data-t="{{ l.filtres | join(' ') }}">
+            <span class="t">{{ l.temps }}</span>
+            <div><h4>{{ l.nom }}</h4><p>{{ l.texte | riche | safe }}</p>{% if l.lien and l.lien.lien %}{{ m.lienA(l.lien) }}{% endif %}</div>
           </div>
-          <div class="lieu" data-t="plage enfants">
-            <span class="t">7 min</span>
-            <div><h4>Plage de Pontaillac</h4><p>La grande plage familiale, surveillée l’été.</p></div>
-          </div>
-          <div class="lieu" data-t="marche">
-            <span class="t">10 min</span>
-            <div><h4>Marché de Vaux-sur-Mer</h4><p>Produits locaux, tous les matins l’été.</p></div>
-          </div>
-          <div class="lieu" data-t="balade chien">
-            <span class="t">30 min</span>
-            <div><h4>Sentier des douaniers</h4><p>Falaises et villas Belle Époque jusqu’à Nauzan.</p></div>
-          </div>
-          <div class="vide" hidden>Rien dans cette catégorie à pied.</div>
+{%- endif %}{% endfor %}
+          <div class="vide" hidden>{{ z.vide }}</div>
         </div>
-        <div>
-          <div class="zone-head">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="5.5" cy="16.5" r="3.5"/><circle cx="18.5" cy="16.5" r="3.5"/><path d="M5.5 16.5L9 9h6l3.5 7.5"/><path d="M12 16.5L9 9"/><path d="M14 6h2.5L15 9"/></svg>
-            <h3>À vélo</h3><span>temps indicatifs</span>
-          </div>
-          <div class="lieu" data-t="plage enfants">
-            <span class="t">10 min</span>
-            <div><h4>Conche de Nauzan</h4><p>Sable fin entre deux falaises vertes.</p></div>
-          </div>
-          <div class="lieu" data-t="marche pluie">
-            <span class="t">15 min</span>
-            <div><h4>Royan</h4><p>Front de mer, port et marché couvert.</p></div>
-          </div>
-          <div class="lieu" data-t="balade">
-            <span class="t">25 min</span>
-            <div><h4>Saint-Palais et le Pont du Diable</h4><p>Rochers sculptés et carrelets de pêcheurs.</p></div>
-          </div>
-          <div class="vide" hidden>Rien dans cette catégorie à vélo.</div>
-        </div>
-        <div>
-          <div class="zone-head">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M5 17h14v-4l-2-5H7l-2 5z"/><circle cx="8" cy="17" r="2"/><circle cx="16" cy="17" r="2"/><path d="M5 13h14"/></svg>
-            <h3>En voiture</h3><span>temps indicatifs</span>
-          </div>
-          <div class="lieu" data-t="enfants">
-            <span class="t">20 min</span>
-            <div><h4>Zoo de La Palmyre</h4><p>Une journée entière avec les enfants.</p></div>
-          </div>
-          <div class="lieu" data-t="pluie enfants">
-            <span class="t">20 min</span>
-            <div><h4>Grottes de Meschers</h4><p>Habitations creusées dans la falaise.</p></div>
-          </div>
-          <div class="lieu" data-t="balade">
-            <span class="t">25 min</span>
-            <div><h4>Phare de la Coubre</h4><p>On monte au sommet, puis cap sur la Côte sauvage.</p></div>
-          </div>
-          <div class="lieu" data-t="enfants">
-            <span class="t">Royan</span>
-            <div><h4>Phare de Cordouan en bateau</h4><p>Le « roi des phares », d’avril à octobre, sur réservation.</p><a href="https://www.phare-de-cordouan.fr/" rel="noopener" target="_blank">Horaires et réservation</a></div>
-          </div>
-          <div class="vide" hidden>Rien dans cette catégorie en voiture.</div>
-        </div>
+{%- endfor %}
       </div>
-      <p class="aussi">Et aussi : le village fortifié de Talmont-sur-Gironde, à 30 min en voiture.</p>
-      <!-- À réafficher quand Belle aura donné ses adresses
+{%- if au.aussi %}
+      <p class="aussi">{{ au.aussi | riche | safe }}</p>
+{%- endif %}
+{%- if au.adresses.afficher %}
       <div class="adresses">
-        <span class="signature">Les belles adresses de Belle</span>
-        <p>Bientôt sur cette page : sa boulangerie, son poissonnier, sa table préférée et le meilleur glacier de Pontaillac.</p>
+        <span class="signature">{{ au.adresses.titre }}</span>
+        <p>{{ au.adresses.texte | riche | safe }}</p>
       </div>
-      -->
+{%- endif %}
     </div>
   </section>
 
 
   <section class="cta-final" aria-label="Réserver">
     <div class="wrap">
-      <div class="kicker">Vos dates</div>
-      <h2 style="margin-top:10px">La plage à 5 minutes, le reste à vélo</h2>
-      <p class="lead">Dès 80 € la nuit, linge et ménage compris. Réponse de Belle sous 24 heures.</p>
-      <div class="hero-actions"><a class="btn" href="../tarifs-reservation/#reserver">Demander mes dates</a><a class="btn line" href="../chez-belle/">Visiter le logement</a></div>
+      <div class="kicker">{{ au.appel.kicker | jetons }}</div>
+      <h2 style="margin-top:10px">{{ au.appel.titre | riche | safe }}</h2>
+      <p class="lead">{{ au.appel.texte | riche | safe }}</p>
+      <div class="hero-actions">{{ m.boutons(au.appel.boutons) }}</div>
     </div>
   </section>
 </main>
 {% endblock %}
 {% block scripts %}
-<script src="../assets/autour.js"></script>
+<script src="{{ racine }}assets/autour.js"></script>
 {% endblock %}

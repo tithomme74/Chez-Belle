@@ -1,32 +1,22 @@
----
-titre: "Le logement : rez-de-jardin de 55 m² à Pontaillac | Chez Belle"
-description: "Chez Belle, rez-de-jardin indépendant de 55 m² à Vaux-sur-Mer : pièce à vivre, chambre, douche à l’italienne, jardin clos de 200 m² sous les pins. Lits faits, linge et ménage compris. Toutes les photos."
-og_titre: "Chez Belle · le logement et ses prestations"
-og_description: "Rez-de-jardin de 55 m² au calme à Pontaillac, jardin clos et ombragé, linge et ménage compris, chien bienvenu."
+---js
+{ eleventyComputed: { seo: data => data.logement.seo } }
 ---
 {% extends "base.njk" %}
+{% set l = logement %}
 {% block main %}
 <main>
   <!-- 1. Ce que c'est, en une phrase, puis les photos -->
   <section id="logement" class="page-head" aria-labelledby="t-logement">
     <div class="wrap">
-      <div class="kicker">Le logement</div>
-      <h1 id="t-logement">55 m² de plain-pied, ouverts sur un jardin sous les pins</h1>
-      <p class="lead">Pour 4 personnes au maximum, au calme, à 7 minutes à pied de la plage de Pontaillac.</p>
+      <div class="kicker">{{ l.entete.kicker | jetons }}</div>
+      <h1 id="t-logement">{{ l.entete.titre | riche | safe }}</h1>
+      <p class="lead">{{ l.entete.texte | riche | safe }}</p>
       <div class="galerie g5" id="photos">
-        <figure class="big"><img src="../photos/jardin-960.webp" srcset="../photos/jardin-480.webp 480w, ../photos/jardin-960.webp 960w" sizes="(max-width: 900px) 100vw, 560px" width="960" height="720" alt="Le jardin sous les pins, avec deux transats"><figcaption>Le jardin</figcaption></figure>
-        <figure class="tall"><img src="../photos/piece-a-vivre-960.webp" srcset="../photos/piece-a-vivre-480.webp 480w, ../photos/piece-a-vivre-960.webp 960w" sizes="(max-width: 900px) 50vw, 280px" width="960" height="1280" loading="lazy" alt="Le salon avec canapé-lit et fauteuil en rotin"><figcaption>Le salon</figcaption></figure>
-        <figure class="tall"><img src="../photos/chambre-960.webp" srcset="../photos/chambre-480.webp 480w, ../photos/chambre-960.webp 960w" sizes="(max-width: 900px) 50vw, 280px" width="960" height="1280" loading="lazy" alt="La chambre, lits rapprochés en grand lit"><figcaption>La chambre</figcaption></figure>
-        <figure><img src="../photos/cuisine-960.webp" srcset="../photos/cuisine-480.webp 480w, ../photos/cuisine-960.webp 720w" sizes="(max-width: 900px) 50vw, 280px" width="720" height="540" loading="lazy" alt="La cuisine équipée"><figcaption>La cuisine</figcaption></figure>
-        <figure><img src="../photos/salle-de-douche-960.webp" srcset="../photos/salle-de-douche-480.webp 480w, ../photos/salle-de-douche-960.webp 960w" sizes="(max-width: 900px) 50vw, 280px" width="960" height="720" loading="lazy" alt="La salle de douche à l’italienne"><figcaption>La douche</figcaption></figure>
-        <!-- Visibles seulement en grand, avec les flèches -->
-        <figure hidden><img src="../photos/galerie-1-960.webp" width="960" height="1280" loading="lazy" alt="Le coin repas et sa table en bois"><figcaption>Le coin repas</figcaption></figure>
-        <figure hidden><img src="../photos/terrasse-960.webp" width="960" height="720" loading="lazy" alt="Le côté terrasse du jardin, en fleurs"><figcaption>Le côté terrasse</figcaption></figure>
-        <figure hidden><img src="../photos/galerie-2-480.webp" width="480" height="640" loading="lazy" alt="L’entrée, avec la porte ouverte sur le jardin"><figcaption>L’entrée</figcaption></figure>
-        <figure hidden><img src="../photos/salle-a-manger-480.webp" width="480" height="388" loading="lazy" alt="La table de la salle à manger dressée"><figcaption>La table</figcaption></figure>
-        <figure hidden><img src="../photos/galerie-3-480.webp" width="480" height="640" loading="lazy" alt="La buanderie avec lave-linge"><figcaption>La buanderie</figcaption></figure>
+{%- for p in l.galerie %}
+        {{ m.figure(p, not loop.first) }}
+{%- endfor %}
       </div>
-      <p class="plus"><button type="button" class="btn line" data-galerie-ouvrir>Voir les 10 photos</button></p>
+      <p class="plus"><button type="button" class="btn line" data-galerie-ouvrir>{{ l.bouton_photos | jetons }}</button></p>
     </div>
   </section>
 
@@ -34,10 +24,9 @@ og_description: "Rez-de-jardin de 55 m² au calme à Pontaillac, jardin clos et 
   <section class="chiffres-sec" aria-label="En un coup d’œil">
     <div class="wrap">
       <ul class="chiffres">
-        <li><b>55 m²</b><span>de plain-pied, entrée indépendante</span></li>
-        <li><b>4 personnes</b><span>1 chambre et 1 canapé-lit</span></li>
-        <li><b>200 m²</b><span>de jardin clos, sous les pins</span></li>
-        <li><b>7 min</b><span>à pied jusqu’à la plage</span></li>
+{%- for c in l.chiffres %}
+        <li><b>{{ c.valeur | jetons }}</b><span>{{ c.texte | riche | safe }}</span></li>
+{%- endfor %}
       </ul>
     </div>
   </section>
@@ -45,46 +34,33 @@ og_description: "Rez-de-jardin de 55 m² au calme à Pontaillac, jardin clos et 
   <!-- 3. Comment c'est organisé -->
   <section aria-labelledby="t-orga" class="orga-sec">
     <div class="wrap">
-      <h2 id="t-orga">Comment c’est organisé</h2>
+      <h2 id="t-orga">{{ l.organisation.titre | riche | safe }}</h2>
       <div class="orga">
+{%- for c in l.organisation.cartes %}
         <article>
-          <h3>Dedans</h3>
+          <h3>{{ c.titre }}</h3>
           <ul class="coches">
-            <li>La chambre : 2 lits simples, à jumeler en grand lit ou à séparer</li>
-            <li>Le salon : un canapé-lit, à côté du coin repas</li>
-            <li>Une cuisine équipée et une douche à l’italienne rénovée</li>
+{%- for p in c.points %}
+            <li>{{ p | riche | safe }}</li>
+{%- endfor %}
           </ul>
         </article>
-        <article>
-          <h3>Dehors</h3>
-          <ul class="coches">
-            <li>Un jardin clos de 200 m², à l’ombre des pins</li>
-            <li>Une table sous l’auvent pour dîner dehors</li>
-            <li>Barbecue Weber et 2 transats</li>
-          </ul>
-        </article>
-        <article>
-          <h3>Avec Belle</h3>
-          <ul class="coches">
-            <li>Votre propre porte, de plain-pied sur le jardin</li>
-            <li>Belle vit à l’étage, avec son entrée à elle</li>
-            <li>Portail et jardin partagés, place de parking réservée</li>
-          </ul>
-        </article>
+{%- endfor %}
       </div>
-      <p class="option-sup" style="margin-top:20px"><b>En option :</b> la caravane « cosy » dans le jardin, avec un lit double · 20 € par jour, en réservation directe.</p>
+{%- if l.organisation.option %}
+      <p class="option-sup" style="margin-top:20px">{{ l.organisation.option | riche | safe }}</p>
+{%- endif %}
     </div>
   </section>
 
   <!-- 4. Équipements regroupés -->
   <section aria-labelledby="t-equip" class="equip-sec">
     <div class="wrap">
-      <h2 id="t-equip">Les équipements</h2>
+      <h2 id="t-equip">{{ l.equipements.titre | riche | safe }}</h2>
       <div class="familles">
-        <div><h3>Cuisine</h3><p>Lave-vaisselle · four · micro-ondes · plaque vitrocéramique · réfrigérateur et congélateur · Nespresso · grille-pain</p></div>
-        <div><h3>Confort</h3><p>Wifi fibre · télévision · lave-linge · fer à repasser · sèche-cheveux · volets roulants</p></div>
-        <div><h3>Plage</h3><p>Parasol · jeux de plage · serviettes de plage fournies</p></div>
-        <div><h3>Bébé et chien</h3><p>Lit parapluie et chaise haute prêtés sur demande · chien bienvenu</p></div>
+{%- for f in l.equipements.familles %}
+        <div><h3>{{ f.titre }}</h3><p>{{ f.liste | join(" · ") }}</p></div>
+{%- endfor %}
       </div>
     </div>
   </section>
@@ -92,33 +68,31 @@ og_description: "Rez-de-jardin de 55 m² au calme à Pontaillac, jardin clos et 
   <!-- 5. Compris + règles, en une bande -->
   <section class="compris-sec" aria-label="Compris dans le prix et règles de la maison">
     <div class="wrap compris">
+{%- for b in l.bandeau %}
       <div>
-        <div class="kicker">Compris dans le prix</div>
-        <p class="gros">Lits faits, linge de toilette et ménage de fin de séjour.</p>
+        <div class="kicker">{{ b.kicker | jetons }}</div>
+        <p class="gros">{{ b.texte | riche | safe }}</p>
       </div>
-      <div>
-        <div class="kicker">La maison</div>
-        <p class="gros">Non-fumeur, ni fête ni réception. Arrivée dès 16 h, départ avant 10 h.</p>
-      </div>
+{%- endfor %}
     </div>
   </section>
 
   <!-- 6. Un avis, puis l'action -->
   <section aria-label="Un avis et la suite" class="fin-sec">
     <div class="wrap">
-      <!-- Extrait d’avis Airbnb recopié mot pour mot (le flow « maj-avis-chez-belle » ne met à jour que l’accueil) -->
+{%- if l.avis_fixe.texte %}
       <figure class="avis-un">
-        <blockquote>Nous avons passé une agréable semaine, le logement est bien équipé, spacieux et possède un grand extérieur ombragé. Le quartier est calme, à proximité de la plage Pontaillac et des commerces.</blockquote>
-        <figcaption><strong>Clémence</strong> · août 2025 · Airbnb · <a href="../#avis">les autres avis</a></figcaption>
+        <blockquote>{{ l.avis_fixe.texte }}</blockquote>
+        <figcaption><strong>{{ l.avis_fixe.prenom }}</strong> · {{ l.avis_fixe.date }} · Airbnb · <a href="{{ '/#avis' | lien }}">{{ l.avis_fixe.lien_autres }}</a></figcaption>
       </figure>
+{%- endif %}
       <div class="plus">
-        <a class="btn" href="../tarifs-reservation/">Voir les prix et demander mes dates</a>
-        <a href="../autour/">Les plages et adresses autour →</a>
+        {{ m.boutons(l.boutons) }}
       </div>
     </div>
   </section>
 </main>
 {% endblock %}
 {% block scripts %}
-<script src="../assets/galerie.js"></script>
+<script src="{{ racine }}assets/galerie.js"></script>
 {% endblock %}

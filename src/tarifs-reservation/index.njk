@@ -1,114 +1,113 @@
----
-titre: "Tarifs 2027 et réservation en direct | Chez Belle, Pontaillac"
-description: "Tarifs 2027 de Chez Belle à Vaux-sur-Mer : dès 80 € la nuit en mai, juin et septembre, 805 € la semaine en cœur d’été. Linge et ménage compris. Estimation immédiate et demande de dates à Belle, réponse sous 24 h."
-og_titre: "Chez Belle · tarifs 2027 et demande de réservation"
+---js
+{ eleventyComputed: { seo: data => data.reservation.seo } }
 ---
 {% extends "base.njk" %}
+{% set r = reservation %}
+{% set fo = tarifs.formulaire %}
+{% set tx = r.formulaire %}
 {% block main %}
 <main>
   <section class="page-head" aria-labelledby="t-page">
     <div class="wrap">
-      <div class="kicker">Tarifs 2027 · réservation en direct</div>
-      <h1 id="t-page">Dès 80 € la nuit, linge et ménage compris</h1>
-      <p class="lead">Le prix de la grille est celui du contrat, sans frais de plateforme. Choisissez vos dates : Belle vous répond sous 24 heures.</p>
-      <div class="hero-actions"><a class="btn" href="#reserver">Estimer mon séjour</a><a class="btn line" href="#tarifs">Voir les prix</a></div>
+      <div class="kicker">{{ r.entete.kicker | jetons }}</div>
+      <h1 id="t-page">{{ r.entete.titre | riche | safe }}</h1>
+      <p class="lead">{{ r.entete.texte | riche | safe }}</p>
+      <div class="hero-actions">{{ m.boutons(r.entete.boutons) }}</div>
     </div>
   </section>
 
   <section id="tarifs" class="grille-sec" aria-labelledby="t-tarifs">
     <div class="wrap">
-      <h2 id="t-tarifs">Les prix, saison par saison</h2>
+      <h2 id="t-tarifs">{{ r.grille.titre | riche | safe }}</h2>
       <div class="grille-box">
         <table class="grille num">
           <thead><tr><th scope="col">Période</th><th scope="col">Prix</th><th scope="col">Séjour</th></tr></thead>
           <tbody>
-            <tr class="calme"><th scope="row">Mai et juin <span class="tag">plus calme</span><small>2 mai – 21 juin, hors ponts</small></th><td><span class="prix">80 €</span><small>la nuit</small></td><td>3 nuits minimum</td></tr>
-            <tr><th scope="row">Ponts de mai<small>1<sup>er</sup> mai · Ascension 6 – 9 mai · Pentecôte 14 – 17 mai</small></th><td><span class="prix">95 €</span><small>la nuit</small></td><td>3 nuits minimum</td></tr>
-            <tr><th scope="row">Début juillet<small>21 juin – 7 juillet</small></th><td><span class="prix">105 €</span><small>la nuit</small></td><td>4 nuits minimum</td></tr>
-            <tr class="peak"><th scope="row">Cœur de l’été<small>7 juillet – 28 août</small></th><td><span class="prix">805 €</span><small>la semaine, soit 115 € la nuit</small></td><td>7 nuits minimum</td></tr>
-            <tr><th scope="row">Fin d’été<small>28 août – 5 septembre</small></th><td><span class="prix">90 €</span><small>la nuit</small></td><td>4 nuits minimum</td></tr>
-            <tr class="calme"><th scope="row">Septembre <span class="tag">plus calme</span><small>5 – 25 septembre</small></th><td><span class="prix">80 €</span><small>la nuit</small></td><td>3 nuits minimum</td></tr>
-            <tr><th scope="row">Noël<small>semaine du 18 ou du 25 décembre</small></th><td><span class="prix">85 €</span><small>la nuit</small></td><td>7 nuits</td></tr>
+{%- for g in calc.grille %}
+            <tr{% if g.style %} class="{{ g.style }}"{% endif %}><th scope="row">{{ g.titre }}{% if g.etiquette %} <span class="tag">{{ g.etiquette }}</span>{% endif %}<small>{{ g.dates | riche | safe }}</small></th><td><span class="prix">{{ g.prix }}</span><small>{{ g.unite }}</small></td><td>{{ g.sejour }}</td></tr>
+{%- endfor %}
           </tbody>
         </table>
       </div>
-      <p class="secret"><b>Le secret des habitués :</b> en mai, juin et septembre, les plages sont calmes, l’océan est bon et le prix descend à 80 € la nuit.</p>
+{%- if r.grille.secret %}
+      <p class="secret">{{ r.grille.secret | riche | safe }}</p>
+{%- endif %}
     </div>
   </section>
 
   <section class="inclus-sec" aria-label="Ce qui est compris dans le prix">
     <div class="wrap inclus">
       <div class="stack">
-        <h2>Compris dans le prix</h2>
+        <h2>{{ r.compris.titre | riche | safe }}</h2>
         <ul class="coches">
-          <li>Lits faits, linge de toilette et serviettes de plage</li>
-          <li>Ménage de fin de séjour</li>
-          <li>Eau, électricité, chauffage et wifi fibre</li>
-          <li>Café et produits de base pour démarrer</li>
-          <li>Place de parking dans la propriété</li>
+{%- for c in r.compris.liste %}
+          <li>{{ c | riche | safe }}</li>
+{%- endfor %}
         </ul>
       </div>
       <div class="stack">
-        <h2>En plus, selon votre séjour</h2>
+        <h2>{{ r.en_plus.titre | riche | safe }}</h2>
         <ul class="coches plus-s">
-          <li>Taxe de séjour : par adulte et par nuit, mineurs exonérés</li>
-          <li>Chien : 15 € jusqu’à 3 nuits, 25 € au-delà</li>
-          <li>Lit parapluie et chaise haute : gratuits, sur demande</li>
+{%- for c in r.en_plus.liste %}
+          <li>{{ c | riche | safe }}</li>
+{%- endfor %}
         </ul>
-        <p class="fine">Arrivée dès 16 h · départ avant 10 h · 4 personnes au maximum, bébés compris.</p>
+        <p class="fine">{{ r.en_plus.note | riche | safe }}</p>
       </div>
     </div>
   </section>
 
   <section aria-labelledby="t-etapes">
     <div class="wrap">
-      <h2 id="t-etapes">Réserver en trois étapes</h2>
+      <h2 id="t-etapes">{{ r.etapes.titre | riche | safe }}</h2>
       <ol class="etapes">
-        <li><div><h3>Vous demandez vos dates</h3><p>Belle répond sous 24 heures et vous envoie le contrat.</p></div></li>
-        <li><div><h3>Vous confirmez</h3><p>Contrat signé et 30 % d’arrhes par virement.</p></div></li>
-        <li><div><h3>Un mois avant</h3><p>Vous réglez le solde, puis recevez le livret d’accueil et le code de la boîte à clés.</p></div></li>
+{%- for e in r.etapes.liste %}
+        <li><div><h3>{{ e.titre }}</h3><p>{{ e.texte | riche | safe }}</p></div></li>
+{%- endfor %}
       </ol>
     </div>
   </section>
 
   <section id="reserver" class="demande" aria-labelledby="t-reserver">
     <div class="wrap">
-      <h2 id="t-reserver">Demander mes dates</h2>
+      <h2 id="t-reserver">{{ tx.titre }}</h2>
       <div class="req">
         <form id="f" novalidate>
-          <label for="arr">Arrivée<input id="arr" type="date" min="2027-05-01" max="2027-12-31"></label>
-          <label for="dep">Départ<input id="dep" type="date" min="2027-05-02" max="2028-01-01"></label>
-          <label for="pax">Voyageurs, bébés compris<select id="pax"><option>1</option><option selected>2</option><option>3</option><option>4</option></select></label>
-          <label for="kids">Dont enfants<select id="kids"><option selected>0</option><option>1</option><option>2</option><option>3</option></select></label>
-          <span class="full check"><input id="pet" type="checkbox"><label for="pet" style="display:inline;color:var(--encre)">Je viens avec mon chien</label></span>
-          <label class="full" for="nom">Nom et prénom<input id="nom" type="text" autocomplete="name" placeholder="Claire Martin"></label>
-          <label class="full" for="contact">E-mail ou téléphone<input id="contact" type="text" autocomplete="email" placeholder="claire.martin@exemple.fr"></label>
-          <label class="full" for="msg">Message (facultatif)<textarea id="msg" placeholder="Un lit parapluie, une arrivée tardive…"></textarea></label>
-          <div class="full"><button class="btn" type="submit">Préparer ma demande</button></div>
+          <label for="arr">{{ tx.arrivee }}<input id="arr" type="date" min="{{ fo.arrivee_min }}" max="{{ fo.arrivee_max }}"></label>
+          <label for="dep">{{ tx.depart }}<input id="dep" type="date" min="{{ fo.depart_min }}" max="{{ fo.depart_max }}"></label>
+          <label for="pax">{{ tx.voyageurs }}<select id="pax">{% for n in range(1, fo.voyageurs_max + 1) %}<option{% if n == fo.voyageurs_defaut %} selected{% endif %}>{{ n }}</option>{% endfor %}</select></label>
+          <label for="kids">{{ tx.enfants }}<select id="kids">{% for n in range(0, fo.enfants_max + 1) %}<option{% if n == 0 %} selected{% endif %}>{{ n }}</option>{% endfor %}</select></label>
+          <span class="full check"><input id="pet" type="checkbox"><label for="pet" style="display:inline;color:var(--encre)">{{ tx.chien }}</label></span>
+          <label class="full" for="nom">{{ tx.nom }}<input id="nom" type="text" autocomplete="name" placeholder="{{ tx.nom_exemple }}"></label>
+          <label class="full" for="contact">{{ tx.contact }}<input id="contact" type="text" autocomplete="email" placeholder="{{ tx.contact_exemple }}"></label>
+          <label class="full" for="msg">{{ tx.message }}<textarea id="msg" placeholder="{{ tx.message_exemple }}"></textarea></label>
+          <div class="full"><button class="btn" type="submit">{{ tx.bouton }}</button></div>
         </form>
         <div class="stack">
           <div class="estim" aria-live="polite">
-            <div class="kicker" style="color:var(--marine-2)">Estimation</div>
+            <div class="kicker" style="color:var(--marine-2)">{{ tx.estimation_titre }}</div>
             <div class="total num" id="total">—</div>
             <div id="detail" class="fine"></div>
             <ul id="lines"></ul>
             <p class="warn" id="warn" hidden></p>
-            <p class="fine">Taxe de séjour en sus. Prix confirmé par Belle avec le contrat.</p>
+            <p class="fine">{{ tx.estimation_note | riche | safe }}</p>
           </div>
           <div class="estim out" id="out" hidden>
-            <div class="kicker" style="color:var(--marine-2)">Votre demande, prête à envoyer</div>
+            <div class="kicker" style="color:var(--marine-2)">{{ tx.demande_titre }}</div>
             <pre id="draft"></pre>
             <div class="row">
-              <button class="btn line" type="button" id="copy">Copier la demande</button>
-              <a class="btn" id="mail" href="#">Ouvrir ma messagerie</a>
+              <button class="btn line" type="button" id="copy">{{ tx.copier }}</button>
+              <a class="btn" id="mail" href="#">{{ tx.messagerie }}</a>
             </div>
-            <span id="copied" class="fine" hidden>Demande copiée.</span>
-            <p class="fine">Ou écrivez directement à <span class="mail-belle" id="belle-mail"></span></p>
+            <span id="copied" class="fine" hidden>{{ tx.copiee }}</span>
+            <p class="fine">{{ tx.ecrire }} <span class="mail-belle" id="belle-mail"></span></p>
           </div>
+{%- if r.mot_de_belle.texte %}
           <figure class="mot-court">
-            <blockquote>« Je loue le rez-de-jardin comme j’aimerais être reçue en vacances. Vous êtes chez vous, et je reste là si vous avez besoin. »</blockquote>
-            <figcaption class="signature">Belle</figcaption>
+            <blockquote>{{ r.mot_de_belle.texte | riche | safe }}</blockquote>
+            <figcaption class="signature">{{ r.mot_de_belle.signature }}</figcaption>
           </figure>
+{%- endif %}
         </div>
       </div>
     </div>
@@ -116,20 +115,20 @@ og_titre: "Chez Belle · tarifs 2027 et demande de réservation"
 
   <section id="questions" aria-labelledby="t-faq">
     <div class="wrap">
-      <h2 id="t-faq">Vos questions</h2>
+      <h2 id="t-faq">{{ r.faq.titre | riche | safe }}</h2>
       <div class="faq-list">
-        <details><summary>Comment se passent l’arrivée et le départ ?</summary><p>En autonomie, avec une boîte à clés : arrivée dès 16 h, départ avant 10 h. Le code vous est envoyé au plus tard trois jours avant, une fois le séjour réglé.</p></details>
-        <details><summary>Combien coûte la taxe de séjour ?</summary><p>Elle est due par adulte et par nuit, au tarif de la Communauté d’Agglomération Royan Atlantique en vigueur à la date du séjour. Les mineurs en sont exonérés. Belle vous indique le montant exact avec le contrat.</p></details>
-        <details><summary>Y a-t-il un dépôt de garantie ?</summary><p>Oui, 300 €, versés avec le solde et rendus par virement au plus tard quatorze jours après votre départ, déduction faite d’éventuels dégâts justifiés.</p></details>
-        <details><summary>Et si je dois annuler ?</summary><p>Avant le paiement du solde, vous renoncez en abandonnant les arrhes. Après, le séjour reste dû, mais Belle vous rembourse les nuits qu’elle parvient à relouer. Une assurance annulation est recommandée.</p></details>
-        <details><summary>Je viens avec mon chien, comment ça se passe ?</summary><p>Il est le bienvenu : signalez-le dans votre demande. Il ne monte ni sur les lits ni sur le canapé et ne reste pas seul dans le logement. Du 1<sup>er</sup> avril au 30 septembre, les chiens ne sont admis ni sur les plages de Royan, dont Pontaillac, ni sur la conche de Saint-Sordelin, mais le sentier des douaniers est tout proche.</p></details>
-        <details><summary>Peut-on venir en dehors de mai à septembre ?</summary><p>Oui à Noël : une semaine à 85 € la nuit, du 18 ou du 25 décembre. Pour d’autres dates, écrivez à Belle.</p></details>
+{%- for q in r.faq.questions %}
+        <details><summary>{{ q.question | jetons }}</summary><p>{{ q.reponse | riche | safe }}</p></details>
+{%- endfor %}
       </div>
-      <p class="fine" style="margin-top:20px">Couchages, parking, Belle à l’étage : tout est détaillé sur la page <a href="../chez-belle/">Le logement</a>.</p>
+{%- if r.faq.note %}
+      <p class="fine" style="margin-top:20px">{{ r.faq.note | riche | safe }}</p>
+{%- endif %}
     </div>
   </section>
 </main>
 {% endblock %}
 {% block scripts %}
-<script src="../assets/reservation.js"></script>
+<script type="application/json" id="donnees-tarifs">{{ { types: tarifs.types, calendrier: tarifs.calendrier, chien: tarifs.chien, email: site.email } | jsonScript | safe }}</script>
+<script src="{{ racine }}assets/reservation.js"></script>
 {% endblock %}
