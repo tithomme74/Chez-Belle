@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>{{ titre }}</title>
+<meta name="description" content="{{ description }}">
+<link rel="canonical" href="{{ site.url }}{{ page.url }}">
+<link rel="icon" href="{{ racine }}favicon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#F8F4EA">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Chez Belle">
+<meta property="og:title" content="{{ og_titre }}">
+<meta property="og:description" content="{{ og_description or description }}">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:url" content="{{ site.url }}{{ page.url }}">
+<meta property="og:image" content="{{ site.url }}/photos/jardin.jpg">
+{% block head %}{% endblock %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Jost:wght@400;500;600&family=Caveat:wght@500&display=swap">
+<link rel="stylesheet" href="{{ racine }}assets/style.css">
+{% block headFin %}{% endblock %}
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="{{ racine or './' }}" aria-label="Chez Belle, accueil">
+      <svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><circle cx="15" cy="15" r="14" fill="#1E3A5C"/><path d="M5 19c3-2 5-2 7 0s5 2 7 0 5-2 7 0" stroke="#F8F4EA" stroke-width="2" fill="none" stroke-linecap="round"/><circle cx="15" cy="11" r="4" fill="#C4513A"/></svg>
+      Chez Belle
+    </a>
+    <nav class="main" aria-label="Onglets du site">
+{%- set onglets = [["", "Accueil"], ["chez-belle/", "Le logement"], ["tarifs-reservation/", "Tarifs"], ["autour/", "Autour"]] %}
+{%- for o in onglets %}
+      <a href="{{ (racine + o[0]) or './' }}"{% if page.url == "/" + o[0] %} aria-current="page"{% endif %}>{{ o[1] }}</a>
+{%- endfor %}
+    </nav>
+    <a class="btn" href="{{ racine }}tarifs-reservation/#reserver">Demander mes dates</a>
+  </div>
+</header>
+<div class="stripes" aria-hidden="true"></div>
+
+{% block main %}{% endblock %}
+
+<div class="stripes" aria-hidden="true"></div>
+<footer>
+  <div class="wrap">
+    <div class="stack" style="gap:10px">
+      <a class="brand" href="{{ racine or './' }}">Chez Belle</a>
+      <p>Location de vacances de particulier · quartier de Pontaillac, 17640 Vaux-sur-Mer</p>
+    </div>
+    <div>
+      <h4>Informations légales</h4>
+      <p>Meublé de tourisme · numéro d’enregistrement : en cours d’attribution</p>
+      <p>Éditrice du site : Isabelle L.</p>
+      <p>Hébergement : Netlify, Inc., San Francisco, États-Unis</p>
+    </div>
+    <div>
+      <h4>Liens</h4>
+      <p><a href="https://www.airbnb.fr/rooms/25931091" rel="noopener" target="_blank">Tous les avis sur Airbnb</a></p>
+      <p><a href="{{ racine }}tarifs-reservation/#reserver">Demander mes dates</a></p>
+      <p><a href="{{ racine }}tarifs-reservation/#questions">Vos questions</a></p>
+    </div>
+  </div>
+</footer>
+
+<div class="barre" aria-label="Réservation rapide">
+  <span class="p">dès <b>80 €</b> la nuit<br>linge et ménage compris</span>
+  <a class="btn" href="{{ racine }}tarifs-reservation/#reserver">Demander mes dates</a>
+</div>
+
+{% block scripts %}{% endblock %}
+</body>
+</html>

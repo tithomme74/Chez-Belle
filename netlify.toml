@@ -1,0 +1,7 @@
+# Netlify construit le site avec Eleventy et publie le dossier _site
+[build]
+  command = "npm run build"
+  publish = "_site"
+
+[build.environment]
+  NODE_VERSION = "24"

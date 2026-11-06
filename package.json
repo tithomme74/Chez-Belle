@@ -1,0 +1,13 @@
+{
+  "name": "chez-belle-site",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "eleventy",
+    "dev": "eleventy --serve --port=8765",
+    "test": "eleventy --quiet && node --test tests/*.test.js"
+  },
+  "devDependencies": {
+    "@11ty/eleventy": "3.1.7"
+  }
+}
