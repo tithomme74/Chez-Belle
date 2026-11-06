@@ -4,6 +4,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+{%- if apercu %}
+<meta name="robots" content="noindex, nofollow">
+{%- endif %}
 <title>{{ seo.titre | jetons }}</title>
 <meta name="description" content="{{ seo.description | jetons }}">
 <link rel="canonical" href="{{ site.url }}{{ page.url }}">
@@ -24,6 +27,9 @@
 {% block headFin %}{% endblock %}
 </head>
 <body>
+{%- if apercu %}
+<div class="bandeau-apercu" role="note">Aperçu du brouillon : ces modifications ne sont pas encore publiées. <a href="/admin/">Retour à l’admin</a></div>
+{%- endif %}
 
 <header class="top">
   <div class="wrap">

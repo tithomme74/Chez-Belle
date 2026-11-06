@@ -7,7 +7,8 @@ depuis la branche `main` : https://chez-belle-pontaillac.netlify.app
 ## Travailler en local
 
 - `npm install` (une fois), puis `npm run mot-de-passe -- --local` (une fois : crée `.env` avec un mot de passe de test, noté en commentaire dans ce fichier).
-- `npm run dev` : site et API de l'admin sur http://localhost:8765 ; chaque contenu enregistré reconstruit le site.
+- `npm run dev` : site « publié » sur http://localhost:8765, aperçu du brouillon sur http://localhost:8765/apercu/, admin sur http://localhost:8765/admin/.
+  En local, le site publié est construit depuis `src/_data/`, le brouillon vit dans `.local/brouillon/` et l'historique dans `.local/historique/` (dossiers ignorés par Git).
 - `npm run build` : produit le site dans `_site/` (ce que Netlify publie, voir `netlify.toml`).
 - `npm test` : reconstruit et vérifie que les pages restent identiques aux références de `tests/reference/`.
 
@@ -51,6 +52,16 @@ Commun, Avis en lecture seule). Les formulaires sont générés à partir de `sr
 apparaître dans l'admin. Listes : ajouter, supprimer, monter, descendre. Photos : réduites dans le navigateur (480 et 960 px, WebP,
 ou JPEG si le navigateur ne sait pas faire de WebP), puis envoyées à `/api/photos`. Retirer une photo de la liste la retire du site
 (le fichier reste dans `src/photos/`). Contrôles faits dans le navigateur puis refaits par le serveur.
+
+## Brouillon, aperçu, publication, historique
+
+- Chaque « Enregistrer le brouillon » écrit dans le brouillon : en ligne, la branche Git `brouillon`, que Netlify publie comme aperçu
+  (bandeau « Aperçu du brouillon », pages non indexées) ; en local, `.local/brouillon/` servi sur `/apercu/`.
+- « Publier sur le site » revalide tout le brouillon puis le fusionne dans `main` (Netlify reconstruit le site, 1 à 2 min) ;
+  le brouillon repart ensuite de la version publiée. « Abandonner le brouillon » le remet à l'identique du site publié.
+- Historique : chaque rubrique liste ses versions publiées (commits de `main` qui ont modifié son fichier) ; « Reprendre »
+  remet une version dans le formulaire, à enregistrer puis publier.
+- Les avis (`avis.json`) se lisent toujours sur la version publiée ; le flow les met à jour directement sur `main`.
 
 ## API de l'admin (api/)
 

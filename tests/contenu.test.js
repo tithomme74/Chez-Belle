@@ -3,7 +3,9 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import { riche, lien, jetons } from "../src/_lib/contenu.js";
-import calc from "../src/_data/calc.js";
+import { calculer } from "../src/_lib/calc.js";
+const lireJson = n => JSON.parse(fs.readFileSync(`src/_data/${n}.json`, "utf8"));
+const calc = () => calculer(lireJson("tarifs"), lireJson("accueil"));
 
 test("riche : balises autorisées conservées", () => {
   assert.equal(riche("<b>a</b> <em>b</em> 1<sup>er</sup><br>&nbsp;€"), "<b>a</b> <em>b</em> 1<sup>er</sup><br>&nbsp;€");

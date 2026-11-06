@@ -77,15 +77,17 @@ test("liste et lecture des contenus", async () => {
   assert.equal(t.donnees.depot, 300); assert.equal(typeof t.version, "string"); assert.equal(t.lectureSeule, false);
 });
 
-test("enregistrement valide, puis conflit de version", async () => {
+test("enregistrement dans le brouillon seulement, puis conflit de version", async () => {
   const t = await json(await appel("GET", "/api/contenus/tarifs"));
   t.donnees.depot = 350;
   t.donnees.champInconnu = "<script>";
   const r = await json(await appel("PUT", "/api/contenus/tarifs", { donnees: t.donnees, version: t.version }));
   assert.equal(r.statut, 200, JSON.stringify(r));
-  const disque = JSON.parse(fs.readFileSync(path.join(racine, "src/_data/tarifs.json"), "utf8"));
-  assert.equal(disque.depot, 350);
-  assert.equal(disque.champInconnu, undefined, "champ hors schéma ignoré");
+  const brouillon = JSON.parse(fs.readFileSync(path.join(racine, ".local/brouillon/tarifs.json"), "utf8"));
+  assert.equal(brouillon.depot, 350);
+  assert.equal(brouillon.champInconnu, undefined, "champ hors schéma ignoré");
+  const publie = JSON.parse(fs.readFileSync(path.join(racine, "src/_data/tarifs.json"), "utf8"));
+  assert.equal(publie.depot, 300, "le site publié n'a pas bougé");
   const r2 = await appel("PUT", "/api/contenus/tarifs", { donnees: t.donnees, version: t.version });
   assert.equal(r2.status, 409);
 });
@@ -145,24 +147,106 @@ test("déconnexion : cookie effacé", async () => {
   assert.match(r.headers.get("set-cookie"), /Max-Age=0/);
 });
 
-test("stockage GitHub : lecture, écriture sur la branche, conflit", async () => {
-  const appels = [];
-  const faux = async (url, o = {}) => {
-    appels.push({ url, o });
-    if (!o.method) return new Response(JSON.stringify({ sha: "abc", content: Buffer.from('{"depot":300}').toString("base64") }));
-    const b = JSON.parse(o.body);
-    if (b.sha !== "abc") return new Response("{}", { status: 409 });
-    return new Response(JSON.stringify({ content: { sha: "def" } }));
+// Faux GitHub minimal : branches, fichiers, comparaison, fusion, historique
+function fauxGithub() {
+  const refs = { main: "m1" }, appels = [];
+  let enAvance = 0;
+  const rep = (corps, status = 200) => new Response(corps === null ? null : JSON.stringify(corps), { status });
+  const f = async (url, o = {}) => {
+    const u = new URL(url), chemin = u.pathname.replace("/repos/moi/depot", ""), m = o.method || "GET";
+    const corps = o.body ? JSON.parse(o.body) : null;
+    appels.push({ m, chemin, query: u.search, corps, auth: o.headers.Authorization });
+    let x;
+    if (m === "GET" && (x = /^\/git\/ref\/heads\/(.+)$/.exec(chemin))) return refs[x[1]] ? rep({ object: { sha: refs[x[1]] } }) : rep({}, 404);
+    if (m === "POST" && chemin === "/git/refs") { refs[corps.ref.replace("refs/heads/", "")] = corps.sha; return rep({}, 201); }
+    if (m === "PATCH" && (x = /^\/git\/refs\/heads\/(.+)$/.exec(chemin))) { refs[x[1]] = corps.sha; enAvance = 0; return rep({}); }
+    if (m === "GET" && chemin.startsWith("/contents/")) return rep({ sha: "abc", content: Buffer.from('{"depot":300}').toString("base64") });
+    if (m === "PUT" && chemin.startsWith("/contents/")) { if (corps.sha && corps.sha !== "abc") return rep({}, 409); enAvance++; return rep({ content: { sha: "def" } }, 201); }
+    if (m === "GET" && chemin === "/compare/main...brouillon")
+      return rep({ ahead_by: enAvance, behind_by: 0, files: enAvance ? [{ filename: "src/_data/tarifs.json" }, { filename: "src/photos/x-480.webp" }] : [] });
+    if (m === "POST" && chemin === "/merges") { refs.main = "m2"; return rep({ sha: "m2" }, 201); }
+    if (m === "GET" && chemin === "/commits") return rep([{ sha: "c".repeat(40), commit: { committer: { date: "2027-01-02T10:00:00Z" }, message: "Publication depuis l’admin : Tarifs\n\ndétail" } }]);
+    return rep({ message: "inattendu" }, 500);
   };
-  const g = stockageGithub({ GITHUB_TOKEN: "jeton-factice", GITHUB_DEPOT: "moi/depot", GITHUB_BRANCHE: "brouillon" }, faux);
-  const l = await g.lire("tarifs");
-  assert.deepEqual(l, { donnees: { depot: 300 }, version: "abc" });
-  assert.match(appels[0].url, /contents\/src\/_data\/tarifs\.json\?ref=brouillon$/);
+  return { f, refs, appels };
+}
+const envGh = { GITHUB_TOKEN: "jeton-factice", GITHUB_DEPOT: "moi/depot", GITHUB_BRANCHE: "brouillon", APERCU_URL: "https://brouillon--exemple.netlify.app" };
+
+test("GitHub : la branche de brouillon est créée depuis main, lecture et écriture s'y font", async () => {
+  const gh = fauxGithub(), g = stockageGithub(envGh, gh.f);
+  assert.deepEqual(await g.lire("tarifs"), { donnees: { depot: 300 }, version: "abc" });
+  assert.equal(gh.refs.brouillon, "m1");
+  assert.ok(gh.appels.some(a => a.chemin === "/contents/src/_data/tarifs.json" && a.query === "?ref=brouillon"));
   assert.equal((await g.ecrire("tarifs", { depot: 1 }, "abc")).version, "def");
-  const corps = JSON.parse(appels[1].o.body);
-  assert.equal(corps.branch, "brouillon"); assert.equal(appels[1].o.headers.Authorization, "Bearer jeton-factice");
+  const put = gh.appels.find(a => a.m === "PUT");
+  assert.equal(put.corps.branch, "brouillon"); assert.equal(put.auth, "Bearer jeton-factice");
   await assert.rejects(g.ecrire("tarifs", { depot: 1 }, "vieux"), ConflitVersion);
   await assert.rejects(g.lire("../package"), /inconnu/);
+  await g.lire("avis");
+  assert.ok(gh.appels.some(a => a.chemin === "/contents/src/_data/avis.json" && a.query === "?ref=main"), "les avis se lisent sur main");
+});
+
+test("GitHub : état, publication (fusion dans main), historique, abandon", async () => {
+  const gh = fauxGithub(), g = stockageGithub(envGh, gh.f);
+  await g.ecrire("tarifs", { depot: 1 }, "abc");
+  assert.deepEqual(await g.etat(), { modifies: ["tarifs"], photos: 1, apercu: envGh.APERCU_URL });
+  assert.deepEqual((await g.publier("Publication test")).modifies, ["tarifs"]);
+  const fusion = gh.appels.find(a => a.chemin === "/merges");
+  assert.deepEqual(fusion.corps, { base: "main", head: "brouillon", commit_message: "Publication test" });
+  assert.equal(gh.refs.brouillon, "m2", "le brouillon repart de la version publiée");
+  const h = await g.historique("tarifs");
+  assert.equal(h[0].message, "Publication depuis l’admin : Tarifs");
+  assert.ok(gh.appels.some(a => a.chemin === "/commits" && a.query.includes("sha=main") && a.query.includes("src%2F_data%2Ftarifs.json")));
+  await g.lireVersion("tarifs", h[0].id);
+  await assert.rejects(g.lireVersion("tarifs", "../../x"), /Version inconnue/);
+  await g.ecrire("tarifs", { depot: 2 }, "abc");
+  await g.abandonner();
+  const patch = gh.appels.filter(a => a.m === "PATCH").at(-1);
+  assert.deepEqual(patch.corps, { sha: "m2", force: true });
+});
+
+// ---------- Brouillon, publication, historique (stockage local) ----------
+test("brouillon : état, publication, historique, reprise d'une version, abandon", async () => {
+  const etat = await json(await appel("GET", "/api/brouillon"));
+  assert.deepEqual(etat.modifies, ["tarifs"]);
+  assert.equal(etat.apercu, "/apercu/");
+  const pub = await json(await appel("POST", "/api/publier", {}));
+  assert.equal(pub.statut, 200, JSON.stringify(pub));
+  assert.equal(JSON.parse(fs.readFileSync(path.join(racine, "src/_data/tarifs.json"), "utf8")).depot, 350, "publié");
+  assert.deepEqual((await json(await appel("GET", "/api/brouillon"))).modifies, []);
+  const h = await json(await appel("GET", "/api/historique/tarifs"));
+  assert.equal(h.versions.length, 2);
+  assert.match(h.versions[0].message, /Publication depuis l’admin : Tarifs/);
+  assert.equal(h.versions[1].message, "Version d’origine");
+  const origine = await json(await appel("GET", `/api/historique/tarifs/${h.versions[1].id}`));
+  assert.equal(origine.donnees.depot, 300);
+  assert.equal((await appel("GET", "/api/historique/tarifs/inexistant")).status, 404);
+  assert.equal((await appel("GET", "/api/historique/avis")).status, 404);
+  // Modification puis abandon : le brouillon redevient le site publié
+  const t = await json(await appel("GET", "/api/contenus/tarifs"));
+  t.donnees.depot = 400;
+  await appel("PUT", "/api/contenus/tarifs", { donnees: t.donnees, version: t.version });
+  assert.deepEqual((await json(await appel("GET", "/api/brouillon"))).modifies, ["tarifs"]);
+  assert.equal((await appel("POST", "/api/abandonner", {})).status, 200);
+  assert.deepEqual((await json(await appel("GET", "/api/brouillon"))).modifies, []);
+  assert.equal((await json(await appel("GET", "/api/contenus/tarifs"))).donnees.depot, 350);
+});
+
+test("publication refusée si le brouillon est invalide (fichier modifié à la main)", async () => {
+  const f = path.join(racine, ".local/brouillon/tarifs.json");
+  const d = JSON.parse(fs.readFileSync(f, "utf8")); d.types.basse.prix = -1;
+  fs.writeFileSync(f, JSON.stringify(d));
+  const r = await json(await appel("POST", "/api/publier", {}));
+  assert.equal(r.statut, 422); assert.match(r.erreurs[0].message, /Tarifs et calendrier/);
+  assert.equal(JSON.parse(fs.readFileSync(path.join(racine, "src/_data/tarifs.json"), "utf8")).types.basse.prix, 80, "rien publié");
+  await appel("POST", "/api/abandonner", {});
+});
+
+test("publication et brouillon : connexion et origine exigées", async () => {
+  assert.equal((await appel("POST", "/api/publier", {}, { avecCookie: false })).status, 401);
+  assert.equal((await appel("POST", "/api/publier", {}, { origine: "https://pirate.example" })).status, 403);
+  assert.equal((await appel("POST", "/api/abandonner", {}, { origine: null })).status, 403);
+  assert.equal((await appel("GET", "/api/brouillon", undefined, { avecCookie: false })).status, 401);
 });
 
 // ---------- Photos ----------

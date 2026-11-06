@@ -84,6 +84,7 @@ async function afficherAdmin() {
   const nav = $("rubriques"); nav.replaceChildren();
   for (const [nom, titre, , desc] of RUBRIQUES)
     nav.append(el("button", { type: "button", dataset: { nom }, onclick: () => ouvrir(nom) }, titre, el("small", {}, desc)));
+  majBrouillon();
   const depuisAdresse = location.hash.slice(1);
   await ouvrir(RUBRIQUES.some(r => r[0] === depuisAdresse) ? depuisAdresse : "accueil");
 }
@@ -134,6 +135,7 @@ function dessiner(erreurs = []) {
   const schema = SCHEMAS[nom];
   for (const [k, s] of Object.entries(schema.champs))
     blocs.push(noeud(s, () => etat.donnees[k], v => { etat.donnees[k] = v; }, k));
+  blocs.push(blocHistorique(nom));
   zone.replaceChildren(...blocs);
   $("pied-enregistrer").hidden = false;
   marquerErreurs(erreurs);
@@ -452,13 +454,85 @@ $("enregistrer").addEventListener("click", async () => {
     const r = await api("PUT", "/api/contenus/" + nom, { donnees: valeur, version: etat.version });
     Object.assign(etat, { donnees: r.donnees, version: r.version, original: JSON.stringify(r.donnees) });
     dessiner();
-    $("etat").textContent = "Enregistré. La page sera à jour dans quelques instants."; $("etat").className = "ok";
+    $("etat").textContent = "Brouillon enregistré : visible dans l’aperçu, pas encore sur le site."; $("etat").className = "ok";
+    majBrouillon();
   } catch (err) {
     if (err.statut === 422 && err.details && err.details.erreurs) dessiner(err.details.erreurs);
     else if (err.statut !== 401) { $("etat").textContent = err.message; $("etat").className = "modifie"; }
     majEtat();
   }
 });
+
+// ---------- Brouillon, aperçu, publication ----------
+const LIBELLES = Object.fromEntries(RUBRIQUES.map(r => [r[0], r[1]]));
+let brouillon = { modifies: [], photos: 0, apercu: null };
+
+async function majBrouillon() {
+  try { brouillon = await api("GET", "/api/brouillon"); } catch { return; }
+  const n = brouillon.modifies.length, attente = n > 0 || brouillon.photos > 0;
+  $("barre-brouillon").classList.toggle("attente", attente);
+  $("texte-brouillon").textContent = attente
+    ? `En attente de publication : ${brouillon.modifies.map(m => LIBELLES[m] || m).join(", ") || `${brouillon.photos} photo(s)`}.`
+    : "Le site en ligne est à jour : aucun brouillon en attente.";
+  $("lien-apercu").hidden = !attente || !brouillon.apercu;
+  if (brouillon.apercu) $("lien-apercu").href = brouillon.apercu;
+  $("publier").hidden = $("abandonner").hidden = !attente;
+  for (const b of $("rubriques").children) b.classList.toggle("modifie", brouillon.modifies.includes(b.dataset.nom));
+}
+
+$("publier").addEventListener("click", async () => {
+  if (modifie() && !confirm("La rubrique ouverte a des modifications non enregistrées : elles ne seront pas publiées. Continuer ?")) return;
+  const liste = brouillon.modifies.map(m => "• " + (LIBELLES[m] || m)).join("\n");
+  if (!confirm(`Publier sur le site en ligne ?\n\n${liste}\n\nLe site sera à jour dans une à deux minutes.`)) return;
+  $("publier").disabled = true; $("texte-brouillon").textContent = "Publication en cours…";
+  try {
+    await api("POST", "/api/publier", {});
+    await majBrouillon();
+    $("texte-brouillon").textContent = "Publié ! Le site en ligne sera à jour dans une à deux minutes.";
+    if (etat.nom && etat.nom !== "avis") dessiner();
+  } catch (err) {
+    await majBrouillon();
+    const details = err.details && err.details.erreurs ? "\n\n" + err.details.erreurs.slice(0, 8).map(e => "• " + e.message).join("\n") : "";
+    if (err.statut !== 401) alert(err.message + details);
+  } finally { $("publier").disabled = false; }
+});
+
+$("abandonner").addEventListener("click", async () => {
+  if (!confirm("Abandonner toutes les modifications du brouillon et revenir au site en ligne ? Cette action ne peut pas être annulée.")) return;
+  try {
+    await api("POST", "/api/abandonner", {});
+    etat.original = JSON.stringify(etat.donnees); // évite l'alerte « non enregistré » au rechargement
+    await majBrouillon();
+    if (etat.nom) { const n = etat.nom; etat.nom = null; await ouvrir(n); }
+  } catch (err) { if (err.statut !== 401) alert(err.message); }
+});
+
+// Versions publiées d'une rubrique : on peut en reprendre une dans le formulaire, puis l'enregistrer et la publier
+function blocHistorique(nom) {
+  const liste = el("div", {}, el("p", { class: "aide" }, "Chargement…"));
+  const dateFr = d => new Date(d).toLocaleString("fr-FR", { dateStyle: "long", timeStyle: "short" });
+  const bloc = el("details", { class: "groupe historique" }, el("summary", {}, "Historique : versions publiées"), el("div", {}, liste));
+  bloc.addEventListener("toggle", async () => {
+    if (!bloc.open || bloc.dataset.charge) return;
+    bloc.dataset.charge = "1";
+    try {
+      const { versions } = await api("GET", "/api/historique/" + nom);
+      if (!versions.length) { liste.replaceChildren(el("p", { class: "aide" }, "Aucune version publiée depuis l’admin pour l’instant.")); return; }
+      liste.replaceChildren(el("p", { class: "aide" }, "« Reprendre » remet cette version dans le formulaire : vérifiez, enregistrez le brouillon, puis publiez."),
+        el("ol", {}, versions.map(v => el("li", {}, el("span", {}, el("strong", {}, dateFr(v.date)), " · ", v.message),
+          el("button", { type: "button", class: "btn line petit", onclick: async () => {
+            if (modifie() && !confirm("Remplacer les modifications en cours par cette version ?")) return;
+            try {
+              const { donnees } = await api("GET", `/api/historique/${nom}/${v.id}`);
+              etat.donnees = donnees; dessiner();
+              $("etat").textContent = `Version du ${dateFr(v.date)} reprise : vérifiez puis enregistrez le brouillon.`; $("etat").className = "modifie";
+              window.scrollTo(0, 0);
+            } catch (err) { if (err.statut !== 401) alert(err.message); }
+          } }, "Reprendre")))));
+    } catch (err) { liste.replaceChildren(el("p", { class: "erreur" }, err.message)); }
+  });
+  return bloc;
+}
 
 // ---------- Démarrage ----------
 (async () => {

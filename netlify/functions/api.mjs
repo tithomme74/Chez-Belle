@@ -6,6 +6,7 @@
 //   GITHUB_TOKEN             jeton GitHub limité à ce dépôt, droit « Contents : lecture et écriture »
 //   GITHUB_DEPOT             tithomme74/Chez-Belle
 //   GITHUB_BRANCHE           brouillon
+//   APERCU_URL               https://brouillon--chez-belle-pontaillac.netlify.app (aperçu du brouillon)
 import { getStore } from "@netlify/blobs";
 import { traiter } from "../../api/app.js";
 import { stockageGithub } from "../../api/stockage.js";

@@ -8,11 +8,17 @@
 //   GET  /api/contenus/<nom>                           → { donnees, version, lectureSeule }
 //   PUT  /api/contenus/<nom>   { donnees, version }    → valide puis enregistre → { version }
 //   POST /api/photos           { nom, variantes[] }    → enregistre une photo (WebP ou JPEG) → { photo }
+//   GET  /api/brouillon                                → { modifies, photos, apercu } : ce qui attend d'être publié
+//   POST /api/publier                                  → revalide tout le brouillon puis le publie
+//   POST /api/abandonner                               → le brouillon redevient identique au site publié
+//   GET  /api/historique/<nom>                         → { versions } publiées
+//   GET  /api/historique/<nom>/<id>                    → { donnees } d'une version (à reprendre dans le formulaire)
 //
+// Les enregistrements vont toujours dans le brouillon ; seul « publier » modifie le site en ligne.
 // deps = { env, stockage, memoire, ip }
 import { verifierMotDePasse, creerSession, sessionValide, cookieSession, cookieEfface, lireCookie, estBloque, noterEchec, effacerEchecs } from "./auth.js";
 import { SCHEMAS, LECTURE_SEULE, FICHIERS, valider, coherence } from "../src/_lib/schemas.js";
-import { ConflitVersion } from "./stockage.js";
+import { ConflitVersion, ConflitPublication } from "./stockage.js";
 import { dimensionsImage, nomFichier } from "./images.js";
 
 const TAILLE_MAX = 300 * 1024;
@@ -102,6 +108,40 @@ export async function traiter(req, deps) {
         ...(prets.length > 1 ? { srcset: prets.map(p => [`/photos/${p.fichier}`, p.dim.largeur]) } : {}),
         largeur: grande.dim.largeur, hauteur: grande.dim.hauteur
       } });
+    }
+
+    // ----- Brouillon et publication -----
+    if (route === "/api/brouillon" && m === "GET") return reponse(200, await stockage.etat());
+
+    if (route === "/api/publier" && m === "POST") {
+      const { modifies } = await stockage.etat();
+      // Dernier contrôle de tout le brouillon, ensemble (un contenu peut dépendre d'un autre)
+      const tous = {};
+      for (const n of Object.keys(SCHEMAS)) tous[n] = (await stockage.lire(n)).donnees;
+      const erreurs = [];
+      for (const n of modifies.filter(n => SCHEMAS[n])) {
+        const r = valider(SCHEMAS[n], tous[n]);
+        for (const e of [...r.erreurs, ...coherence(n, r.valeur, tous)]) erreurs.push({ ...e, rubrique: n, message: `${SCHEMAS[n].label} : ${e.message}` });
+      }
+      if (erreurs.length) return erreur(422, "Le brouillon contient des erreurs : corrigez-les avant de publier.", { erreurs });
+      const libelles = modifies.filter(n => SCHEMAS[n]).map(n => SCHEMAS[n].label);
+      try {
+        const r = await stockage.publier(`Publication depuis l’admin${libelles.length ? " : " + libelles.join(", ") : ""}`);
+        return reponse(200, { publie: r.modifies });
+      } catch (e) {
+        if (e instanceof ConflitPublication) return erreur(409, "Publication impossible : le site en ligne a été modifié d’une façon incompatible. Contactez Thomas.");
+        throw e;
+      }
+    }
+
+    if (route === "/api/abandonner" && m === "POST") { await stockage.abandonner(); return reponse(200, { abandonne: true }); }
+
+    const mh = /^\/api\/historique\/([a-z]+)(?:\/([A-Za-z0-9_-]{1,64}))?$/.exec(route);
+    if (mh && m === "GET") {
+      const [, nom, id] = mh;
+      if (!SCHEMAS[nom]) return erreur(404, "Contenu inconnu.");
+      if (!id) return reponse(200, { versions: await stockage.historique(nom) });
+      return reponse(200, { donnees: await stockage.lireVersion(nom, id) });
     }
 
     const mc = /^\/api\/contenus\/([a-z]+)$/.exec(route);

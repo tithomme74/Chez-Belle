@@ -1,9 +1,7 @@
-// Valeurs calculées à partir des tarifs (src/_data/tarifs.json) : rien n'est saisi deux fois.
-import fs from "node:fs";
-import { nombre } from "../_lib/contenu.js";
+// Valeurs calculées à partir des tarifs (tarifs.json) et des cartes de l'accueil : rien n'est saisi deux fois.
+import { nombre } from "./contenu.js";
 
-export default function () {
-  const t = JSON.parse(fs.readFileSync(new URL("./tarifs.json", import.meta.url), "utf8"));
+export function calculer(t, accueil) {
   const prixMin = Math.min(...Object.values(t.types).map(x => x.prix));
 
   // Grille de la page Tarifs : prix et durée lus dans le type de période
@@ -19,7 +17,6 @@ export default function () {
   });
 
   // Cartes « Zoom sur les prix » de l'accueil : fourchette de prix et durées minimales des types choisis
-  const accueil = JSON.parse(fs.readFileSync(new URL("./accueil.json", import.meta.url), "utf8"));
   const zoom = accueil.zoom.cartes.map(c => {
     const tys = c.types.map(k => t.types[k]);
     const semaine = c.unite === "semaine";

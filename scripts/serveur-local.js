@@ -1,6 +1,7 @@
 // Serveur de développement : `npm run dev`
-//  - Eleventy reconstruit _site/ à chaque modification (dont les enregistrements de l'admin) ;
-//  - ce serveur sert _site/ et l'API /api/* avec le stockage local (fichiers src/_data/*.json).
+//  - _site/   : le « site en ligne », construit depuis src/_data/ (modifié seulement par « Publier ») ;
+//  - /apercu/ : l'aperçu du brouillon, construit depuis .local/brouillon/ (modifié par chaque enregistrement) ;
+//  - /api/*   : l'API de l'admin avec le stockage local.
 // Le mot de passe de test et le secret de session sont lus dans .env (créé par `npm run mot-de-passe -- --local`).
 import http from "node:http";
 import fs from "node:fs";
@@ -13,6 +14,7 @@ import { memoireLocale } from "../api/auth.js";
 
 const RACINE = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const SITE = path.join(RACINE, "_site");
+const APERCU = path.join(RACINE, "_apercu");
 const PORT = Number(process.env.PORT) || 8765;
 if (fs.existsSync(path.join(RACINE, ".env"))) process.loadEnvFile(path.join(RACINE, ".env"));
 
@@ -43,8 +45,10 @@ async function api(req, res) {
 function fichier(req, res) {
   let p;
   try { p = decodeURIComponent(new URL(req.url, "http://x").pathname); } catch { res.writeHead(400).end(); return; }
-  const f = path.join(SITE, path.normalize(p));
-  if (!f.startsWith(SITE)) { res.writeHead(403).end(); return; }
+  const estApercu = p === "/apercu" || p.startsWith("/apercu/");
+  const base = estApercu ? APERCU : SITE;
+  const f = path.join(base, path.normalize(estApercu ? p.slice("/apercu".length) || "/" : p));
+  if (!f.startsWith(base)) { res.writeHead(403).end(); return; }
   let cible = f;
   if (fs.existsSync(cible) && fs.statSync(cible).isDirectory()) {
     if (!p.endsWith("/")) { res.writeHead(301, { Location: p + "/" }).end(); return; }
@@ -60,7 +64,12 @@ http.createServer((req, res) => {
     .catch(e => { console.error(e); if (!res.headersSent) res.writeHead(500); res.end(); });
 }).listen(PORT, () => console.log(`Site et admin : http://localhost:${PORT}  (Ctrl+C pour arrêter)`));
 
-// Eleventy en surveillance : chaque fichier modifié reconstruit le site
-const eleventy = spawn(process.execPath, [path.join(RACINE, "node_modules/@11ty/eleventy/cmd.cjs"), "--watch", "--quiet"], { cwd: RACINE, stdio: "inherit" });
-process.on("exit", () => eleventy.kill());
+// Deux Eleventy en surveillance : le site publié et l'aperçu du brouillon
+await deps.stockage.preparer(); // crée .local/brouillon/ si besoin
+const CMD = path.join(RACINE, "node_modules/@11ty/eleventy/cmd.cjs");
+const site = spawn(process.execPath, [CMD, "--watch", "--quiet"], { cwd: RACINE, stdio: "inherit" });
+const apercu = spawn(process.execPath, [CMD, "--watch", "--quiet", "--output=_apercu"], {
+  cwd: RACINE, stdio: "inherit", env: { ...process.env, CB_DONNEES: ".local/brouillon", CB_APERCU: "1" }
+});
+process.on("exit", () => { site.kill(); apercu.kill(); });
 process.on("SIGINT", () => process.exit(0));

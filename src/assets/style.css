@@ -409,3 +409,7 @@ ul.coches.plus-s li::before { content: "+"; }
   .galerie.g5 { grid-auto-rows: 150px; }
 }
 .galerie.g5 .tall { grid-row: auto; }
+
+/* Aperçu du brouillon (jamais affiché sur le site publié) */
+.bandeau-apercu { position: sticky; top: 0; z-index: 100; background: #C4513A; color: #fff; text-align: center; padding: 8px 16px; font: 500 15px/1.4 Jost, sans-serif; }
+.bandeau-apercu a { color: #fff; }

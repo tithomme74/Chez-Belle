@@ -25,7 +25,7 @@ a { color: var(--marine-2); }
 .carte { background: var(--blanc); border: 1px solid var(--ligne); border-radius: 16px; padding: 28px; width: min(380px, 100%); display: grid; gap: 14px; }
 
 /* Mise en page de l'admin */
-.admin { display: grid; grid-template-columns: 240px 1fr; grid-template-rows: auto 1fr auto; min-height: 100vh; }
+.admin { display: grid; grid-template-columns: 240px 1fr; grid-template-rows: auto auto 1fr auto; min-height: 100vh; }
 .barre-haut { grid-column: 1 / -1; display: flex; gap: 18px; align-items: center; padding: 12px 20px; background: var(--marine); color: var(--creme); position: sticky; top: 0; z-index: 5; }
 .barre-haut a, .barre-haut .lien { color: var(--creme); }
 .marque { font-family: "DM Serif Display", serif; font-weight: 400; font-size: 1.2rem; margin-right: auto; }
@@ -107,3 +107,14 @@ details.groupe > div { padding: 0 16px 6px; }
 .champ textarea.json { font-family: ui-monospace, Consolas, monospace; font-size: .85rem; }
 .carte label { display: grid; gap: 6px; font-weight: 500; }
 .carte input { font: inherit; padding: .6em .8em; border: 1px solid #c9bfa8; border-radius: 10px; background: #fff; width: 100%; }
+
+/* Brouillon et publication */
+.barre-brouillon { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 10px 14px; align-items: center; padding: 10px 20px; background: var(--sable); border-bottom: 1px solid var(--ligne); }
+.barre-brouillon #texte-brouillon { margin-right: auto; }
+.barre-brouillon.attente { background: #fbe3dc; }
+.barre-brouillon.attente #texte-brouillon { color: var(--corail); font-weight: 600; }
+.rubriques button.modifie::after { content: " ●"; color: var(--corail); }
+.historique ol { list-style: none; padding: 0; margin: 0; }
+.historique li { display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--ligne); }
+.historique li span { margin-right: auto; }
+@media (max-width: 760px) { .barre-brouillon { padding: 10px 16px; } }

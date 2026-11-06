@@ -3,3 +3,5 @@ _site/
 .env
 .netlify/
 .claude/
+_apercu/
+.local/
