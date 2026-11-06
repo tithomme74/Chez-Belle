@@ -22,7 +22,7 @@
       "nom": "Ponts de mai",
       "dates": [
         {
-          "du": "2027-05-01",
+          "du": "2027-04-29",
           "au": "2027-05-02"
         },
         {
@@ -38,8 +38,8 @@
       "min": 3,
       "semaine_fixe": false,
       "prix_semaine": false,
-      "mise_en_avant": "",
-      "etiquette": "",
+      "mise_en_avant": "calme",
+      "etiquette": "Beaux jours",
       "dates_texte": "1<sup>er</sup> mai · Ascension 6 – 9 mai · Pentecôte 14 – 17 mai"
     },
     {
