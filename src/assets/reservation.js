@@ -104,7 +104,8 @@ $("envoyer").addEventListener("click", async () => {
     });
     ok = rep.ok && (await rep.json()).envoyee === true;
   } catch (err) { ok = false; }
-  etatEnvoi.textContent = ok ? etatEnvoi.dataset.ok : etatEnvoi.dataset.echec;
+  const confirmation = ok && $("contact").value.includes("@") ? " Un e-mail de confirmation vient de vous être envoyé (pensez à regarder dans les indésirables)." : "";
+  etatEnvoi.textContent = (ok ? etatEnvoi.dataset.ok : etatEnvoi.dataset.echec) + confirmation;
   etatEnvoi.classList.toggle("ok", ok);
   etatEnvoi.hidden = false;
   bouton.hidden = ok; bouton.disabled = false;
