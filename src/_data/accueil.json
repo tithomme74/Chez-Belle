@@ -84,7 +84,7 @@
     }
   },
   "hero": {
-    "kicker": "Vaux-sur-Mer · quartier&nbsp;",
+    "kicker": "Vaux-sur-Mer · quartier de Pontaillac",
     "titre": "Flâner sous les pins, <em>l’océan</em> au bout de la rue",
     "texte": "Un rez-de-jardin indépendant de {surface}&nbsp;m², au calme, sous la maison de Belle, avec un grand jardin clos à l’ombre des pins. La petite conche de Saint-Sordelin est à {dist_conche}&nbsp;minutes à pied, la plage de Pontaillac à {dist_plage}. Lits faits, {compris}.",
     "boutons": [
