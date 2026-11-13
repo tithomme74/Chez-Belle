@@ -103,7 +103,7 @@
         }
       ],
       "prix": 80,
-      "min": 3,
+      "min": 4,
       "semaine_fixe": false,
       "prix_semaine": false,
       "mise_en_avant": "calme",
