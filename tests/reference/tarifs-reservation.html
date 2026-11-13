@@ -116,9 +116,11 @@
           <label for="kids">Dont enfants<select id="kids"><option selected>0</option><option>1</option><option>2</option><option>3</option></select></label>
           <span class="full check"><input id="pet" type="checkbox"><label for="pet" style="display:inline;color:var(--encre)">Je viens avec mon chien</label></span>
           <label class="full" for="nom">Nom et prénom<input id="nom" type="text" autocomplete="name" placeholder="Claire Martin"></label>
-          <label class="full" for="contact">E-mail ou téléphone<input id="contact" type="text" autocomplete="email" placeholder="claire.martin@exemple.fr"></label>
+          <label class="full" for="contact">E-mail ou téléphone<input id="contact" type="text" autocomplete="email" placeholder="claire.martin@exemple.fr" data-manquant="Indiquez votre e-mail ou votre téléphone pour que Belle puisse vous répondre."></label>
           <label class="full" for="msg">Message (facultatif)<textarea id="msg" placeholder="Un lit parapluie, une arrivée tardive…"></textarea></label>
+          <label class="piege" aria-hidden="true">Site web<input id="site_web" type="text" tabindex="-1" autocomplete="off"></label>
           <div class="full"><button class="btn" type="submit">Préparer ma demande</button></div>
+          <p class="full fine">Vos coordonnées sont transmises à Belle par e-mail, uniquement pour répondre à votre demande.</p>
         </form>
         <div class="stack">
           <div class="estim" aria-live="polite">
@@ -132,6 +134,12 @@
           <div class="estim out" id="out" hidden>
             <div class="kicker" style="color:var(--marine-2)">Votre demande, prête à envoyer</div>
             <pre id="draft"></pre>
+            <div class="row" id="envoi-direct" hidden>
+              <button class="btn" type="button" id="envoyer">Envoyer à Belle</button>
+            </div>
+            <p id="envoi-etat" class="envoi-etat" role="status" hidden
+               data-ok="Demande envoyée ! Belle vous répond sous 24 heures."
+               data-echec="L’envoi direct n’a pas fonctionné : copiez la demande ou ouvrez votre messagerie."></p>
             <div class="row">
               <button class="btn line" type="button" id="copy">Copier la demande</button>
               <a class="btn" id="mail" href="#">Ouvrir ma messagerie</a>

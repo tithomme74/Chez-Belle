@@ -79,9 +79,11 @@
           <label for="kids">{{ tx.enfants }}<select id="kids">{% for n in range(0, fo.enfants_max + 1) %}<option{% if n == 0 %} selected{% endif %}>{{ n }}</option>{% endfor %}</select></label>
           <span class="full check"><input id="pet" type="checkbox"><label for="pet" style="display:inline;color:var(--encre)">{{ tx.chien }}</label></span>
           <label class="full" for="nom">{{ tx.nom }}<input id="nom" type="text" autocomplete="name" placeholder="{{ tx.nom_exemple }}"></label>
-          <label class="full" for="contact">{{ tx.contact }}<input id="contact" type="text" autocomplete="email" placeholder="{{ tx.contact_exemple }}"></label>
+          <label class="full" for="contact">{{ tx.contact }}<input id="contact" type="text" autocomplete="email" placeholder="{{ tx.contact_exemple }}" data-manquant="{{ tx.contact_manquant or 'Indiquez votre e-mail ou votre téléphone pour que Belle puisse vous répondre.' }}"></label>
           <label class="full" for="msg">{{ tx.message }}<textarea id="msg" placeholder="{{ tx.message_exemple }}"></textarea></label>
+          <label class="piege" aria-hidden="true">Site web<input id="site_web" type="text" tabindex="-1" autocomplete="off"></label>
           <div class="full"><button class="btn" type="submit">{{ tx.bouton }}</button></div>
+          <p class="full fine">{{ tx.confidentialite or "Vos coordonnées sont transmises à Belle par e-mail, uniquement pour répondre à votre demande." }}</p>
         </form>
         <div class="stack">
           <div class="estim" aria-live="polite">
@@ -95,6 +97,12 @@
           <div class="estim out" id="out" hidden>
             <div class="kicker" style="color:var(--marine-2)">{{ tx.demande_titre }}</div>
             <pre id="draft"></pre>
+            <div class="row" id="envoi-direct" hidden>
+              <button class="btn" type="button" id="envoyer">{{ tx.envoyer or "Envoyer à Belle" }}</button>
+            </div>
+            <p id="envoi-etat" class="envoi-etat" role="status" hidden
+               data-ok="{{ tx.envoi_ok or 'Demande envoyée ! Belle vous répond sous 24 heures.' }}"
+               data-echec="{{ tx.envoi_echec or 'L’envoi direct n’a pas fonctionné : copiez la demande ou ouvrez votre messagerie.' }}"></p>
             <div class="row">
               <button class="btn line" type="button" id="copy">{{ tx.copier }}</button>
               <a class="btn" id="mail" href="#">{{ tx.messagerie }}</a>

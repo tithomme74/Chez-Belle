@@ -11,6 +11,7 @@
 //   GET  /api/brouillon                                → { modifies, photos, apercu } : ce qui attend d'être publié
 //   POST /api/publier                                  → revalide tout le brouillon puis le publie
 //   POST /api/abandonner                               → le brouillon redevient identique au site publié
+//   POST /api/demande          { nom, contact, texte } → demande de dates d'un voyageur, envoyée à Belle (public, voir demande.js)
 //   GET  /api/historique/<nom>                         → { versions } publiées
 //   GET  /api/historique/<nom>/<id>                    → { donnees } d'une version (à reprendre dans le formulaire)
 //
@@ -21,6 +22,7 @@ import { SCHEMAS, LECTURE_SEULE, FICHIERS, LIES, valider, coherence } from "../s
 import { ConflitVersion, ConflitPublication } from "./stockage-commun.js";
 import { depuisBase64 } from "./octets.js";
 import { dimensionsImage, nomFichier } from "./images.js";
+import { traiterDemande, demandeConfiguree } from "./demande.js";
 
 const TAILLE_MAX = 300 * 1024;
 const OCTETS_MAX_PHOTO = 1.5 * 1024 * 1024;
@@ -59,6 +61,15 @@ export async function traiter(req, deps) {
 
   try {
     if (!route.startsWith("/api/")) return erreur(404, "Introuvable.");
+
+    // Demande de dates des voyageurs (page publique) : indépendante de l'admin
+    if (route === "/api/demande" && m === "GET") return reponse(200, { disponible: demandeConfiguree(env) });
+    if (route === "/api/demande" && m === "POST") {
+      if (!origineAutorisee(req, env)) return erreur(403, "Requête refusée (origine).");
+      const [statut, corps] = await traiterDemande(await lireJson(req, 8 * 1024), { env, memoire, ip, ...(deps.envoyer ? { envoyer: deps.envoyer } : {}) });
+      return reponse(statut, corps);
+    }
+
     if (!configurationValide(env)) return erreur(503, "Espace d’administration non configuré (mot de passe ou secret de session manquant).");
     if (m !== "GET" && m !== "HEAD" && !origineAutorisee(req, env)) return erreur(403, "Requête refusée (origine).");
 

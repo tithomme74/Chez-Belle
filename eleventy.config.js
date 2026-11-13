@@ -11,6 +11,9 @@ const apercu = process.env.CB_APERCU === "1" || (process.env.CF_PAGES === "1" &&
 
 export default function (eleventyConfig) {
   eleventyConfig.addGlobalData("apercu", apercu);
+  // En ligne, l'aperçu du brouillon est servi sur une autre adresse (brouillon.…pages.dev) dont l'admin ne fonctionne pas :
+  // ses liens vers l'admin doivent donc viser l'adresse du site (site.url) ; en local, /admin/ est sur le même serveur.
+  eleventyConfig.addGlobalData("enLigne", process.env.CF_PAGES === "1");
   // Valeurs calculées pour chaque page
   eleventyConfig.addGlobalData("eleventyComputed", {
     // Chemin relatif vers la racine du site : "" pour l'accueil, "../" pour les onglets (liens relatifs conservés)
@@ -36,7 +39,8 @@ export default function (eleventyConfig) {
   // Texte mis en forme (gras, italique, lien…) : seules quelques balises sont autorisées
   eleventyConfig.addFilter("riche", function (texte) { return riche(jetons(texte, this.ctx), this.ctx.racine); });
   // Texte simple avec jetons ({prix_min}, {depot}…), échappé normalement
-  eleventyConfig.addFilter("jetons", function (texte) { return jetons(texte, this.ctx); });
+  // (« &nbsp; » laissé par l'ancien éditeur de l'admin dans un texte simple : rendu comme une espace insécable, pas en toutes lettres)
+  eleventyConfig.addFilter("jetons", function (texte) { return jetons(texte == null ? texte : String(texte).replace(/&nbsp;/g, " "), this.ctx); });
   // Lien interne écrit depuis la racine (« /autour/ ») rendu relatif à la page
   eleventyConfig.addFilter("lien", function (url) { return lien(url, this.ctx.racine); });
   eleventyConfig.addFilter("jsonScript", jsonScript);

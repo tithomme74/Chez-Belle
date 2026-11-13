@@ -81,6 +81,8 @@ Mode d'emploi du superviseur : rubrique « Mode d'emploi » de l'admin (`modeEmp
 - `api/images.js` : contrôle des photos envoyées (vraie image WebP ou JPEG, dimensions lues dans le fichier).
 - `api/stockage.js` : en local, écrit dans `src/_data/` ; en ligne, écrit sur GitHub (branche de brouillon) via `functions/api/[[route]].js` (fonction Cloudflare Pages ; uniquement des API web standard, vérifié par `tests/cloudflare.test.js`).
 - En ligne, variables Cloudflare à définir : voir `.env.exemple` et l'en-tête de `functions/api/[[route]].js` ; essais de connexion comptés dans Cloudflare KV (liaison `MEMOIRE`). `npm run mot-de-passe -- "…"` calcule l'empreinte du vrai mot de passe.
+- Demandes de dates : `POST /api/demande` les envoie à Belle par e-mail via Resend si `RESEND_API_KEY` et `DEMANDE_EMAIL` sont définies ; sinon la page garde « Copier » / « Ouvrir ma messagerie » (voir `api/demande.js`).
+- L'admin ne fonctionne que sur l'adresse principale : `functions/admin/_middleware.js` y renvoie si on l'ouvre depuis un aperçu (`brouillon.…pages.dev`).
 
 ## Avis et notes Airbnb
 

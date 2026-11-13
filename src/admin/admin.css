@@ -80,6 +80,8 @@ a { color: var(--marine-2); }
 .msg-erreur { color: var(--alerte); font-size: 1rem; margin-top: 4px; font-weight: 500; }
 .compteur { float: right; color: var(--gris); font-size: .85rem; font-weight: 400; }
 .compteur.trop { color: var(--alerte); font-weight: 600; }
+.compteur[hidden], .alerte-douce[hidden] { display: none; }
+.alerte-douce { margin-top: 6px; padding: 8px 12px; border-radius: 8px; background: #fdf3dc; border: 1px solid #e6c56f; color: #6b4f0e; font-size: 1rem; font-weight: 500; }
 
 /* Éditeur de texte (comme un traitement de texte) */
 .outils { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 6px; }
