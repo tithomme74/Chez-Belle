@@ -11,6 +11,9 @@ const apercu = process.env.CB_APERCU === "1" || (process.env.CF_PAGES === "1" &&
 
 export default function (eleventyConfig) {
   eleventyConfig.addGlobalData("apercu", apercu);
+  // En ligne, l'aperçu du brouillon est servi sur une autre adresse (brouillon.…pages.dev) dont l'admin ne fonctionne pas :
+  // ses liens vers l'admin doivent donc viser l'adresse du site (site.url) ; en local, /admin/ est sur le même serveur.
+  eleventyConfig.addGlobalData("enLigne", process.env.CF_PAGES === "1");
   // Valeurs calculées pour chaque page
   eleventyConfig.addGlobalData("eleventyComputed", {
     // Chemin relatif vers la racine du site : "" pour l'accueil, "../" pour les onglets (liens relatifs conservés)

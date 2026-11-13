@@ -28,7 +28,7 @@
 </head>
 <body>
 {%- if apercu %}
-<div class="bandeau-apercu" role="note">Aperçu du brouillon : ces modifications ne sont pas encore publiées. <a href="/admin/">Retour à l’admin</a></div>
+<div class="bandeau-apercu" role="note">Aperçu du brouillon : ces modifications ne sont pas encore publiées. <a href="{% if enLigne %}{{ site.url }}{% endif %}/admin/">Retour à l’admin</a></div>
 {%- endif %}
 
 <header class="top">
