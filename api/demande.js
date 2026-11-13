@@ -13,9 +13,20 @@ const MAX_PAR_HEURE = 5;      // par adresse IP
 const MAX_PAR_JOUR = 40;      // pour tout le site : protège le quota gratuit Brevo (300 e-mails/jour) en cas d'abus
 const EMAIL = /^[^\s@<>"]{1,64}@[^\s@<>"]{1,190}\.[a-z]{2,}$/i;
 
-const cleBrevo = env => env.BREVO_CLE_API || env.BREVO_API_KEY || "";
+// Valeurs saisies à la main dans Cloudflare : on tolère espaces et guillemets autour
+const propre = v => String(v || "").trim().replace(/^["'<]+|["'>]+$/g, "").trim();
+const cleBrevo = env => propre(env.BREVO_CLE_API || env.BREVO_API_KEY);
+const emailBelle = env => propre(env.DEMANDE_EMAIL);
 export function demandeConfiguree(env) {
-  return Boolean(cleBrevo(env) && EMAIL.test(env.DEMANDE_EMAIL || ""));
+  return Boolean(cleBrevo(env) && EMAIL.test(emailBelle(env)));
+}
+// Ce qui manque, pour aider à régler Cloudflare (noms seulement, jamais les valeurs)
+export function diagnosticDemande(env) {
+  const manque = [];
+  if (!cleBrevo(env)) manque.push(env.RESEND_API_KEY ? "BREVO_CLE_API (une ancienne RESEND_API_KEY est présente : à remplacer)" : "BREVO_CLE_API");
+  if (!env.DEMANDE_EMAIL) manque.push("DEMANDE_EMAIL");
+  else if (!EMAIL.test(emailBelle(env))) manque.push("DEMANDE_EMAIL (adresse e-mail non reconnue)");
+  return manque;
 }
 
 const nettoyer = (v, max) => String(v ?? "").replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, "").trim().slice(0, max);
@@ -45,7 +56,7 @@ export async function traiterDemande(corps, { env, memoire, ip, envoyer = (...a)
   if (!(await compter(memoire, `demande:${ip}`, MAX_PAR_HEURE, 3600e3))) return trop;
   if (!(await compter(memoire, "demande:jour", MAX_PAR_JOUR, 86400e3))) return trop;
 
-  const belle = { email: env.DEMANDE_EMAIL, name: env.DEMANDE_NOM || "Chez Belle" };
+  const belle = { email: emailBelle(env), name: propre(env.DEMANDE_NOM) || "Chez Belle" };
   const voyageurEmail = EMAIL.test(contact) ? contact : null;
   const brevo = message => envoyer("https://api.brevo.com/v3/smtp/email", {
     method: "POST",

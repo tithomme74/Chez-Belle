@@ -34,6 +34,13 @@ test("GET : la page sait si l'envoi direct est en place (BREVO_CLE_API ou BREVO_
   assert.equal(await dispo({ BREVO_API_KEY: "k", DEMANDE_EMAIL: "belle@exemple.fr" }), true);
 });
 
+test("valeurs saisies avec espaces ou guillemets : acceptées ; sinon la page dit ce qui manque", async () => {
+  const lire = async env => (await (await traiter(new Request(ORIGINE + "/api/demande"), { env, memoire: memoire(), ip: "x" })).json());
+  assert.equal((await lire({ BREVO_CLE_API: " xkeysib-a ", DEMANDE_EMAIL: ' "belle@exemple.fr" ' })).disponible, true);
+  assert.deepEqual((await lire({})).manque, ["BREVO_CLE_API", "DEMANDE_EMAIL"]);
+  assert.match((await lire({ RESEND_API_KEY: "re", DEMANDE_EMAIL: "belle" })).manque.join(" "), /RESEND_API_KEY.*non reconnue/);
+});
+
 test("e-mail donné : demande chez Belle (Répondre → voyageur) puis accusé de réception au voyageur", async () => {
   const r = await appeler({ nom: "Claire Martin", contact: "claire@exemple.fr", texte: TEXTE });
   assert.equal(r.statut, 200);
