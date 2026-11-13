@@ -39,7 +39,8 @@ export default function (eleventyConfig) {
   // Texte mis en forme (gras, italique, lien…) : seules quelques balises sont autorisées
   eleventyConfig.addFilter("riche", function (texte) { return riche(jetons(texte, this.ctx), this.ctx.racine); });
   // Texte simple avec jetons ({prix_min}, {depot}…), échappé normalement
-  eleventyConfig.addFilter("jetons", function (texte) { return jetons(texte, this.ctx); });
+  // (« &nbsp; » laissé par l'ancien éditeur de l'admin dans un texte simple : rendu comme une espace insécable, pas en toutes lettres)
+  eleventyConfig.addFilter("jetons", function (texte) { return jetons(texte == null ? texte : String(texte).replace(/&nbsp;/g, " "), this.ctx); });
   // Lien interne écrit depuis la racine (« /autour/ ») rendu relatif à la page
   eleventyConfig.addFilter("lien", function (url) { return lien(url, this.ctx.racine); });
   eleventyConfig.addFilter("jsonScript", jsonScript);

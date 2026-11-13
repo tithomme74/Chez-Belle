@@ -359,7 +359,7 @@ function editeurTexte(s, lire, set, id, titre) {
     compteur.classList.toggle("trop", val.length > s.max);
     compteur.hidden = !etat.avance && val.length < s.max * 0.85;
   };
-  const maj = () => { const val = depuisEditeur(zone, multi); set(val); compter(val); };
+  const maj = () => { const val = depuisEditeur(zone, multi, Boolean(s.riche)); set(val); compter(val); };
   compter(lire() ?? "");
   zone.addEventListener("input", maj);
   zone.addEventListener("keydown", e => {
@@ -441,14 +441,19 @@ function versEditeur(valeur, zone) {
 }
 
 // Contenu de l'éditeur → texte stocké
-function depuisEditeur(zone, multi) {
-  const ech = t => t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/ /g, "&nbsp;");
+// Texte mis en forme (riche) : HTML limité, caractères spéciaux échappés.
+// Texte simple : texte brut, sans aucun code HTML (le site l'échappe lui-même ; sinon « &nbsp; » s'afficherait tel quel).
+function depuisEditeur(zone, multi, riche = true) {
+  const ech = riche
+    ? t => t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\u00a0/g, "&nbsp;")
+    : t => t.replace(/\u00a0/g, " ");
   const parcourir = n => {
     if (n.nodeType === 3) return ech(n.nodeValue);
     if (n.nodeType !== 1) return "";
     if (n.classList.contains("pastille")) return `{${n.dataset.jeton}}`;
     const tag = n.tagName.toLowerCase();
     const dedans = [...n.childNodes].map(parcourir).join("");
+    if (!riche) return tag === "br" || ((tag === "div" || tag === "p") && n.previousSibling) ? " " + dedans : dedans;
     if (tag === "br") return multi ? "<br>" : " ";
     if (tag === "b" || tag === "strong") return dedans ? `<b>${dedans}</b>` : "";
     if (tag === "i" || tag === "em") return dedans ? `<em>${dedans}</em>` : "";
