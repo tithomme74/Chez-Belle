@@ -116,7 +116,7 @@ export const SCHEMAS = {
       id: texte("Identifiant interne", { max: 40, motif: "^[a-z0-9-]+$", cache: true }),
       nom: texte("Période", { max: 40 }),
       dates: liste("Dates (arrivée → départ)", objet("Dates", { du: date("Arrivée"), au: date("Départ") }), { min: 1, max: 8 }),
-      prix: nombre("Prix par nuit (€)", { min: 1, max: 2000 }),
+      prix: nombre("Prix par nuit (€)", { min: 1, max: 2000, habituel: [40, 300] }),
       min: nombre("Minimum (nuits)", { min: 1, max: 60 }),
       semaine_fixe: booleen("Semaine fixe : arrivée seulement le premier jour de chaque plage (ex. Noël)"),
       prix_semaine: booleen("Afficher le prix à la semaine"),
@@ -158,7 +158,11 @@ export const SCHEMAS = {
       ["nom", "Nom"], ["nom_exemple", "Exemple de nom"], ["contact", "Contact"], ["contact_exemple", "Exemple de contact"], ["message", "Message"],
       ["message_exemple", "Exemple de message"], ["bouton", "Bouton d’envoi"], ["estimation_titre", "Titre de l’estimation"], ["estimation_note", "Note sous l’estimation"],
       ["demande_titre", "Titre de la demande prête"], ["copier", "Bouton copier"], ["messagerie", "Bouton messagerie"], ["copiee", "Confirmation de copie"], ["ecrire", "Texte avant l’e-mail"]
-    ].map(([k, l]) => [k, texte(l, { max: 200, riche: k === "estimation_note" })])), { avance: true }),
+    ].map(([k, l]) => [k, texte(l, { max: 200, riche: k === "estimation_note" })]).concat([
+      // Envoi direct (ajoutés en novembre 2026 : facultatifs, une valeur par défaut est prévue dans la page)
+      ["envoyer", "Bouton « envoyer à Belle »"], ["envoi_ok", "Message après envoi"], ["envoi_echec", "Message si l’envoi échoue"],
+      ["contact_manquant", "Message si le contact manque"], ["confidentialite", "Mention sur les coordonnées"]
+    ].map(([k, l]) => [k, texte(l, { max: 300, optionnel: true })]))), { avance: true }),
     mot_de_belle: objet("Mot de Belle", { texte: long("Texte (vide = masqué)", { optionnel: true }), signature: texte("Signature", { max: 40 }) }),
     faq: objet("Questions fréquentes", {
       titre: texte("Titre", { max: 80, riche: true }),

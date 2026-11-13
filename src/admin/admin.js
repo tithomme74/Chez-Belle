@@ -293,9 +293,18 @@ function champSimple(s, lire, ecrire, chemin) {
     return champ(titre(), aideChamp, e);
   }
   if (s.type === "nombre") {
-    const e = el("input", { id, type: "number", inputmode: "numeric", min: s.min, max: s.max, step: s.entier ? 1 : "any", oninput: ev => set(ev.target.value === "" ? null : Number(ev.target.value)) });
+    // Valeur possible mais inhabituelle (ex. 8 € ou 800 € la nuit) : simple avertissement, rien n'est bloqué
+    const alerte = s.habituel ? el("p", { class: "alerte-douce", role: "status" }) : null;
+    const verifier = n => {
+      if (!alerte) return;
+      const hors = n != null && (n < s.habituel[0] || n > s.habituel[1]);
+      alerte.hidden = !hors;
+      alerte.textContent = hors ? `${n.toLocaleString("fr-FR")}, est-ce bien ça ? D’habitude, c’est entre ${s.habituel[0]} et ${s.habituel[1]}.` : "";
+    };
+    const e = el("input", { id, type: "number", inputmode: "numeric", min: s.min, max: s.max, step: s.entier ? 1 : "any", oninput: ev => { const n = ev.target.value === "" ? null : Number(ev.target.value); set(n); verifier(n); } });
     e.value = v ?? "";
-    return champ(titre(), e);
+    verifier(v ?? null);
+    return champ(titre(), e, alerte);
   }
   if (s.type === "date") {
     const e = el("input", { id, type: "date", oninput: ev => set(ev.target.value) });
@@ -343,7 +352,13 @@ function editeurTexte(s, lire, set, id, titre) {
   const zone = el("div", { id, class: "editeur" + (multi ? " multi" : ""), contenteditable: "true", role: "textbox", "aria-multiline": String(multi), spellcheck: "true", lang: "fr" });
   versEditeur(lire() ?? "", zone);
   const compteur = s.max ? el("span", { class: "compteur" }) : null;
-  const compter = val => { if (compteur) { compteur.textContent = `${val.length} / ${s.max}`; compteur.classList.toggle("trop", val.length > s.max); } };
+  // Le compteur n'apparaît qu'à l'approche de la limite (ou toujours en mode avancé)
+  const compter = val => {
+    if (!compteur) return;
+    compteur.textContent = val.length > s.max ? `Texte trop long : ${val.length} / ${s.max}` : `${val.length} / ${s.max}`;
+    compteur.classList.toggle("trop", val.length > s.max);
+    compteur.hidden = !etat.avance && val.length < s.max * 0.85;
+  };
   const maj = () => { const val = depuisEditeur(zone, multi); set(val); compter(val); };
   compter(lire() ?? "");
   zone.addEventListener("input", maj);
@@ -371,9 +386,10 @@ function editeurTexte(s, lire, set, id, titre) {
         zone.focus(); sel.removeAllRanges(); sel.addRange(plage);
         document.execCommand("createLink", false, url); maj();
       } }, "Lien"),
-      el("button", { type: "button", onmousedown: garderSelection, onclick: () => { zone.focus(); document.execCommand("unlink"); document.execCommand("removeFormat"); maj(); } }, "Sans mise en forme"));
+      el("button", { type: "button", onmousedown: garderSelection, onclick: () => { zone.focus(); document.execCommand("unlink"); document.execCommand("removeFormat"); maj(); } }, "Texte normal"));
   }
-  if (s.riche || s.max >= 120) {
+  // Insertion de valeurs automatiques : réservée au mode avancé (les pastilles existantes restent visibles et modifiables)
+  if (etat.avance && (s.riche || s.max >= 120)) {
     const choix = el("select", { "aria-label": "Insérer une valeur automatique", onchange: () => {
       if (!choix.value) return;
       const p = pastille(choix.value);
@@ -667,7 +683,7 @@ function boutonEnvoiPhoto(texte, desactive, plusieurs, quandPretes) {
   return el("div", { class: "ajouter" }, bouton, info, fichier);
 }
 
-// Réduit la photo dans le navigateur (480 et 960 px de large), en WebP si possible, sinon JPEG
+// Réduit la photo dans le navigateur (480, 960 et 1600 px de large : 1600 pour les écrans nets et les ordinateurs), en WebP si possible, sinon JPEG
 async function preparerPhoto(f) {
   if (f.size > 30 * 1024 * 1024) throw new Error("Photo trop lourde (30 Mo au plus).");
   let image;
@@ -675,7 +691,7 @@ async function preparerPhoto(f) {
   catch { throw new Error("Cette photo n’a pas pu être lue : essayez une photo JPEG."); }
   if (image.width < 400) throw new Error("Photo trop petite (400 pixels de large au minimum).");
   const variantes = [];
-  for (const l of [480, 960].filter(x => x <= image.width)) {
+  for (const l of [480, 960, 1600].filter(x => x <= image.width)) {
     const h = Math.round(image.height * l / image.width);
     const canvas = el("canvas", { width: l, height: h });
     canvas.getContext("2d").drawImage(image, 0, 0, l, h);
@@ -861,8 +877,9 @@ function modeEmploi() {
         "Si tout vous plaît, « Publier sur le site » : c’est en ligne en une à deux minutes. Sinon « Tout annuler ».")),
     section("Écrire un texte",
       liste("Écrivez comme dans un traitement de texte. Gras et Italique : sélectionnez les mots puis touchez le bouton.",
-        "Les pastilles bleues (par exemple « 80 » ou « 16 h ») sont des valeurs automatiques : elles se mettent à jour toutes seules quand vous changez un prix ou un horaire. Pour en ajouter une : « + Valeur automatique ».",
-        "Le petit compteur indique la longueur maximale du texte.")),
+        "Les pastilles bleues (par exemple « 80 » ou « 16 h ») sont des valeurs automatiques : elles se mettent à jour toutes seules quand vous changez un prix ou un horaire. Laissez-les en place.",
+        "« Texte normal » enlève le gras, l’italique et les liens des mots sélectionnés.",
+        "Si un texte devient trop long, un petit compteur apparaît au-dessus du champ.")),
     section("Mes prix",
       liste("Une ligne par période : nom, dates de l’arrivée au départ, prix par nuit, nombre minimum de nuits.",
         "« + Autres dates » ajoute des dates à la même période (par exemple les trois ponts de mai).",

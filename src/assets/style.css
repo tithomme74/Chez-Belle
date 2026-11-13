@@ -219,6 +219,11 @@ textarea { min-height: 92px; resize: vertical; }
 .warn { color: var(--corail-fonce); font-size: .95rem; font-weight: 500; }
 .out pre { white-space: pre-wrap; word-break: break-word; font-family: var(--body); font-size: .92rem; background: var(--creme); padding: 14px; border-radius: 10px; margin: 4px 0 10px; }
 .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.row + .envoi-etat, .envoi-etat + .row { margin-top: 12px; }
+.envoi-etat { padding: 12px 14px; border-radius: 10px; font-weight: 500; background: #fbeee9; color: var(--corail-fonce); }
+.envoi-etat.ok { background: #e7f2ea; color: #1f5a33; }
+/* Champ piège pour les robots : invisible pour les visiteurs */
+.piege { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
 .mail-belle { font-weight: 600; user-select: all; }
 
 /* FAQ */
@@ -309,7 +314,11 @@ dialog.lb img { display: block; max-width: min(1100px, 96vw); max-height: 82vh; 
   .page-head { padding-block: 40px 28px; }
 }
 @media (max-width: 600px) {
-  .essentiels { grid-template-columns: 1fr; }
+  /* « En un coup d'œil » : deux colonnes compactes plutôt qu'une longue liste */
+  .essentiels { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 14px; }
+  .essentiels li { padding: 14px 0; min-width: 0; overflow-wrap: anywhere; hyphens: auto; }
+  .essentiels b { font-size: 1.12rem; }
+  .essentiels span { font-size: .85rem; line-height: 1.4; }
 }
 
 /* Réorganisation de novembre 2026 */
@@ -320,6 +329,17 @@ dialog.lb img { display: block; max-width: min(1100px, 96vw); max-height: 82vh; 
   .hero .arch { aspect-ratio: 4 / 3; border-radius: 220px 220px 16px 16px; }
   .hero { padding-block: 28px 56px; }
   .hero .badge-ticket { bottom: 14px; }
+}
+/* Téléphone : le titre passe avant la photo pour être lu dès l'ouverture, photo moins haute */
+@media (max-width: 600px) {
+  .hero-grid { gap: 0; }
+  .hero-grid > div:first-child { display: contents; }
+  .hero .kicker { order: 1; }
+  .hero h1 { order: 2; }
+  .hero-photo { order: 3; margin-top: 22px; }
+  .hero .lead { order: 4; }
+  .hero-actions { order: 5; }
+  .hero .arch { aspect-ratio: 3 / 2; border-radius: 160px 160px 14px 14px; }
 }
 .tarif-ticket .extras { margin-top: 18px; }
 @media (min-width: 901px) {

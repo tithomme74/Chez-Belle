@@ -74,10 +74,40 @@ function draft(r) {
 $("f").addEventListener("submit", e => {
   e.preventDefault();
   const r = render(true); if (!r.nights) return;
+  // Sans e-mail ni téléphone, Belle ne peut pas répondre
+  if (!$("contact").value.trim()) {
+    $("warn").textContent = $("contact").dataset.manquant; $("warn").hidden = false;
+    $("contact").focus(); return;
+  }
   const t = draft(r);
   $("draft").textContent = t;
   $("mail").href = `mailto:${EMAIL}?subject=${encodeURIComponent("Demande de séjour Chez Belle")}&body=${encodeURIComponent(t)}`;
   $("out").hidden = false; $("copied").hidden = true;
+  $("envoi-etat").hidden = true; $("envoyer").hidden = false; $("envoyer").disabled = false;
+  $("out").scrollIntoView({ behavior: "smooth", block: "start" });
+});
+// Envoi direct proposé seulement s'il est configuré sur le serveur ; sinon la page reste « copier / messagerie »
+fetch("/api/demande").then(r => r.ok ? r.json() : null).then(d => {
+  if (!d || d.disponible !== true) return;
+  $("envoi-direct").hidden = false;
+  $("mail").classList.add("line");
+}).catch(() => {});
+// Envoi direct à Belle ; en cas d'échec, les boutons « Copier » et « Ouvrir ma messagerie » restent là
+$("envoyer").addEventListener("click", async () => {
+  const etatEnvoi = $("envoi-etat"), bouton = $("envoyer");
+  bouton.disabled = true;
+  let ok = false;
+  try {
+    const rep = await fetch("/api/demande", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ nom: $("nom").value, contact: $("contact").value, texte: $("draft").textContent, site_web: $("site_web").value })
+    });
+    ok = rep.ok && (await rep.json()).envoyee === true;
+  } catch (err) { ok = false; }
+  etatEnvoi.textContent = ok ? etatEnvoi.dataset.ok : etatEnvoi.dataset.echec;
+  etatEnvoi.classList.toggle("ok", ok);
+  etatEnvoi.hidden = false;
+  bouton.hidden = ok; bouton.disabled = false;
 });
 $("copy").addEventListener("click", () => {
   const sel = () => { const s = getSelection(), rg = document.createRange(); rg.selectNodeContents($("draft")); s.removeAllRanges(); s.addRange(rg); };
